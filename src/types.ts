@@ -1,0 +1,1 @@
+export type Mapping<A, B> = (a: A) => B
