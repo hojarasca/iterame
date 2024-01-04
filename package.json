@@ -1,0 +1,21 @@
+{
+  "name": "iterame",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "chai": "^5.0.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-tsdoc": "^0.2.17",
+    "mocha": "^10.2.0",
+    "tsx": "^4.7.0",
+    "typedoc": "^0.25.6",
+    "typescript": "^5.3.3"
+  }
+}
