@@ -16,6 +16,10 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new IterFilter(this, predicate)
   }
 
+  toArray (): T[] {
+    return [...this]
+  }
+
   * [Symbol.iterator] (): Generator<T> {
     let next = this.next()
     while (next.isSome()) {

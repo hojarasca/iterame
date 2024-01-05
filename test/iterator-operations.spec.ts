@@ -105,6 +105,55 @@ describe('IterArray', () => {
     })
   })
 
+  describe('#skip', () => {
+    it('skip 0 does nothing', () => {
+      const target = iter([1,2,3]).skip(0)
+      expect(target.toArray()).to.eql([1,2,3])
+    })
+
+    it('skip 1 ignores first element', () => {
+      const target = iter([1,2,3]).skip(1)
+      expect(target.toArray()).to.eql([2,3])
+    })
+
+    it('skip 1 ignores for empty iterator returns empty iterator', () => {
+      const target = iter([]).skip(1)
+      expect(target.toArray()).to.eql([])
+    })
+
+    it('skip more times than iterator length returns empty iterator', () => {
+      const target = iter([1,2,3]).skip(5)
+      expect(target.next().isNone()).to.eql(true)
+    })
+  })
+
+  describe('#nth', () => {
+    it('with 0 returns element at first position', () => {
+      const elem = iter([1,2,3]).nth(0)
+      expect(elem.unwrap()).to.eql(1)
+    })
+
+    it('with 1 returns element at second position', () => {
+      const elem = iter([1,2,3]).nth(1)
+      expect(elem.unwrap()).to.eql(2)
+    })
+
+    it('with 1 returns element at second position', () => {
+      const elem = iter([1,2,3]).nth(1)
+      expect(elem.unwrap()).to.eql(2)
+    })
+
+    it('with a negative number throws an error', () => {
+      let iterator = iter([1,2,3])
+      expect(() => iterator.nth(-1)).to.throw(Error, 'position should be positive')
+      expect(iterator.toArray()).to.eql([1,2,3])
+    })
+
+    it('with a value bigger than the size of the iterator returns none', () => {
+      let tenth = iter([1,2,3]).nth(10)
+      expect(tenth.isNone()).to.eql(true)
+    })
+  })
 
   it('can be mapped and then mapped again', () => {
     const res = []
