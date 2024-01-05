@@ -155,6 +155,23 @@ describe('IterArray', () => {
     })
   })
 
+  describe('#take', () => {
+    it('for an empty list returns empty list', () => {
+      const taken = iter([]).take(10)
+      expect(taken.toArray()).to.eql([])
+    })
+
+    it('when size is lower than the iterator length retuns the first elements of the iterator', () => {
+      const taken = iter([1,2,3]).take(2)
+      expect(taken.toArray()).to.eql([1,2])
+    })
+
+    it('when the size is bigger than the list returns the entire list', () => {
+      const taken = iter([1,2,3]).take(10)
+      expect(taken.toArray()).to.eql([1,2,3])
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1,2,3]).map(n => n * 2).map(n => n + 1)) {

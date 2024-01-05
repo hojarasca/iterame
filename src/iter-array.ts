@@ -3,6 +3,7 @@ import {Iterator} from "./iterator.js";
 import {IterMap} from "./iter-map.js";
 import {Mapping, Predicate} from "./types.js";
 import {times} from "./helpers.js";
+import {Take} from "./take.js";
 
 export class IterArray<T> extends Iterator<T> {
   private current: number;
@@ -51,5 +52,9 @@ export class IterArray<T> extends Iterator<T> {
     }
     this.skip(position)
     return this.next()
+  }
+
+  take (size: number): Take<T> {
+    return new Take(this, size)
   }
 }
