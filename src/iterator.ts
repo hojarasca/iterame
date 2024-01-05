@@ -1,6 +1,8 @@
 import {Option} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
-import {IterFilter, IterMap} from "./index.js";
+import {IterFilter, IterMap, Take, Chunks} from "./index.js";
+import {times} from "./helpers.js";
+
 
 export interface Iterable<T> {
   next(): Option<T>
@@ -16,8 +18,52 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new IterFilter(this, predicate)
   }
 
+  every (param: Predicate<T>): boolean {
+    let next = this.next()
+    // Advance until there is next and the condition is meet.
+    while (next.isSomeAnd(param)) {
+      next = this.next()
+    }
+    // If last value was none it means end of iterator.
+    return next.isNone()
+  }
+
+  some (predicate: Predicate<T>) {
+    let map = this.map(predicate);
+    let next = map.next()
+
+    while (next.isSome() && !next.unwrap()) {
+      next = map.next()
+    }
+
+    return next.isSome()
+  }
+
   toArray (): T[] {
     return [...this]
+  }
+
+
+
+  skip (n: number): Iterator<T> {
+    times(n, () => this.next())
+    return this
+  }
+
+  nth (position: number): Option<T> {
+    if (position < 0) {
+      throw new Error('position should be positive')
+    }
+    this.skip(position)
+    return this.next()
+  }
+
+  take (size: number): Take<T> {
+    return new Take(this, size)
+  }
+
+  chunks (eachSize: number): Chunks<T> {
+    return new Chunks<T>(this, eachSize)
   }
 
   * [Symbol.iterator] (): Generator<T> {

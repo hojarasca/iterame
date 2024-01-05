@@ -172,6 +172,13 @@ describe('IterArray', () => {
     })
   })
 
+  describe('#chunks', () => {
+    it('using 2, an iterator with 4 elements gets into an iterator with 2 lists of 2', () => {
+      const chunks = iter([1,2,3,4]).chunks(2)
+      expect(chunks.toArray()).to.eql([[1,2], [3, 4]])
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1,2,3]).map(n => n * 2).map(n => n + 1)) {

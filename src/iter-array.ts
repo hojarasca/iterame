@@ -19,42 +19,4 @@ export class IterArray<T> extends Iterator<T> {
         .filter(_ => this.current < this.iterable.length)
         .ifSome(() => this.current += 1)
   }
-
-  every (param: Predicate<T>): boolean {
-    let next = this.next()
-    // Advance until there is next and the condition is meet.
-    while (next.isSomeAnd(param)) {
-      next = this.next()
-    }
-    // If last value was none it means end of iterator.
-    return next.isNone()
-  }
-
-  some (predicate: Predicate<T>) {
-    let map = this.map(predicate);
-    let next = map.next()
-
-    while (next.isSome() && !next.unwrap()) {
-      next = map.next()
-    }
-
-    return next.isSome()
-  }
-
-  skip (n: number): Iterator<T> {
-    times(n, () => this.next())
-    return this
-  }
-
-  nth (position: number): Option<T> {
-    if (position < 0) {
-      throw new Error('position should be positive')
-    }
-    this.skip(position)
-    return this.next()
-  }
-
-  take (size: number): Take<T> {
-    return new Take(this, size)
-  }
 }

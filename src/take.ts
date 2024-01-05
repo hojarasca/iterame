@@ -1,4 +1,4 @@
-import {Iterator} from "./iterator.js";
+import {Iterator} from "./index.js";
 import {Option} from "nochoices";
 
 export class Take<T> extends Iterator<T> {
