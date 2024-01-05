@@ -285,6 +285,35 @@ describe('IterArray', () => {
     })
   })
 
+  describe('#dedup', () => {
+    it('returns none for empty iterator', () => {
+      const it = iter<number>([]).dedup()
+      expect(it.toArray()).to.eql([])
+    })
+
+    it('returns same list when all elements are different', () => {
+      const it = iter<number>([1, 2, 3]).dedup()
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+
+    it('groups of 2 are reduced to only one', () => {
+      const it = iter<number>([1, 1, 2, 2, 3, 3]).dedup()
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+
+    it('when elements appear in different moments only the first insance is shown', () => {
+      const it = iter<number>([1, 2, 3, 1, 4, 1, 2, 5]).dedup()
+      expect(it.toArray()).to.eql([1, 2, 3, 4, 5])
+    })
+
+    it('it compares elements using js ===', () => {
+      const obj1 = {}
+      const obj2 = {}
+      const it = iter([obj1, obj2, obj1]).dedup()
+      expect(it.toArray()).to.eql([obj1, obj2])
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {

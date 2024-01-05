@@ -1,6 +1,6 @@
 import {Option} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
-import {Filter, IterMap, Take, Chunks, Concat, TakeWhile, TakeWhileInclusive} from "./index.js";
+import {Filter, IterMap, Take, Chunks, Concat, TakeWhile, TakeWhileInclusive, Dedup} from "./index.js";
 import {times} from "./helpers.js";
 import {} from "./concat.js";
 
@@ -99,5 +99,9 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   takeWhileInclusive (condition: Predicate<T>): TakeWhileInclusive<T> {
     return new TakeWhileInclusive(this, condition)
+  }
+
+  dedup (): Dedup<T> {
+    return new Dedup<T>(this)
   }
 }
