@@ -6,6 +6,9 @@ export class Chunks<T> extends Iterator<T[]> {
   private chunkSize: number;
   constructor (base: Iterator<T>, chunkSize: number) {
     super();
+    if (chunkSize <= 0) {
+      throw new Error('size should be a positive non zero integer')
+    }
     this.base = base
     this.chunkSize = chunkSize
   }

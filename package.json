@@ -4,6 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint ."
+  },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@types/chai": "^4.3.11",

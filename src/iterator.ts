@@ -1,7 +1,8 @@
 import {Option} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
-import {IterFilter, IterMap, Take, Chunks} from "./index.js";
+import {IterFilter, IterMap, Take, Chunks, Concat} from "./index.js";
 import {times} from "./helpers.js";
+import {} from "./concat.js";
 
 
 export interface Iterable<T> {
@@ -29,7 +30,7 @@ export abstract class Iterator<T> implements Iterable<T> {
   }
 
   some (predicate: Predicate<T>) {
-    let map = this.map(predicate);
+    const map = this.map(predicate);
     let next = map.next()
 
     while (next.isSome() && !next.unwrap()) {
@@ -64,6 +65,10 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   chunks (eachSize: number): Chunks<T> {
     return new Chunks<T>(this, eachSize)
+  }
+
+  concat (it2: Iterator<T>): Concat<T> {
+    return new Concat(this, it2)
   }
 
   * [Symbol.iterator] (): Generator<T> {
