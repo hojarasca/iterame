@@ -172,6 +172,19 @@ describe('IterArray', () => {
     })
   })
 
+  describe('#takeWhile', () => {
+    it('returns empty for empty iterator', () => {
+      const it = iter<number>([]).takeWhile(() => true)
+      expect(it.toArray()).to.eql([])
+    })
+
+    it('returns first chunk of elements that match the condition', () => {
+      const it = iter<number>([-3, -1, 0, -1, 1, 2])
+          .takeWhile((elem) => elem < 0)
+      expect(it.toArray()).to.eql([-3, -1])
+    })
+  })
+
   describe('#chunks', () => {
     it('using 2, an iterator with 4 elements gets into an iterator with 2 lists of 2', () => {
       const chunks = iter([1, 2, 3, 4]).chunks(2)
