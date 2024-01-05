@@ -3,7 +3,7 @@ import {Option} from "nochoices";
 
 import {Predicate} from "./types.js";
 
-export class IterFilter<A> extends Iterator<A> {
+export class Filter<A> extends Iterator<A> {
   private base: Iterable<A>;
   private predicate: Predicate<A>;
 

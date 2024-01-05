@@ -1,6 +1,6 @@
 import {Option} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
-import {IterFilter, IterMap, Take, Chunks, Concat, TakeWhile, TakeWhileInclusive} from "./index.js";
+import {Filter, IterMap, Take, Chunks, Concat, TakeWhile, TakeWhileInclusive} from "./index.js";
 import {times} from "./helpers.js";
 import {} from "./concat.js";
 
@@ -15,8 +15,8 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new IterMap(this, mapping)
   }
 
-  filter(predicate: Predicate<T>): IterFilter<T> {
-    return new IterFilter(this, predicate)
+  filter(predicate: Predicate<T>): Filter<T> {
+    return new Filter(this, predicate)
   }
 
   every (param: Predicate<T>): boolean {
