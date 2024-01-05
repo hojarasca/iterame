@@ -1,4 +1,4 @@
-import {Iterable, Iterator} from "./index.js";
+import {Iterator, Iterable, TakeWhileInclusive} from "./index.js";
 import {Option} from "nochoices";
 
 import {Predicate} from "./types.js";
@@ -7,7 +7,7 @@ export class Filter<A> extends Iterator<A> {
   private base: Iterable<A>;
   private predicate: Predicate<A>;
 
-  constructor (base: Iterator<A>, predicate: Predicate<A>) {
+  constructor (base: Iterable<A>, predicate: Predicate<A>) {
     super()
     this.base = base
     this.predicate = predicate

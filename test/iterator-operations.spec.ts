@@ -183,6 +183,12 @@ describe('IterArray', () => {
           .takeWhile((elem) => elem < 0)
       expect(it.toArray()).to.eql([-3, -1])
     })
+
+    it('when condition always fullfills take all the iterator', () => {
+      const it = iter<number>([1, 2, 3])
+          .takeWhile((_) => true)
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
   })
 
   describe('#takeWhileInclusive', () => {
@@ -195,6 +201,12 @@ describe('IterArray', () => {
       const it = iter<number>([-3, -1, 0, -1, 1, 2])
           .takeWhileInclusive((elem) => elem < 0)
       expect(it.toArray()).to.eql([-3, -1, 0])
+    })
+
+    it('when condition always fullfills take all the iterator', () => {
+      const it = iter<number>([1, 2, 3])
+          .takeWhileInclusive((_) => true)
+      expect(it.toArray()).to.eql([1, 2, 3])
     })
   })
 

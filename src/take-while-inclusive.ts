@@ -1,13 +1,13 @@
-import {Iterator} from "./index.js";
+import {Iterable, Iterator} from "./index.js";
 import {Option} from "nochoices";
 import {Predicate} from "./types.js";
 
 export class TakeWhileInclusive<T> extends Iterator<T> {
-  private base: Iterator<T>;
+  private base: Iterable<T>;
   private condition: Predicate<T>;
   private finished: boolean;
 
-  constructor (base: Iterator<T>, condition: Predicate<T>) {
+  constructor (base: Iterable<T>, condition: Predicate<T>) {
     super();
     this.base = base;
     this.condition = condition;
@@ -27,5 +27,4 @@ export class TakeWhileInclusive<T> extends Iterator<T> {
       ? Option.None<void>()
       : Option.Some(undefined)
   }
-
 }
