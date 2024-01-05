@@ -1,6 +1,6 @@
 import {Option} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
-import {IterFilter, IterMap, Take, Chunks, Concat, TakeUntil} from "./index.js";
+import {IterFilter, IterMap, Take, Chunks, Concat, TakeWhile, TakeWhileInclusive} from "./index.js";
 import {times} from "./helpers.js";
 import {} from "./concat.js";
 
@@ -85,8 +85,8 @@ export abstract class Iterator<T> implements Iterable<T> {
     return count
   }
 
-  takeWhile (condition: Predicate<T>): TakeUntil<T> {
-    return new TakeUntil(this, condition)
+  takeWhile (condition: Predicate<T>): TakeWhile<T> {
+    return new TakeWhile(this, condition)
   }
 
   * [Symbol.iterator] (): Generator<T> {
@@ -95,5 +95,9 @@ export abstract class Iterator<T> implements Iterable<T> {
       yield next.unwrap()
       next = this.next()
     }
+  }
+
+  takeWhileInclusive (condition: Predicate<T>): TakeWhileInclusive<T> {
+    return new TakeWhileInclusive(this, condition)
   }
 }

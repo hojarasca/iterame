@@ -23,6 +23,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "nochoices": "^1.1.2"
+    "nochoices": "^1.1.3"
   }
 }

@@ -2,7 +2,7 @@ import {Iterator} from "./index.js";
 import {Option} from "nochoices";
 import {Predicate} from "./types.js";
 
-export class TakeUntil<T> extends Iterator<T> {
+export class TakeWhile<T> extends Iterator<T> {
   private base: Iterator<T>;
   private condition: Predicate<T>;
   private finished: boolean;
@@ -26,5 +26,4 @@ export class TakeUntil<T> extends Iterator<T> {
       ? Option.None()
       : Option.Some(undefined)
   }
-
 }

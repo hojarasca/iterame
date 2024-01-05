@@ -1,10 +1,10 @@
 import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
-import {IterArray} from "../src/index.js";
+import {IterArray, Iterator} from "../src/index.js";
 
 describe('IterArray', () => {
-  const iter = <T> (arr: T[]): IterArray<T> => {
+  const iter = <T> (arr: T[]): Iterator<T> => {
     return new IterArray(arr)
   }
 
@@ -182,6 +182,19 @@ describe('IterArray', () => {
       const it = iter<number>([-3, -1, 0, -1, 1, 2])
           .takeWhile((elem) => elem < 0)
       expect(it.toArray()).to.eql([-3, -1])
+    })
+  })
+
+  describe('#takeWhileInclusive', () => {
+    it('returns empty for empty iterator', () => {
+      const it = iter<number>([]).takeWhileInclusive(() => true)
+      expect(it.toArray()).to.eql([])
+    })
+
+    it('returns first chunk of elements that match the condition, including the element that made the condition fail', () => {
+      const it = iter<number>([-3, -1, 0, -1, 1, 2])
+          .takeWhileInclusive((elem) => elem < 0)
+      expect(it.toArray()).to.eql([-3, -1, 0])
     })
   })
 
