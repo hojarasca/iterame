@@ -14,19 +14,16 @@ export class DedupWith<A, B> extends Iterator<A>{
     this.transformation = transformation
   }
   next (): Option<A> {
-    let next = this.base.next()
-    while (next.isSomeAnd(t => this.has(t))) {
-      next = this.base.next()
+    let next = this.nextWithTransformation()
+    while (next.isSomeAnd(([_, transformed]) => this.alreadySeen.has(transformed))) {
+      next = this.nextWithTransformation()
     }
-    next.ifSome(t => this.add(t))
-    return next
+    next.ifSome(([_, transformed]) => this.alreadySeen.add(transformed))
+    return next.map(([value, _]) => value)
   }
-
-  private has(value: A): boolean {
-    return this.alreadySeen.has(this.transformation(value))
-  }
-
-  private add(value: A): void {
-    this.alreadySeen.add(this.transformation(value))
+  
+  private nextWithTransformation(): Option<[A, B]> {
+    return this.base.next()
+        .map<[A, B]>(value => [value, this.transformation(value)])
   }
 }
