@@ -229,6 +229,24 @@ describe('IterArray', () => {
     })
   })
 
+  describe('#count', () => {
+    it('returns 0 for empty iterator', () => {
+      const it = iter<number>([])
+      expect(it.count()).to.eql(0)
+    })
+
+    it('returns amount of elements for non empty iterator', () => {
+      const it = iter([1, 2, 3])
+      expect(it.count()).to.eql(3)
+    })
+
+    it('consumes the iterator', () => {
+      const it = iter([1, 2, 3])
+      it.count()
+      expect(it.next().isNone()).to.eql(true)
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {

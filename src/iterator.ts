@@ -71,6 +71,20 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Concat(this, it2)
   }
 
+  forEach(fn: (t: T) => void): void {
+    let next = this.next()
+    while (next.isSome()) {
+      fn(next.unwrap())
+      next = this.next()
+    }
+  }
+
+  count (): number {
+    let count = 0
+    this.forEach(() => count += 1)
+    return count
+  }
+
   * [Symbol.iterator] (): Generator<T> {
     let next = this.next()
     while (next.isSome()) {
