@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "tsc"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",

@@ -1,4 +1,4 @@
-import {Iterator, Iterable, TakeWhileInclusive} from "./index.js";
+import {Iterator, Iterable} from "./index.js";
 import {Option} from "nochoices";
 
 import {Predicate} from "./types.js";

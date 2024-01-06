@@ -15,7 +15,7 @@ export class TakeWhileInclusive<T> extends Iterator<T> {
   }
 
   next (): Option<T> {
-    let next = this.start().and(this.base.next());
+    const next = this.start().and(this.base.next());
     if(next.isSomeBut(this.condition)) {
       this.finished = true
     }
