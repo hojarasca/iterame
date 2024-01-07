@@ -1,6 +1,6 @@
-import {Iterable, Iterator, Take} from "./index.js";
+import {Iterable, Iterator, Take} from "../index.js";
 import {Option} from "nochoices";
-import {last} from "./helpers.js";
+import {last} from "../helpers.js";
 
 export class StepBy<T> extends Iterator<T> {
   private base: Iterable<T>;

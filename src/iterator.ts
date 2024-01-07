@@ -13,7 +13,7 @@ import {
   StepBy
 } from "./index.js";
 import {times} from "./helpers.js";
-import {} from "./concat.js";
+import {ToArray} from "./collectors/to-array.js";
 
 
 export interface Iterable<T> {
@@ -22,6 +22,11 @@ export interface Iterable<T> {
 
 export abstract class Iterator<T> implements Iterable<T> {
   abstract next (): Option<T>
+
+  //---------
+  // Filters
+  //---------
+
   map<U>(mapping: Mapping<T, U>): IterMap<T, U> {
     return new IterMap(this, mapping)
   }
@@ -29,6 +34,51 @@ export abstract class Iterator<T> implements Iterable<T> {
   filter(predicate: Predicate<T>): Filter<T> {
     return new Filter(this, predicate)
   }
+
+  drop (n: number): Iterator<T> {
+    times(n, () => this.next())
+    return this
+  }
+
+  take (size: number): Take<T> {
+    return new Take(this, size)
+  }
+
+  chunks (eachSize: number): Chunks<T> {
+    return new Chunks<T>(this, eachSize)
+  }
+
+  concat (it2: Iterator<T>): Concat<T> {
+    return new Concat(this, it2)
+  }
+
+  takeWhile (condition: Predicate<T>): TakeWhile<T> {
+    return new TakeWhile(this, condition)
+  }
+
+  takeWhileInclusive (condition: Predicate<T>): TakeWhileInclusive<T> {
+    return new TakeWhileInclusive(this, condition)
+  }
+
+  dedup (): Dedup<T> {
+    return new Dedup<T>(this)
+  }
+
+  dedupWith <U>(transformation: Mapping<T, U>): DedupWith<T, U> {
+    return new DedupWith(this, transformation)
+  }
+
+  stepBy(stepSize: number): StepBy<T> {
+    return new StepBy(this, stepSize)
+  }
+
+  toArray (): T[] {
+    return new ToArray(this).collect()
+  }
+
+  //------------
+  // Finalizers
+  //------------
 
   every (param: Predicate<T>): boolean {
     let next = this.next()
@@ -51,35 +101,12 @@ export abstract class Iterator<T> implements Iterable<T> {
     return next.isSome()
   }
 
-  toArray (): T[] {
-    return [...this]
-  }
-
-
-
-  skip (n: number): Iterator<T> {
-    times(n, () => this.next())
-    return this
-  }
-
   nth (position: number): Option<T> {
     if (position < 0) {
       throw new Error('position should be positive')
     }
-    this.skip(position)
+    this.drop(position)
     return this.next()
-  }
-
-  take (size: number): Take<T> {
-    return new Take(this, size)
-  }
-
-  chunks (eachSize: number): Chunks<T> {
-    return new Chunks<T>(this, eachSize)
-  }
-
-  concat (it2: Iterator<T>): Concat<T> {
-    return new Concat(this, it2)
   }
 
   forEach(fn: (t: T) => void): void {
@@ -96,31 +123,11 @@ export abstract class Iterator<T> implements Iterable<T> {
     return count
   }
 
-  takeWhile (condition: Predicate<T>): TakeWhile<T> {
-    return new TakeWhile(this, condition)
-  }
-
   * [Symbol.iterator] (): Generator<T> {
     let next = this.next()
     while (next.isSome()) {
       yield next.unwrap()
       next = this.next()
     }
-  }
-
-  takeWhileInclusive (condition: Predicate<T>): TakeWhileInclusive<T> {
-    return new TakeWhileInclusive(this, condition)
-  }
-
-  dedup (): Dedup<T> {
-    return new Dedup<T>(this)
-  }
-
-  dedupWith <U>(transformation: Mapping<T, U>): DedupWith<T, U> {
-    return new DedupWith(this, transformation)
-  }
-
-  stepBy(stepSize: number): StepBy<T> {
-    return new StepBy(this, stepSize)
   }
 }

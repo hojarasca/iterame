@@ -1,4 +1,4 @@
-import {Iterator} from "./iterator.js";
+import {Iterator} from "../iterator.js";
 import {Option} from "nochoices";
 
 export class Chunks<T> extends Iterator<T[]> {

@@ -1,6 +1,6 @@
-import {Iterable, Iterator} from "./index.js";
+import {Iterable, Iterator} from "../index.js";
 import {Option} from "nochoices";
-import {Predicate} from "./types.js";
+import {Predicate} from "../types.js";
 
 export class TakeWhileInclusive<T> extends Iterator<T> {
   private base: Iterable<T>;

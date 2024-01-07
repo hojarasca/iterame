@@ -1,6 +1,6 @@
-import {Iterator, Iterable} from "./index.js";
+import {Iterator, Iterable} from "../index.js";
 import {Option} from "nochoices";
-import {Mapping} from "./types.js";
+import {Mapping} from "../types.js";
 
 export class DedupWith<A, B> extends Iterator<A>{
   private base: Iterable<A>;
@@ -21,7 +21,7 @@ export class DedupWith<A, B> extends Iterator<A>{
     next.ifSome(([_, transformed]) => this.alreadySeen.add(transformed))
     return next.map(([value, _]) => value)
   }
-  
+
   private nextWithTransformation(): Option<[A, B]> {
     return this.base.next()
         .map<[A, B]>(value => [value, this.transformation(value)])

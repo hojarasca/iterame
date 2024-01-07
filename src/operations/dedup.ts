@@ -1,4 +1,4 @@
-import {Iterator, Iterable} from "./index.js";
+import {Iterator, Iterable} from "../index.js";
 import {Option} from "nochoices";
 
 export class Dedup<T> extends Iterator<T>{

@@ -1,7 +1,7 @@
-import {Iterator, Iterable} from "./index.js";
+import {Iterator, Iterable} from "../index.js";
 import {Option} from "nochoices";
 
-import {Predicate} from "./types.js";
+import {Predicate} from "../types.js";
 
 export class Filter<A> extends Iterator<A> {
   private base: Iterable<A>;

@@ -1,4 +1,4 @@
-import {Iterator} from "./index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class Concat<T> extends Iterator<T> {

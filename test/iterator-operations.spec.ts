@@ -107,22 +107,22 @@ describe('IterArray', () => {
 
   describe('#skip', () => {
     it('skip 0 does nothing', () => {
-      const target = iter([1, 2, 3]).skip(0)
+      const target = iter([1, 2, 3]).drop(0)
       expect(target.toArray()).to.eql([1, 2, 3])
     })
 
     it('skip 1 ignores first element', () => {
-      const target = iter([1, 2, 3]).skip(1)
+      const target = iter([1, 2, 3]).drop(1)
       expect(target.toArray()).to.eql([2, 3])
     })
 
     it('skip 1 ignores for empty iterator returns empty iterator', () => {
-      const target = iter([]).skip(1)
+      const target = iter([]).drop(1)
       expect(target.toArray()).to.eql([])
     })
 
     it('skip more times than iterator length returns empty iterator', () => {
-      const target = iter([1, 2, 3]).skip(5)
+      const target = iter([1, 2, 3]).drop(5)
       expect(target.next().isNone()).to.eql(true)
     })
   })
