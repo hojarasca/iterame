@@ -1,6 +1,17 @@
 import {Option} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
-import {Filter, IterMap, Take, Chunks, Concat, TakeWhile, TakeWhileInclusive, Dedup, DedupWith} from "./index.js";
+import {
+  Filter,
+  IterMap,
+  Take,
+  Chunks,
+  Concat,
+  TakeWhile,
+  TakeWhileInclusive,
+  Dedup,
+  DedupWith,
+  StepBy
+} from "./index.js";
 import {times} from "./helpers.js";
 import {} from "./concat.js";
 
@@ -107,5 +118,9 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   dedupWith <U>(transformation: Mapping<T, U>): DedupWith<T, U> {
     return new DedupWith(this, transformation)
+  }
+
+  stepBy(stepSize: number): StepBy<T> {
+    return new StepBy(this, stepSize)
   }
 }

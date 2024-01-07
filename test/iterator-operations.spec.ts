@@ -4,7 +4,7 @@ import '../src/index'
 import {IterArray, Iterator} from "../src/index.js";
 
 describe('IterArray', () => {
-  const iter = <T> (arr: T[]): Iterator<T> => {
+  const iter = <T>(arr: T[]): Iterator<T> => {
     return new IterArray(arr)
   }
 
@@ -180,13 +180,13 @@ describe('IterArray', () => {
 
     it('returns first chunk of elements that match the condition', () => {
       const it = iter<number>([-3, -1, 0, -1, 1, 2])
-          .takeWhile((elem) => elem < 0)
+        .takeWhile((elem) => elem < 0)
       expect(it.toArray()).to.eql([-3, -1])
     })
 
     it('when condition always fullfills take all the iterator', () => {
       const it = iter<number>([1, 2, 3])
-          .takeWhile((_) => true)
+        .takeWhile((_) => true)
       expect(it.toArray()).to.eql([1, 2, 3])
     })
   })
@@ -199,13 +199,13 @@ describe('IterArray', () => {
 
     it('returns first chunk of elements that match the condition, including the element that made the condition fail', () => {
       const it = iter<number>([-3, -1, 0, -1, 1, 2])
-          .takeWhileInclusive((elem) => elem < 0)
+        .takeWhileInclusive((elem) => elem < 0)
       expect(it.toArray()).to.eql([-3, -1, 0])
     })
 
     it('when condition always fullfills take all the iterator', () => {
       const it = iter<number>([1, 2, 3])
-          .takeWhileInclusive((_) => true)
+        .takeWhileInclusive((_) => true)
       expect(it.toArray()).to.eql([1, 2, 3])
     })
   })
@@ -334,11 +334,39 @@ describe('IterArray', () => {
       const obj1 = {}
       const obj2 = {}
       const it = iter([1, 2, 3]).dedupWith(t => {
-        if (t === 1) { return obj1 }
-        if (t === 2) { return obj2 }
-        if (t === 3) { return obj1 }
+        if (t === 1) {
+          return obj1
+        }
+        if (t === 2) {
+          return obj2
+        }
+        if (t === 3) {
+          return obj1
+        }
       })
       expect(it.toArray()).to.eql([1, 2])
+    })
+  })
+
+  describe('#stepBy', () => {
+    it('returns odd positiosn when size is 2', () => {
+      const it = iter([0, 1, 2, 3, 4, 5]).stepBy(2)
+      expect(it.toArray()).to.eql([1, 3, 5])
+    })
+
+    it('returns empty iter when step is bigger than iterator size', () => {
+      const it = iter([0, 1, 2]).stepBy(4)
+      expect(it.toArray()).to.eql([])
+    })
+
+    it('returns equivalent iterator when size is 1', () => {
+      const it = iter([0, 1, 2]).stepBy(1)
+      expect(it.toArray()).to.eql([0, 1, 2])
+    })
+
+    it('when there is a rest the rest is ignored', () => {
+      const it = iter([0, 1, 2, 3, 4, 5, 6, 7]).stepBy(3)
+      expect(it.toArray()).to.eql([2, 5])
     })
   })
 
@@ -361,8 +389,8 @@ describe('IterArray', () => {
   it('can be mapped and filtered filtered', () => {
     const res = []
     const iterator = iter([1, 2, 3])
-        .filter(n => n % 2 === 1)
-        .map(n => n * 2)
+      .filter(n => n % 2 === 1)
+      .map(n => n * 2)
     for (const a of iterator) {
       res.push(a)
     }

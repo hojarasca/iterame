@@ -1,11 +1,11 @@
-import {Iterator} from "./index.js";
+import {Iterable, Iterator} from "./index.js";
 import {Option} from "nochoices";
 
 export class Take<T> extends Iterator<T> {
-  private base: Iterator<T>;
+  private base: Iterable<T>;
   private size: number;
   private current: number;
-  constructor (base: Iterator<T>, size: number) {
+  constructor (base: Iterable<T>, size: number) {
     super();
     this.base = base
     this.size = size
@@ -18,5 +18,4 @@ export class Take<T> extends Iterator<T> {
         .andThen(() => this.base.next())
         .ifSome(() => this.current += 1)
   }
-
 }
