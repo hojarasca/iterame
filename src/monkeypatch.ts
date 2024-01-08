@@ -1,4 +1,4 @@
-import {IterArray} from "./iter-array.js";
+import {IterArray} from "./index.js";
 
 
 declare global {

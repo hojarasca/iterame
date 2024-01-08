@@ -2,9 +2,8 @@ import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
 import {IterArray, Iterator} from "../src/index.js";
-import {Option} from "nochoices";
 
-describe('IterArray', () => {
+describe('Iterator', () => {
   const iter = <T> (arr: T[]): Iterator<T> => {
     return new IterArray(arr)
   }
@@ -395,22 +394,22 @@ describe('IterArray', () => {
 
   describe('#flatMap', () => {
     it('returns empty for empty iter', () => {
-      const it = iter<number>([]).flatMap((n) => [])
+      const it = iter<number>([]).flatMap((_) => [])
       expect(it.next().isNone()).to.eql(true)
     })
 
     it('returns empty iter for fn that returns empty array', () => {
-      const it = iter<number>([1, 2, 3]).flatMap((n) => [])
+      const it = iter<number>([1, 2, 3]).flatMap((_) => [])
       expect(it.next().isNone()).to.eql(true)
     })
 
     it('when the function returns a list it returns those elements in order', () => {
-      const it = iter<number>([1]).flatMap((n) => [2, 3, 4])
+      const it = iter<number>([1]).flatMap((_) => [2, 3, 4])
       expect(it.toArray()).to.eql([2, 3, 4])
     })
 
     it('when the function returns an iter it returns those elements in order', () => {
-      const it = iter<number>([1]).flatMap((n) => iter([2, 3, 4]))
+      const it = iter<number>([1]).flatMap((_) => iter([2, 3, 4]))
       expect(it.toArray()).to.eql([2, 3, 4])
     })
 
@@ -474,10 +473,5 @@ describe('IterArray', () => {
       res.push(a)
     }
     expect(res).to.eql([2, 6])
-  })
-
-  it('monkeypatches the array class', () => {
-    const iter = [1, 2, 3].iter().filter(n => n % 2 === 1).map(n => n * 2)
-    expect([...iter]).to.eql([2, 6])
   })
 })

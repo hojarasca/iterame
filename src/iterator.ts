@@ -11,8 +11,7 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap, IterArray,
-  OnePieceIterator, Flatten
+  Interspace, FlatMap, Flatten, Collector
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -78,12 +77,24 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Interspace(this, separator)
   }
 
+  flatMap<U>(fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
+    return new FlatMap(this, fn)
+  }
+
+  flatten(): Flatten<T> {
+    return new Flatten(this)
+  }
+
   //------------
   // Finalizers
   //------------
 
+  collect<U>(collector: Collector<T, U>): U {
+    return collector.collect(this)
+  }
+
   toArray (): T[] {
-    return new ToArray(this).collect()
+    return this.collect(new ToArray())
   }
 
   every (param: Predicate<T>): boolean {
@@ -135,13 +146,5 @@ export abstract class Iterator<T> implements Iterable<T> {
       yield next.unwrap()
       next = this.next()
     }
-  }
-
-  flatMap<U>(fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
-    return new FlatMap(this, fn)
-  }
-
-  flatten(): Flatten<T> {
-    return new Flatten(this)
   }
 }

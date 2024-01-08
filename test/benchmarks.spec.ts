@@ -25,7 +25,7 @@ describe('simple benchmarks', () => {
 
     console.time('lazy')
     const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).toArray()
-    expect(res.length).to.eql(500)
+    expect(res2.length).to.eql(500)
     console.timeEnd('lazy')
   })
 
@@ -38,7 +38,7 @@ describe('simple benchmarks', () => {
 
     console.time('lazy')
     const res2 = numbers.iter().filter(n => n % 2 === 0).map(n => n * 3).toArray()
-    expect(res.length).to.eql(500)
+    expect(res2.length).to.eql(500)
     console.timeEnd('lazy')
   })
 
@@ -51,7 +51,7 @@ describe('simple benchmarks', () => {
 
     console.time('lazy')
     const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).toArray()
-    expect(res.length).to.eql(10000000 / 2)
+    expect(res2.length).to.eql(10000000 / 2)
     console.timeEnd('lazy')
   })
 
@@ -64,7 +64,7 @@ describe('simple benchmarks', () => {
 
     console.time('lazy')
     const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).take(10).toArray()
-    expect(res.length).to.eql(10)
+    expect(res2.length).to.eql(10)
     console.timeEnd('lazy')
   })
 })
