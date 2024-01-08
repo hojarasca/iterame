@@ -13,7 +13,7 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector, Reducer, Fold
+  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -161,6 +161,10 @@ export abstract class Iterator<T> implements Iterable<T> {
   reduce (param: Reducer<T, T>): Option<T> {
     return this.next()
       .map(t => new Fold(t, param).collect(this))
+  }
+
+  cycle (): Cycle<T> {
+    return new Cycle<T>(this)
   }
 }
 

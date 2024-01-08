@@ -537,6 +537,36 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#cycle', () => {
+    it('returns empty for empty', () => {
+      let empty = iter<number>([]).cycle()
+      expect(empty.next().isNone()).to.eql(true)
+    })
+
+    it('the same element over and over for a 1 element iter', () => {
+      let empty = iter<number>([123]).cycle()
+      expect(empty.next().unwrap()).to.eql(123)
+      expect(empty.next().unwrap()).to.eql(123)
+      expect(empty.next().unwrap()).to.eql(123)
+      expect(empty.next().unwrap()).to.eql(123)
+      expect(empty.next().unwrap()).to.eql(123)
+      expect(empty.next().unwrap()).to.eql(123)
+    })
+
+    it('loops the same elements', () => {
+      const obj1 = {}
+      const obj2 = {}
+      const obj3 = {}
+      const empty = iter([obj1, obj2, obj3]).cycle()
+      expect(empty.next().unwrap()).to.equals(obj1)
+      expect(empty.next().unwrap()).to.equals(obj2)
+      expect(empty.next().unwrap()).to.equals(obj3)
+      expect(empty.next().unwrap()).to.equals(obj1)
+      expect(empty.next().unwrap()).to.equals(obj2)
+      expect(empty.next().unwrap()).to.equals(obj3)
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {

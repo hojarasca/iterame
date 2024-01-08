@@ -15,4 +15,8 @@ export class ArrayIterator<T> extends Iterator<T> {
         .filter(_ => this.current < this.iterable.length)
         .ifSome(() => this.current += 1)
   }
+
+  reset () {
+    this.current = 0
+  }
 }
