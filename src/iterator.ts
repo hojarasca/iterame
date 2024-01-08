@@ -11,7 +11,8 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap
+  Interspace, FlatMap, IterArray,
+  OnePieceIterator, Flatten
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -138,5 +139,9 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   flatMap<U>(fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
     return new FlatMap(this, fn)
+  }
+
+  flatten(): Flatten<T> {
+    return new Flatten(this)
   }
 }

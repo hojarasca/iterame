@@ -6,6 +6,7 @@ export class FlatMap<A, B> extends Iterator<B> {
   private base: Iterable<A>;
   private transformation: Mapping<A, Iterable<B> | B[]>;
   private current: Iterable<B>
+
   constructor (base: Iterable<A>, transformation: Mapping<A, Iterable<B> | B[]>) {
     super();
     this.base = base
@@ -14,27 +15,28 @@ export class FlatMap<A, B> extends Iterator<B> {
   }
 
   next (): Option<B> {
-    return this.current.next().orElse(() => {
-      let next = this.base.next()
-      let current = this.current.next()
-      while (next.isSomeAnd(() => current.isNone())) {
-        this.current = this.arrayOrIterIntoIter(this.transformation(next.unwrap()))
-        current = this.current.next().ifNone(() => next = this.base.next())
-      }
-      return current
-    })
+    return this.current.next().orElse(() => this.findNext())
   }
 
-  // private iterNext(): Option<B> {
-  //   return this.current.next().orElse(() => {
-  //     return this.base.next().andThen(a => {
-  //       this.current = this.arrayOrIterIntoIter(this.transformation(a))
-  //       return this.current.next()
-  //     })
-  //   })
-  // }
+  private findNext (): Option<B> {
+    let next: Option<A>
+    let current: Iterable<B>
+    let maybeElem: Option<B>
 
-  private arrayOrIterIntoIter(arrayOrIter: Iterable<B> | B[]): Iterable<B> {
+    do {
+      next = this.base.next()
+      current = next
+        .map(this.transformation)
+        .map((a) => this.arrayOrIterIntoIter(a))
+        .unwrapOr(new IterArray([]))
+      maybeElem = current.next()
+    } while (next.isSome() && maybeElem.isNone())
+
+    this.current = current
+    return maybeElem
+  }
+
+  private arrayOrIterIntoIter (arrayOrIter: Iterable<B> | B[]): Iterable<B> {
     if (Array.isArray(arrayOrIter)) {
       return new IterArray(arrayOrIter)
     } else {

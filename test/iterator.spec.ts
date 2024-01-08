@@ -2,6 +2,7 @@ import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
 import {IterArray, Iterator} from "../src/index.js";
+import {Option} from "nochoices";
 
 describe('IterArray', () => {
   const iter = <T> (arr: T[]): Iterator<T> => {
@@ -423,6 +424,28 @@ describe('IterArray', () => {
       const it = iter<number>([0, 1, 2])
         .flatMap((n) => [[n]])
       expect(it.toArray()).to.eql([[0], [1], [2]])
+    })
+  })
+
+  describe('#flatten', () => {
+    it('returns empty iter for empty iter', () => {
+      const it = iter<number[]>([]).flatten()
+      expect(it.next().isNone()).to.eql(true)
+    })
+
+    it('flattens a list of size 1', () => {
+      const it = iter([[1]]).flatten()
+      expect(it.toArray()).to.eql([1])
+    })
+
+    it('flattens a list of one iterator', () => {
+      const it = iter([iter([1])]).flatten()
+      expect(it.toArray()).to.eql([1])
+    })
+
+    it('does nothing with a list of plain objects', () => {
+      const it = iter([1, 2, 3]).flatten()
+      expect(it.toArray()).to.eql([1, 2, 3])
     })
   })
 

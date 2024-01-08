@@ -7,7 +7,7 @@ export class IterMap<A, B> extends Iterator<B> {
   private base: Iterable<A>;
   private mapping: Mapping<A, B>;
 
-  constructor (base: Iterator<A>, mapping: Mapping<A, B>) {
+  constructor (base: Iterable<A>, mapping: Mapping<A, B>) {
     super()
     this.base = base
     this.mapping = mapping
