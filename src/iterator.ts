@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-unsafe-declaration-merging: 0 */
+
 import {Option, Transformation} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
 import {
@@ -11,14 +13,14 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector, Reducer, Reduce
+  Interspace, FlatMap, Flatten, Collector, Reducer, Fold
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
 
 
 export interface Iterable<T> {
-  next(): Option<T>
+  next (): Option<T>
 }
 
 export abstract class Iterator<T> implements Iterable<T> {
@@ -28,11 +30,11 @@ export abstract class Iterator<T> implements Iterable<T> {
   // Filters
   //---------
 
-  map<U>(mapping: Mapping<T, U>): IterMap<T, U> {
+  map<U> (mapping: Mapping<T, U>): IterMap<T, U> {
     return new IterMap(this, mapping)
   }
 
-  select(predicate: Predicate<T>): Filter<T> {
+  select (predicate: Predicate<T>): Filter<T> {
     return new Filter(this, predicate)
   }
 
@@ -69,11 +71,11 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Dedup<T>(this)
   }
 
-  dedupWith <U>(transformation: Mapping<T, U>): DedupWith<T, U> {
+  dedupWith<U> (transformation: Mapping<T, U>): DedupWith<T, U> {
     return new DedupWith(this, transformation)
   }
 
-  stepBy(stepSize: number): StepBy<T> {
+  stepBy (stepSize: number): StepBy<T> {
     return new StepBy(this, stepSize)
   }
 
@@ -81,11 +83,11 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Interspace(this, separator)
   }
 
-  flatMap<U>(fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
+  flatMap<U> (fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
     return new FlatMap(this, fn)
   }
 
-  flatten(): Flatten<T> {
+  flatten (): Flatten<T> {
     return new Flatten(this)
   }
 
@@ -93,7 +95,7 @@ export abstract class Iterator<T> implements Iterable<T> {
   // Finalizers
   //------------
 
-  collect<U>(collector: Collector<T, U>): U {
+  collect<U> (collector: Collector<T, U>): U {
     return collector.collect(this)
   }
 
@@ -130,7 +132,7 @@ export abstract class Iterator<T> implements Iterable<T> {
     return this.next()
   }
 
-  forEach(fn: (t: T) => void): void {
+  forEach (fn: (t: T) => void): void {
     let next = this.next()
     while (next.isSome()) {
       fn(next.unwrap())
@@ -152,13 +154,18 @@ export abstract class Iterator<T> implements Iterable<T> {
     }
   }
 
-  reduce<U>(start: U, reducer: Reducer<T, U>): U {
-    return this.collect(new Reduce(start, reducer))
+  fold<U> (start: U, reducer: Reducer<T, U>): U {
+    return this.collect(new Fold(start, reducer))
+  }
+
+  reduce (param: Reducer<T, T>): Option<T> {
+    return this.next()
+      .map(t => new Fold(t, param).collect(this))
   }
 }
 
 export interface Iterator<T> {
-  filter(predicate: Predicate<T>): Filter<T>
+  filter (predicate: Predicate<T>): Filter<T>
 }
 
 Iterator.prototype.filter = Iterator.prototype.select

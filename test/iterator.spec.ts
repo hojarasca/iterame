@@ -462,26 +462,26 @@ describe('Iterator', () => {
     })
   })
 
-  describe('#reduce', () => {
+  describe('#fold', () => {
     it('returns default element for empty iterator', () => {
-      const reduced = iter<number>([]).reduce(123, (_a, _b) => 0)
+      const reduced = iter<number>([]).fold(123, (_a, _b) => 0)
       expect(reduced).to.eql(123)
     })
 
     it('applies the function to the starting value and the only element of a 1 sized iterator', () => {
-      const reduced = iter<number>([100]).reduce(50, (a, b) => a + b)
+      const reduced = iter<number>([100]).fold(50, (a, b) => a + b)
       expect(reduced).to.eql(150)
     })
 
     it('when sum of 100 and 200 with 50 as starter returns 350', () => {
-      const reduced = iter<number>([100, 200]).reduce(50, (a, b) => a + b)
+      const reduced = iter<number>([100, 200]).fold(50, (a, b) => a + b)
       expect(reduced).to.eql(350)
     })
 
     it('sends right arguments for first call of the callback', () => {
       const obj1 = {}
       const obj2 = {}
-      const reduced = iter([obj1]).reduce(obj2, (partial, current): number => {
+      const reduced = iter([obj1]).fold(obj2, (partial, current): number => {
         expect(partial).to.equals(obj2)
         expect(current).to.equals(obj1)
         return 0
@@ -494,16 +494,46 @@ describe('Iterator', () => {
       const obj2 = {}
       const obj3 = {}
       const obj4 = {}
+
       const calls: object[][] = []
-      const reduced = iter([obj1, obj2]).reduce(obj3, (partial, current): object => {
+      iter([obj1, obj2]).fold(obj3, (partial, current): object => {
         calls.push([partial, current])
         return obj4
       })
+
       expect(calls).to.have.length(2)
       expect(calls[0][0]).to.equals(obj3)
       expect(calls[0][1]).to.equals(obj1)
       expect(calls[1][0]).to.equals(obj4)
       expect(calls[1][1]).to.equals(obj2)
+    })
+  })
+
+  describe('#reduce', () => {
+    it('returns none for empty iter', () => {
+      const res = iter<number>([]).reduce((_current, _partial) => 0)
+      expect(res.isNone()).to.eql(true)
+    })
+
+    it('first element when there is only 1 element', () => {
+      const res = iter<number>([100]).reduce((_current, _partial) => 0)
+      expect(res.unwrap()).to.eql(100)
+    })
+
+    it('when calculating sum it sums all the elements', () => {
+      const res = iter<number>([1, 10, 100]).reduce((current, partial) => current + partial)
+      expect(res.unwrap()).to.eql(111)
+    })
+
+    it('sends right args on each call', () => {
+      let calls: number[][] = []
+      iter<number>([1, 10, 100]).reduce((current, partial) => {
+        calls.push([current, partial])
+        return current + partial
+      })
+      expect(calls).to.have.length(2)
+      expect(calls[0]).to.eql([1, 10])
+      expect(calls[1]).to.eql([11, 100])
     })
   })
 

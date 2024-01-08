@@ -2,7 +2,7 @@ import {Collector} from "./collector.js";
 import {Iterator} from "../iterator.js";
 
 export type Reducer<Curr, Res> = (partial: Res, current: Curr) => Res
-export class Reduce<A, B> implements Collector<A, B> {
+export class Fold<A, B> implements Collector<A, B> {
   private start: B;
   private fn: Reducer<A, B>;
 
