@@ -1,15 +1,15 @@
-import {IterArray} from "./index.js";
+import {ArrayIterator} from "./index.js";
 
 
 declare global {
   interface Array<T> {
-    iter(): IterArray<T>;
+    iter(): ArrayIterator<T>;
   }
 }
 
 Object.defineProperty(Array.prototype, 'iter', {
-  value: function<T>(): IterArray<T> {
-    return new IterArray(this)
+  value: function<T>(): ArrayIterator<T> {
+    return new ArrayIterator(this)
   },
   writable: false
 })

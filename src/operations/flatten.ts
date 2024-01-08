@@ -1,6 +1,6 @@
-import {Iterable, IterArray, Iterator, IterMap} from "../index.js";
+import {Iterable, ArrayIterator, Iterator, IterMap} from "../index.js";
 import {Option} from "nochoices";
-import {OnePieceIterator} from "../one-piece-iterator.js";
+import {OnePieceIterator} from "../iterators/one-piece-iterator.js";
 
 export class Flatten<A> extends Iterator<Flattened<A>> {
   private base: Iterable<Iterable<Flattened<A>>>;
@@ -15,7 +15,7 @@ export class Flatten<A> extends Iterator<Flattened<A>> {
   private prepareIter (base: Iterable<A>): Iterator<Iterator<Flattened<A>>> {
     return new IterMap(base, (a) => {
       if (a instanceof Array) {
-        return new IterArray(a) as Iterator<Flattened<A>>
+        return new ArrayIterator(a) as Iterator<Flattened<A>>
       } else if (a instanceof Iterator) {
         return a as Iterator<Flattened<A>>
       } else {

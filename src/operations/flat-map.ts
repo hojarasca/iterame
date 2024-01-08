@@ -1,4 +1,4 @@
-import {Iterable, IterArray, Iterator} from "../index.js";
+import {Iterable, ArrayIterator, Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {Mapping} from "../types.js";
 
@@ -11,7 +11,7 @@ export class FlatMap<A, B> extends Iterator<B> {
     super();
     this.base = base
     this.transformation = transformation
-    this.current = new IterArray([])
+    this.current = new ArrayIterator([])
   }
 
   next (): Option<B> {
@@ -28,7 +28,7 @@ export class FlatMap<A, B> extends Iterator<B> {
       current = next
         .map(this.transformation)
         .map((a) => this.arrayOrIterIntoIter(a))
-        .unwrapOr(new IterArray([]))
+        .unwrapOr(new ArrayIterator([]))
       maybeElem = current.next()
     } while (next.isSome() && maybeElem.isNone())
 
@@ -38,7 +38,7 @@ export class FlatMap<A, B> extends Iterator<B> {
 
   private arrayOrIterIntoIter (arrayOrIter: Iterable<B> | B[]): Iterable<B> {
     if (Array.isArray(arrayOrIter)) {
-      return new IterArray(arrayOrIter)
+      return new ArrayIterator(arrayOrIter)
     } else {
       return arrayOrIter
     }

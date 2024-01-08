@@ -1,11 +1,11 @@
 import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
-import {IterArray, Iterator} from "../src/index.js";
+import {ArrayIterator, Iterator} from "../src/index.js";
 
 describe('Iterator', () => {
   const iter = <T> (arr: T[]): Iterator<T> => {
-    return new IterArray(arr)
+    return new ArrayIterator(arr)
   }
 
   it('generates no values for empty list', () => {

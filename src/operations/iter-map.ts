@@ -1,7 +1,7 @@
-import {Iterable, Iterator} from "./index.js";
+import {Iterable, Iterator} from "../index.js";
 import {Option} from "nochoices";
 
-import {Mapping} from "./types.js";
+import {Mapping} from "../types.js";
 
 export class IterMap<A, B> extends Iterator<B> {
   private base: Iterable<A>;

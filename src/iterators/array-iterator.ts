@@ -1,7 +1,7 @@
 import {Option} from "nochoices";
-import {Iterator} from "./iterator.js";
+import {Iterator} from "../iterator.js";
 
-export class IterArray<T> extends Iterator<T> {
+export class ArrayIterator<T> extends Iterator<T> {
   private current: number;
   private iterable: T[];
   constructor (arr: T[]) {

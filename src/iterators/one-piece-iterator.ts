@@ -1,4 +1,4 @@
-import {Iterator} from "./index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class OnePieceIterator<T> extends Iterator<T>{
