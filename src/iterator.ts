@@ -11,7 +11,7 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector
+  Interspace, FlatMap, Flatten, Collector, Reducer, Reduce
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -150,6 +150,10 @@ export abstract class Iterator<T> implements Iterable<T> {
       yield next.unwrap()
       next = this.next()
     }
+  }
+
+  reduce<U>(start: U, reducer: Reducer<T, U>): U {
+    return this.collect(new Reduce(start, reducer))
   }
 }
 

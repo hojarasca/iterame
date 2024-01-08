@@ -462,6 +462,51 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#reduce', () => {
+    it('returns default element for empty iterator', () => {
+      const reduced = iter<number>([]).reduce(123, (_a, _b) => 0)
+      expect(reduced).to.eql(123)
+    })
+
+    it('applies the function to the starting value and the only element of a 1 sized iterator', () => {
+      const reduced = iter<number>([100]).reduce(50, (a, b) => a + b)
+      expect(reduced).to.eql(150)
+    })
+
+    it('when sum of 100 and 200 with 50 as starter returns 350', () => {
+      const reduced = iter<number>([100, 200]).reduce(50, (a, b) => a + b)
+      expect(reduced).to.eql(350)
+    })
+
+    it('sends right arguments for first call of the callback', () => {
+      const obj1 = {}
+      const obj2 = {}
+      const reduced = iter([obj1]).reduce(obj2, (partial, current): number => {
+        expect(partial).to.equals(obj2)
+        expect(current).to.equals(obj1)
+        return 0
+      })
+      expect(reduced).to.eql(0)
+    })
+
+    it('sends right arguments for second call of the callback', () => {
+      const obj1 = {}
+      const obj2 = {}
+      const obj3 = {}
+      const obj4 = {}
+      const calls: object[][] = []
+      const reduced = iter([obj1, obj2]).reduce(obj3, (partial, current): object => {
+        calls.push([partial, current])
+        return obj4
+      })
+      expect(calls).to.have.length(2)
+      expect(calls[0][0]).to.equals(obj3)
+      expect(calls[0][1]).to.equals(obj1)
+      expect(calls[1][0]).to.equals(obj4)
+      expect(calls[1][1]).to.equals(obj2)
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {
