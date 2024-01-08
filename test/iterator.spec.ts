@@ -448,6 +448,20 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#select', () => {
+    it('works as filter', () => {
+      const it = iter([0, 1, 2, 3]).select(n => n % 2 === 0)
+      expect(it.toArray()).to.eql([0, 2])
+    })
+  })
+
+  describe('#reject', () => {
+    it('returns elemnts that make the predicate false', () => {
+      const it = iter([0, 1, 2, 3]).reject(n => n % 2 === 0)
+      expect(it.toArray()).to.eql([1, 3])
+    })
+  })
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {

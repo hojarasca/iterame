@@ -36,6 +36,10 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Filter(this, predicate)
   }
 
+  reject (condition: Predicate<T>): Filter<T> {
+    return new Filter(this, (t) => !condition(t))
+  }
+
   drop (n: number): Iterator<T> {
     times(n, () => this.next())
     return this
@@ -148,3 +152,9 @@ export abstract class Iterator<T> implements Iterable<T> {
     }
   }
 }
+
+export interface Iterator<T> {
+  select(predicate: Predicate<T>): Filter<T>
+}
+
+Iterator.prototype.select = Iterator.prototype.filter
