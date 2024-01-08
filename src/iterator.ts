@@ -10,7 +10,8 @@ import {
   TakeWhileInclusive,
   Dedup,
   DedupWith,
-  StepBy
+  StepBy,
+  Interspace
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -72,13 +73,17 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new StepBy(this, stepSize)
   }
 
-  toArray (): T[] {
-    return new ToArray(this).collect()
+  interspace (separator: T): Interspace<T> {
+    return new Interspace(this, separator)
   }
 
   //------------
   // Finalizers
   //------------
+
+  toArray (): T[] {
+    return new ToArray(this).collect()
+  }
 
   every (param: Predicate<T>): boolean {
     let next = this.next()
