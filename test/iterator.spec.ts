@@ -4,7 +4,7 @@ import '../src/index'
 import {IterArray, Iterator} from "../src/index.js";
 
 describe('IterArray', () => {
-  const iter = <T>(arr: T[]): Iterator<T> => {
+  const iter = <T> (arr: T[]): Iterator<T> => {
     return new IterArray(arr)
   }
 
@@ -389,6 +389,40 @@ describe('IterArray', () => {
     it('in a 1 elem iterator no separator', () => {
       const it = iter<number>([1]).interspace(100)
       expect(it.toArray()).to.eql([1])
+    })
+  })
+
+  describe('#flatMap', () => {
+    it('returns empty for empty iter', () => {
+      const it = iter<number>([]).flatMap((n) => [])
+      expect(it.next().isNone()).to.eql(true)
+    })
+
+    it('returns empty iter for fn that returns empty array', () => {
+      const it = iter<number>([1, 2, 3]).flatMap((n) => [])
+      expect(it.next().isNone()).to.eql(true)
+    })
+
+    it('when the function returns a list it returns those elements in order', () => {
+      const it = iter<number>([1]).flatMap((n) => [2, 3, 4])
+      expect(it.toArray()).to.eql([2, 3, 4])
+    })
+
+    it('when the function returns an iter it returns those elements in order', () => {
+      const it = iter<number>([1]).flatMap((n) => iter([2, 3, 4]))
+      expect(it.toArray()).to.eql([2, 3, 4])
+    })
+
+    it('when the function returns empty array for some elements they get ignored', () => {
+      const it = iter<number>([0, 1, 2, 3, 4, 5, 6])
+        .flatMap((n) => n % 3 === 0 ? [n] : [])
+      expect(it.toArray()).to.eql([0, 3, 6])
+    })
+
+    it('when the function returns list of lists it flattens only once', () => {
+      const it = iter<number>([0, 1, 2])
+        .flatMap((n) => [[n]])
+      expect(it.toArray()).to.eql([[0], [1], [2]])
     })
   })
 

@@ -1,4 +1,4 @@
-import {Option} from "nochoices";
+import {Option, Transformation} from "nochoices";
 import {Mapping, Predicate} from "./types.js";
 import {
   Filter,
@@ -11,7 +11,7 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace
+  Interspace, FlatMap
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -134,5 +134,9 @@ export abstract class Iterator<T> implements Iterable<T> {
       yield next.unwrap()
       next = this.next()
     }
+  }
+
+  flatMap<U>(fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
+    return new FlatMap(this, fn)
   }
 }
