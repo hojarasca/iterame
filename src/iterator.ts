@@ -32,7 +32,7 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new IterMap(this, mapping)
   }
 
-  filter(predicate: Predicate<T>): Filter<T> {
+  select(predicate: Predicate<T>): Filter<T> {
     return new Filter(this, predicate)
   }
 
@@ -154,7 +154,7 @@ export abstract class Iterator<T> implements Iterable<T> {
 }
 
 export interface Iterator<T> {
-  select(predicate: Predicate<T>): Filter<T>
+  filter(predicate: Predicate<T>): Filter<T>
 }
 
-Iterator.prototype.select = Iterator.prototype.filter
+Iterator.prototype.filter = Iterator.prototype.select
