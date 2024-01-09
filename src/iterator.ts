@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-unsafe-declaration-merging: 0 */
 
 import {Option, Transformation} from "nochoices";
-import {Mapping, Predicate} from "./types.js";
+import {Callback, Mapping, Predicate} from "./types.js";
 import {
   Filter,
   IterMap,
@@ -13,7 +13,7 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle
+  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -165,6 +165,10 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   cycle (): Cycle<T> {
     return new Cycle<T>(this)
+  }
+
+  inspect (callback: Callback<T>): Inspect<T> {
+    return new Inspect(this, callback)
   }
 }
 

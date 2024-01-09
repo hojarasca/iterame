@@ -567,6 +567,85 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#inspect', () => {
+    it('does not call the callback when the iterator was not consumed', () => {
+      const elems: number[] = []
+      const fn = (n: number) => elems.push(n)
+      iter([1, 2, 3]).inspect(fn)
+      expect(elems).to.eql([])
+    })
+
+    it('calls the callback for each element when the iterator was not consumed', () => {
+      const elems: number[] = []
+      const fn = (n: number) => elems.push(n)
+      iter([1, 2, 3]).inspect(fn).toArray()
+      expect(elems).to.eql([1, 2, 3])
+    })
+
+    it('does not affected the items of the iterator', () => {
+      const fn = (_n: number) => {}
+      const it = iter([1, 2, 3]).inspect(fn)
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+  })
+
+  describe.skip('#forEach', () => {
+  })
+  describe.skip('#enumerate', () => {
+  })
+  describe.skip('#equals', () => {
+  })
+  describe.skip('#filterMap', () => {
+  })
+  describe.skip('#find', () => {
+  })
+  describe.skip('#findIndex', () => {
+  })
+  describe.skip('#intersperseWith', () => {
+  })
+  describe.skip('#intersperseWith', () => {
+  })
+  describe.skip('#mapWhile', () => {
+  })
+  // describe.skip('#max', () => {})
+  describe.skip('#maxBy', () => {
+  })
+  describe.skip('#maxWith', () => {
+  })
+  // describe.skip('#min', () => {})
+  describe.skip('#minWith', () => {
+  })
+  describe.skip('#partition', () => {
+  })
+  describe.skip('#findIndex', () => {
+  })
+  describe.skip('#positionOf', () => {
+  })
+  describe.skip('#rev', () => {
+  })
+  describe.skip('#peek', () => {
+  })
+  describe.skip('#rFindIndex', () => {
+  })
+  describe.skip('#rPositionOf', () => {
+  })
+  describe.skip('#rPositionOf', () => {
+  })
+  describe.skip('#zip', () => {
+  })
+
+  describe.skip('collect into map', () => {
+  })
+  describe.skip('collect into set', () => {
+  })
+  describe.skip('collect into orderedList', () => {
+  })
+  describe.skip('collect into orderedListBy', () => {
+  })
+  describe.skip('collect into orderedListWith', () => {
+  })
+
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {
