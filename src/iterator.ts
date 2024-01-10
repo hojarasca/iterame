@@ -11,7 +11,7 @@ import {
   TakeWhile,
   TakeWhileInclusive,
   Dedup,
-  DedupWith,
+  DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate
 } from "./index.js";
@@ -71,8 +71,8 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Dedup<T>(this)
   }
 
-  dedupWith<U> (transformation: Mapping<T, U>): DedupWith<T, U> {
-    return new DedupWith(this, transformation)
+  dedupBy<U> (transformation: Mapping<T, U>): DedupBy<T, U> {
+    return new DedupBy(this, transformation)
   }
 
   stepBy (stepSize: number): StepBy<T> {

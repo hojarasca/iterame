@@ -2,7 +2,7 @@ import {Iterator, Iterable} from "../index.js";
 import {Option} from "nochoices";
 import {Mapping} from "../types.js";
 
-export class DedupWith<A, B> extends Iterator<A>{
+export class DedupBy<A, B> extends Iterator<A>{
   private base: Iterable<A>;
   private alreadySeen: Set<B>;
   private transformation: Mapping<A, B>;

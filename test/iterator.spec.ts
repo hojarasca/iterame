@@ -314,26 +314,26 @@ describe('Iterator', () => {
     })
   })
 
-  describe('#dedupWith', () => {
+  describe('#dedupBy', () => {
     it('returns none for empty iterator', () => {
-      const it = iter<number>([]).dedupWith(() => 10)
+      const it = iter<number>([]).dedupBy(() => 10)
       expect(it.toArray()).to.eql([])
     })
 
     it('groups of 2 that ar mapped to the same value are reduced the first one', () => {
-      const it = iter([1, '1', 2, '2', 3, '3']).dedupWith(t => t.toString())
+      const it = iter([1, '1', 2, '2', 3, '3']).dedupBy(t => t.toString())
       expect(it.toArray()).to.eql([1, 2, 3])
     })
 
     it('when elements that map to the same value are dispersed the first occurrence survives', () => {
-      const it = iter([1, '2', 3, 1, '1', 2, '2', 1]).dedupWith(t => t.toString())
+      const it = iter([1, '2', 3, 1, '1', 2, '2', 1]).dedupBy(t => t.toString())
       expect(it.toArray()).to.eql([1, '2', 3])
     })
 
     it('compares transformed values using js equality', () => {
       const obj1 = {}
       const obj2 = {}
-      const it = iter([1, 2, 3]).dedupWith(t => {
+      const it = iter([1, 2, 3]).dedupBy(t => {
         if (t === 1) {
           return obj1
         }
