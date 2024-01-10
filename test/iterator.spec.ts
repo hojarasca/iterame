@@ -589,10 +589,29 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#forEach', () => {
+  describe('#forEach', () => {
+    it('does not call the callback for empty iterator', () => {
+      const it = iter<number>([])
+      let called = false
+      it.forEach(() => called = true)
+      expect(called).to.eql(false)
+    })
+
+    it('calls for each element of the iterator sending that as argument', () => {
+      const obj1 = {}
+      const obj2 = {}
+      const it = iter<object>([obj1, obj2, obj1])
+      const calls: object[] = []
+      it.forEach((arg) => calls.push(arg))
+      expect(calls[0]).to.equals(obj1)
+      expect(calls[1]).to.equals(obj2)
+      expect(calls[2]).to.equals(obj1)
+    })
   })
+
   describe.skip('#enumerate', () => {
   })
+
   describe.skip('#equals', () => {
   })
   describe.skip('#filterMap', () => {
