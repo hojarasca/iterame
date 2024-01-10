@@ -13,7 +13,7 @@ import {
   Dedup,
   DedupWith,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect
+  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate
 } from "./index.js";
 import {times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -91,6 +91,14 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Flatten(this)
   }
 
+  inspect (callback: Callback<T>): Inspect<T> {
+    return new Inspect(this, callback)
+  }
+
+  enumerate (): Enumerate<T> {
+    return new Enumerate(this)
+  }
+
   //------------
   // Finalizers
   //------------
@@ -164,11 +172,7 @@ export abstract class Iterator<T> implements Iterable<T> {
   }
 
   cycle (): Cycle<T> {
-    return new Cycle<T>(this)
-  }
-
-  inspect (callback: Callback<T>): Inspect<T> {
-    return new Inspect(this, callback)
+    return new Cycle(this)
   }
 }
 

@@ -609,7 +609,48 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#enumerate', () => {
+  describe('#enumerate', () => {
+    it('returns empty for empty iter', () => {
+      const it = iter<number>([]).enumerate()
+      expect(it.next().isNone()).to.eql(true)
+    })
+
+    it('tuple with zero and the element for one element iterator', () => {
+      const it = iter(['first']).enumerate()
+      expect(it.next().unwrap()).to.eql([0, 'first'])
+      expect(it.next().isNone()).to.eql(true)
+    })
+
+    it('enumerates a list', () => {
+      const it = iter(['first', 'second', 'third']).enumerate()
+      expect(it.toArray()).to.eql([
+        [0, 'first'],
+        [1, 'second'],
+        [2, 'third'],
+      ])
+    })
+
+    it('when enumerated and then filtered, the original indexes get conserved', () => {
+      const it = iter(['first', 'second', 'third'])
+        .enumerate()
+        .filter(([_, s]) => s !== 'second')
+
+      expect(it.toArray()).to.eql([
+        [0, 'first'],
+        [2, 'third'],
+      ])
+    })
+
+    it('uses indexes for when enumerated was called', () => {
+      const it = iter(['first', 'second', 'third'])
+        .filter(s => s !== 'second') // first remove some elems
+        .enumerate()
+
+      expect(it.toArray()).to.eql([
+        [0, 'first'],
+        [1, 'third'],
+      ])
+    })
   })
 
   describe.skip('#equals', () => {
