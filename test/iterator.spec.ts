@@ -654,6 +654,13 @@ describe('Iterator', () => {
   })
 
   describe.skip('#equals', () => {
+
+  })
+  describe.skip('#equalsBy', () => {
+
+  })
+  describe.skip('#equalsWith', () => {
+
   })
   describe.skip('#filterMap', () => {
   })
