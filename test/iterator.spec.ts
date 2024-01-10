@@ -161,7 +161,7 @@ describe('Iterator', () => {
       expect(taken.toArray()).to.eql([])
     })
 
-    it('when size is lower than the iterator length retuns the first elements of the iterator', () => {
+    it('when size is lower than the iterator length returns the first elements of the iterator', () => {
       const taken = iter([1, 2, 3]).take(2)
       expect(taken.toArray()).to.eql([1, 2])
     })
@@ -184,7 +184,7 @@ describe('Iterator', () => {
       expect(it.toArray()).to.eql([-3, -1])
     })
 
-    it('when condition always fullfills take all the iterator', () => {
+    it('when condition always fulfills take all the iterator', () => {
       const it = iter<number>([1, 2, 3])
         .takeWhile((_) => true)
       expect(it.toArray()).to.eql([1, 2, 3])
@@ -203,7 +203,7 @@ describe('Iterator', () => {
       expect(it.toArray()).to.eql([-3, -1, 0])
     })
 
-    it('when condition always fullfills take all the iterator', () => {
+    it('when condition always fulfills take all the iterator', () => {
       const it = iter<number>([1, 2, 3])
         .takeWhileInclusive((_) => true)
       expect(it.toArray()).to.eql([1, 2, 3])
@@ -301,7 +301,7 @@ describe('Iterator', () => {
       expect(it.toArray()).to.eql([1, 2, 3])
     })
 
-    it('when elements appear in different moments only the first insance is shown', () => {
+    it('when elements appear in different moments only the first instance is shown', () => {
       const it = iter<number>([1, 2, 3, 1, 4, 1, 2, 5]).dedup()
       expect(it.toArray()).to.eql([1, 2, 3, 4, 5])
     })
@@ -325,7 +325,7 @@ describe('Iterator', () => {
       expect(it.toArray()).to.eql([1, 2, 3])
     })
 
-    it('when elements that map to the same value are dispersed the first occurence survives', () => {
+    it('when elements that map to the same value are dispersed the first occurrence survives', () => {
       const it = iter([1, '2', 3, 1, '1', 2, '2', 1]).dedupWith(t => t.toString())
       expect(it.toArray()).to.eql([1, '2', 3])
     })
@@ -349,7 +349,7 @@ describe('Iterator', () => {
   })
 
   describe('#stepBy', () => {
-    it('returns odd positiosn when size is 2', () => {
+    it('returns odd position when size is 2', () => {
       const it = iter([0, 1, 2, 3, 4, 5]).stepBy(2)
       expect(it.toArray()).to.eql([1, 3, 5])
     })
@@ -376,12 +376,12 @@ describe('Iterator', () => {
       expect(it.next().isNone()).to.eql(true)
     })
 
-    it('in a 2 elem iterator puts 1 intance of the separator in the middle', () => {
+    it('in a 2 elem iterator puts 1 instance of the separator in the middle', () => {
       const it = iter<number>([1, 2]).interspace(100)
       expect(it.toArray()).to.eql([1, 100, 2])
     })
 
-    it('in a 3 elem iterator puts separtor in the middle after first and after second elem', () => {
+    it('in a 3 elem iterator puts separator in the middle after first and after second elem', () => {
       const it = iter<number>([1, 2, 3]).interspace(100)
       expect(it.toArray()).to.eql([1, 100, 2, 100, 3])
     })
@@ -456,7 +456,7 @@ describe('Iterator', () => {
   })
 
   describe('#reject', () => {
-    it('returns elemnts that make the predicate false', () => {
+    it('returns elements that make the predicate false', () => {
       const it = iter([0, 1, 2, 3]).reject(n => n % 2 === 0)
       expect(it.toArray()).to.eql([1, 3])
     })
