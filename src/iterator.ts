@@ -14,7 +14,7 @@ import {
   DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive, FilterMap, Find
+  ZipInclusive, FilterMap, Find, FindIndex
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -207,6 +207,14 @@ export abstract class Iterator<T> implements Iterable<T> {
   find (condition: Predicate<T>): Option<T> {
     return this.collect(new Find(condition))
   }
+
+  findIndex (condition: Predicate<T>): Option<number> {
+    return this.collect(new FindIndex(condition))
+  }
+
+  // interspaceWith (param: () => never) {
+  //
+  // }
 }
 
 export interface Iterator<T> {

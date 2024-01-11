@@ -951,9 +951,49 @@ describe('Iterator', () => {
       expect(it.next().isNone()).to.eql(true)
     })
   })
-  describe.skip('#findIndex', () => {
+
+  describe('#findIndex', () => {
+    it('returns none for empty iter', () => {
+      const found = iter([]).findIndex((_) => true)
+      expect(found.isNone()).to.eql(true)
+    })
+
+    it('returns Some(0) when first item matches', () => {
+      const found = iter([1, 2, 3]).findIndex((n) => n === 1)
+      expect(found.unwrap()).to.eql(0)
+    })
+
+    it('returns Some(1) when second item matches', () => {
+      const found = iter([1, 2, 3]).findIndex((n) => n === 2)
+      expect(found.unwrap()).to.eql(1)
+    })
+
+    it('returns Nopne when no item matches', () => {
+      const found = iter([1, 2, 3]).findIndex((n) => n === 5)
+      expect(found.isNone()).to.eql(true)
+    })
   })
+
   describe.skip('#intersperseWith', () => {
+    // it('returns empty for empty iterator', () => {
+    //   const it = iter<number>([]).interspaceWith(() => expect.fail('should not call this'))
+    //   expect(it.next().isNone()).to.eql(true)
+    // })
+    //
+    // it('in a 2 elem iterator puts 1 instance of the separator in the middle', () => {
+    //   const it = iter<number>([1, 2]).interspace(100)
+    //   expect(it.toArray()).to.eql([1, 100, 2])
+    // })
+    //
+    // it('in a 3 elem iterator puts separator in the middle after first and after second elem', () => {
+    //   const it = iter<number>([1, 2, 3]).interspace(100)
+    //   expect(it.toArray()).to.eql([1, 100, 2, 100, 3])
+    // })
+    //
+    // it('in a 1 elem iterator no separator', () => {
+    //   const it = iter<number>([1]).interspace(100)
+    //   expect(it.toArray()).to.eql([1])
+    // })
   })
   describe.skip('#mapWhile', () => {
   })
