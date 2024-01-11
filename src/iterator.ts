@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-unsafe-declaration-merging: 0 */
 
 import {Option, Transformation} from "nochoices";
-import {Callback, Mapping, Predicate} from "./types.js";
+import {AreEqual, Callback, Mapping, Predicate} from "./types.js";
 import {
   Filter,
   IterMap,
@@ -13,18 +13,23 @@ import {
   Dedup,
   DedupBy,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip
+  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
+  ZipInclusive
 } from "./index.js";
-import {times} from "./helpers.js";
+import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
 
 
 export interface Iterable<T> {
   next (): Option<T>
+
+  // peek(): Option<T>
 }
 
 export abstract class Iterator<T> implements Iterable<T> {
   abstract next (): Option<T>
+
+  // abstract peek (): Option<T>
 
   //---------
   // Filters
@@ -103,6 +108,14 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Cycle(this)
   }
 
+  zip<U> (another: Iterator<U>): Zip<T, U> {
+    return new Zip<T, U>(this, another)
+  }
+
+  zipInclusive<U> (another: Iterator<U>): ZipInclusive<T, U> {
+    return new ZipInclusive(this, another)
+  }
+
   //------------
   // Finalizers
   //------------
@@ -176,11 +189,15 @@ export abstract class Iterator<T> implements Iterable<T> {
   }
 
   equals (it2: Iterator<T>): boolean {
-    return this.collect(new EqualIter(it2))
+    return this.collect(new EqualIter(it2, identity, simpleEquality))
   }
 
-  zip <U>(another: Iterator<U>): Zip<T, U> {
-    return new Zip<T, U>(this, another)
+  equalsBy <U>(iter2: Iterator<T>, fn: Mapping<T, U>): boolean {
+    return this.collect(new EqualIter(iter2, fn, simpleEquality))
+  }
+
+  equalsWith (iter2: Iterator<T>, equality: AreEqual<T>): boolean {
+    return this.collect(new EqualIter(iter2, identity, equality))
   }
 }
 

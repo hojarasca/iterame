@@ -2,6 +2,7 @@ import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
 import {ArrayIterator, Iterator} from "../src/index.js";
+import {Option} from "nochoices";
 
 describe('Iterator', () => {
   const iter = <T> (arr: T[]): Iterator<T> => {
@@ -583,7 +584,8 @@ describe('Iterator', () => {
     })
 
     it('does not affected the items of the iterator', () => {
-      const fn = (_n: number) => {}
+      const fn = (_n: number) => {
+      }
       const it = iter([1, 2, 3]).inspect(fn)
       expect(it.toArray()).to.eql([1, 2, 3])
     })
@@ -698,6 +700,21 @@ describe('Iterator', () => {
       ])
     })
 
+    it('when first finishes the second gets consumed 1 extra time', () => {
+      const it1 = iter<number>([1, 2])
+      const it2 = iter<string>(['one', 'two', 'three', 'four'])
+      it1.zip(it2).toArray()
+      expect(it2.next().unwrap()).to.eql('four')
+      expect(it2.next().isNone()).to.eql(true)
+    })
+
+    it('when second finishes the first does gets consumed one extra time', () => {
+      const it1 = iter<number>([1, 2, 3, 4])
+      const it2 = iter<string>(['one', 'two'])
+      it1.zip(it2).toArray()
+      expect(it1.next().isSome()).to.eql(true)
+    })
+
     it('when second iterator is shorter it limits the size of the zipped', () => {
       const it1 = iter<number>([1, 2, 3])
       const it2 = iter<string>(['one', 'two'])
@@ -709,20 +726,178 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#equals', () => {
+  describe('#zipInclusive', () => {
+    it('for double empty returns 1 element with empty options', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<string>([])
+      const zip = it1.zipInclusive(it2)
+      expect(zip.next().unwrap()).to.eql([Option.None(), Option.None()])
+      expect(zip.next().isNone()).to.eql(true)
+    })
+
+    it('when both are present returns list of pairs of options, ended with double none', () => {
+      const it1 = iter<number>([1, 2, 3])
+      const it2 = iter<string>(['one', 'two', 'tree'])
+      const zip = it1.zipInclusive(it2)
+      expect(zip.toArray()).to.eql([
+        [Option.Some(1), Option.Some('one')],
+        [Option.Some(2), Option.Some('two')],
+        [Option.Some(3), Option.Some('tree')],
+        [Option.None(), Option.None()]
+      ])
+    })
+
+    it('when the first iterator is shorter, returns an extra element of the second one', () => {
+      const it1 = iter<number>([1, 2])
+      const it2 = iter<string>(['one', 'two', 'tree', 'four'])
+      const zip = it1.zipInclusive(it2)
+      expect(zip.toArray()).to.eql([
+        [Option.Some(1), Option.Some('one')],
+        [Option.Some(2), Option.Some('two')],
+        [Option.None(), Option.Some('tree')],
+      ])
+    })
+
+    it('when the second iterator is shorter, returns an extra element of the first one', () => {
+      const it1 = iter<number>([1, 2, 3, 4])
+      const it2 = iter<string>(['one', 'two'])
+      const zip = it1.zipInclusive(it2)
+      expect(zip.toArray()).to.eql([
+        [Option.Some(1), Option.Some('one')],
+        [Option.Some(2), Option.Some('two')],
+        [Option.Some(3), Option.None()],
+      ])
+    })
+  })
+
+  describe('#equals', () => {
     it('returns true for 2 empty iters', () => {
       const it1 = iter<number>([])
       const it2 = iter<number>([])
       expect(it1.equals(it2)).to.eql(true)
     })
 
-  })
-  describe.skip('#equalsBy', () => {
+    it('returns false for 1 empty iter and 1 non empty', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<number>([1])
+      expect(it1.equals(it2)).to.eql(false)
+    })
 
-  })
-  describe.skip('#equalsWith', () => {
+    it('returns false for 1 non empty iter and 1 empty', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([])
+      expect(it1.equals(it2)).to.eql(false)
+    })
 
+    it('returns false when 2 1 sized iterators with different values', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([2])
+      expect(it1.equals(it2)).to.eql(false)
+    })
+
+    it('returns true for 2 equal iterators', () => {
+      const it1 = iter<number>([1, 2 ,3])
+      const it2 = iter<number>([1, 2, 3])
+      expect(it1.equals(it2)).to.eql(true)
+    })
   })
+
+  describe('#equalsBy', () => {
+    it('returns true for 2 empty iters', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<number>([])
+      expect(it1.equalsBy(it2, () => true)).to.eql(true)
+    })
+
+    it('returns false for 1 empty iter and 1 non empty', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<number>([1])
+      const comparison = it1.equalsBy(it2, (a) => a);
+      expect(comparison).to.eql(false)
+    })
+
+    it('returns false for 1 non empty iter and 1 empty', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([])
+      const comparison = it1.equalsBy(it2, (a) => a);
+      expect(comparison).to.eql(false)
+    })
+
+    it('returns false when 2 1 sized iterators with different results', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([2])
+      const comparison = it1.equalsBy(it2, (a) => a.toString());
+      expect(comparison).to.eql(false)
+    })
+
+    it('returns true when 2 1 sized iterators with same results', () => {
+      const it1 = iter<number>([0])
+      const it2 = iter<number>([2])
+      const comparison = it1.equalsBy(it2, (a) => a % 2);
+      expect(comparison).to.eql(true)
+    })
+
+    it('returns true for 2 iterators with same mappings', () => {
+      const it1 = iter<number>([1, 2 ,3])
+      const it2 = iter<number>([1, 2, 3])
+      const comparison = it1.equalsBy(it2, (a) => a % 3);
+      expect(comparison).to.eql(true)
+    })
+
+    it('returns false for 2 iterators with same values but different mappings', () => {
+      const it1 = iter<number>([1, 2 ,3])
+      const it2 = iter<number>([1, 2, 3])
+      const comparison = it1.equalsBy(it2, (_a) => Math.random());
+      expect(comparison).to.eql(false)
+    })
+  })
+
+  describe('#equalsWith', () => {
+    it('returns true for 2 empty iters', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<number>([])
+      const comparison = it1.equalsWith(it2, (_a, _b) => false);
+      expect(comparison).to.eql(true)
+    })
+
+    it('returns false for 1 empty iter and 1 non empty', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<number>([1])
+      const comparison = it1.equalsWith(it2, (_a, _b) => true);
+      expect(comparison).to.eql(false)
+    })
+
+    it('returns false for 1 non empty iter and 1 empty', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([])
+      const comparison = it1.equalsWith(it2, (_a, _b) => true)
+      expect(comparison).to.eql(false)
+    })
+
+    it('returns true when 2 1 sized iterators are different but the comparing function works', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([2])
+      const comparison = it1.equalsWith(it2, (_a, _b) => true)
+      expect(comparison).to.eql(true)
+    })
+
+    it('returns false when 2 1 sized iterators are the same but the comparing function returns false', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<number>([1])
+      const comparison = it1.equalsWith(it2, (_a, _b) => false)
+      expect(comparison).to.eql(false)
+    })
+
+    it('returns true for 2 equal iterators that match the equality condition', () => {
+      const it1 = iter<number>([1, 2 ,32])
+      const it2 = iter<number>([1, 2, 32])
+      const comparison = it1.equalsWith(it2, (a, b) => {
+        return a % 10 === b % 10
+      })
+      expect(comparison).to.eql(true)
+    })
+  })
+
   describe.skip('#filterMap', () => {
   })
   describe.skip('#find', () => {
