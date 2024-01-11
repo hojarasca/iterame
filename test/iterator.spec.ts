@@ -653,7 +653,68 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#zip', () => {
+    it('returns empty for empty pair', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<string>([])
+      const zip = it1.zip(it2)
+      expect(zip.next().isNone()).to.eql(true)
+    })
+
+    it('returns a pair when both have 1', () => {
+      const it1 = iter<number>([1])
+      const it2 = iter<string>(['one'])
+      const zip = it1.zip(it2)
+      expect(zip.next().unwrap()).to.eql([1, 'one'])
+      expect(zip.next().isNone()).to.eql(true)
+    })
+
+    it('the value of self always goes first', () => {
+      const it1 = iter<string>(['one'])
+      const it2 = iter<number>([1])
+      const zip = it1.zip(it2)
+      expect(zip.next().unwrap()).to.eql(['one', 1])
+      expect(zip.next().isNone()).to.eql(true)
+    })
+
+    it('lists pairs', () => {
+      const it1 = iter<number>([1, 2, 3])
+      const it2 = iter<string>(['one', 'two', 'three'])
+      const zip = it1.zip(it2)
+      expect(zip.toArray()).to.eql([
+        [1, 'one'],
+        [2, 'two'],
+        [3, 'three'],
+      ])
+    })
+
+    it('when first iterator is shorter it limits the size of the zipped', () => {
+      const it1 = iter<number>([1, 2])
+      const it2 = iter<string>(['one', 'two', 'three'])
+      const zip = it1.zip(it2)
+      expect(zip.toArray()).to.eql([
+        [1, 'one'],
+        [2, 'two']
+      ])
+    })
+
+    it('when second iterator is shorter it limits the size of the zipped', () => {
+      const it1 = iter<number>([1, 2, 3])
+      const it2 = iter<string>(['one', 'two'])
+      const zip = it1.zip(it2)
+      expect(zip.toArray()).to.eql([
+        [1, 'one'],
+        [2, 'two']
+      ])
+    })
+  })
+
   describe.skip('#equals', () => {
+    it('returns true for 2 empty iters', () => {
+      const it1 = iter<number>([])
+      const it2 = iter<number>([])
+      expect(it1.equals(it2)).to.eql(true)
+    })
 
   })
   describe.skip('#equalsBy', () => {
@@ -698,8 +759,7 @@ describe('Iterator', () => {
   })
   describe.skip('#rPositionOf', () => {
   })
-  describe.skip('#zip', () => {
-  })
+
 
   describe.skip('collect into map', () => {
   })
