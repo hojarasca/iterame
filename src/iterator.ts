@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-unsafe-declaration-merging: 0 */
 
 import {Option, Transformation} from "nochoices";
-import {AreEqual, Callback, Mapping, Predicate} from "./types.js";
+import {AreEqual, Callback, Mapping, OptionalMapping, Predicate} from "./types.js";
 import {
   Filter,
   IterMap,
@@ -14,7 +14,7 @@ import {
   DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive
+  ZipInclusive, FilterMap
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -114,6 +114,10 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   zipInclusive<U> (another: Iterator<U>): ZipInclusive<T, U> {
     return new ZipInclusive(this, another)
+  }
+
+  filterMap<U>(mapping: OptionalMapping<T, U>): Iterator<U> {
+    return new FilterMap(this, mapping)
   }
 
   //------------

@@ -771,7 +771,7 @@ describe('Iterator', () => {
   })
 
   describe('#equals', () => {
-    it('returns true for 2 empty iters', () => {
+    it('returns true for 2 empty iterators', () => {
       const it1 = iter<number>([])
       const it2 = iter<number>([])
       expect(it1.equals(it2)).to.eql(true)
@@ -796,14 +796,14 @@ describe('Iterator', () => {
     })
 
     it('returns true for 2 equal iterators', () => {
-      const it1 = iter<number>([1, 2 ,3])
+      const it1 = iter<number>([1, 2, 3])
       const it2 = iter<number>([1, 2, 3])
       expect(it1.equals(it2)).to.eql(true)
     })
   })
 
   describe('#equalsBy', () => {
-    it('returns true for 2 empty iters', () => {
+    it('returns true for 2 empty iterators', () => {
       const it1 = iter<number>([])
       const it2 = iter<number>([])
       expect(it1.equalsBy(it2, () => true)).to.eql(true)
@@ -838,14 +838,14 @@ describe('Iterator', () => {
     })
 
     it('returns true for 2 iterators with same mappings', () => {
-      const it1 = iter<number>([1, 2 ,3])
+      const it1 = iter<number>([1, 2, 3])
       const it2 = iter<number>([1, 2, 3])
       const comparison = it1.equalsBy(it2, (a) => a % 3);
       expect(comparison).to.eql(true)
     })
 
     it('returns false for 2 iterators with same values but different mappings', () => {
-      const it1 = iter<number>([1, 2 ,3])
+      const it1 = iter<number>([1, 2, 3])
       const it2 = iter<number>([1, 2, 3])
       const comparison = it1.equalsBy(it2, (_a) => Math.random());
       expect(comparison).to.eql(false)
@@ -853,7 +853,7 @@ describe('Iterator', () => {
   })
 
   describe('#equalsWith', () => {
-    it('returns true for 2 empty iters', () => {
+    it('returns true for 2 empty iterators', () => {
       const it1 = iter<number>([])
       const it2 = iter<number>([])
       const comparison = it1.equalsWith(it2, (_a, _b) => false);
@@ -889,7 +889,7 @@ describe('Iterator', () => {
     })
 
     it('returns true for 2 equal iterators that match the equality condition', () => {
-      const it1 = iter<number>([1, 2 ,32])
+      const it1 = iter<number>([1, 2, 32])
       const it2 = iter<number>([1, 2, 32])
       const comparison = it1.equalsWith(it2, (a, b) => {
         return a % 10 === b % 10
@@ -900,15 +900,33 @@ describe('Iterator', () => {
 
   describe.skip('#filterMap', () => {
     it('returns empty iter for empty iter', () => {
+      const empty = iter<number>([]).filterMap(() => Option.Some(10))
+      expect(empty.next().isNone()).to.eql(true)
+    })
 
+    it('returns same list when transformation returns some of the value', () => {
+      const it = iter([1, 2, 3])
+        .filterMap((v) => Option.Some(v))
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+
+    it('stops when function returns None', () => {
+      const it = iter([1, 2, 3, 4, 5])
+        .filterMap(v => Option.Some(v).filter(v => v < 4))
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+
+    it('iterates over transformed values', () => {
+      const it = iter([1, 2, 3, 4, 5])
+        .filterMap(v => Option.Some(v).filter(v => v < 4).map(n => n.toString()))
+      expect(it.toArray()).to.eql(['1', '2', '3'])
     })
   })
 
   describe.skip('#find', () => {
+
   })
   describe.skip('#findIndex', () => {
-  })
-  describe.skip('#intersperseWith', () => {
   })
   describe.skip('#intersperseWith', () => {
   })
