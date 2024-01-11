@@ -14,7 +14,7 @@ import {
   DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive, FilterMap
+  ZipInclusive, FilterMap, Find
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -202,6 +202,10 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   equalsWith (iter2: Iterator<T>, equality: AreEqual<T>): boolean {
     return this.collect(new EqualIter(iter2, identity, equality))
+  }
+
+  find (condition: Predicate<T>): Option<T> {
+    return this.collect(new Find(condition))
   }
 }
 

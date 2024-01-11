@@ -924,7 +924,32 @@ describe('Iterator', () => {
   })
 
   describe.skip('#find', () => {
+    it('returns none for empty iter', () => {
+      const found = iter([]).find((_) => true)
+      expect(found.isNone()).to.eql(true)
+    })
 
+    it('if an element matches the condition returns some with that element', () => {
+      const found = iter([1,2,3,4,5,6,7]).find((n) => n % 5 === 0)
+      expect(found.unwrap()).to.eql(5)
+    })
+
+    it('from the iterator up to the element that matches the condition', () => {
+      const it = iter([1,2,3,4,5,6,7])
+      it.find((n) => n % 5 === 0)
+      expect(it.count()).to.eql(2)
+    })
+
+    it('returns none when no element matches the condition', () => {
+      const found = iter([1,2,3,4,5,6,7]).find((n) => n % 10 === 0)
+      expect(found.isNone()).to.eql(true)
+    })
+
+    it('from the iterator up to the element that matches the condition', () => {
+      const it = iter([1,2,3,4,5,6,7])
+      it.find((n) => n % 10 === 0)
+      expect(it.next().isNone()).to.eql(true)
+    })
   })
   describe.skip('#findIndex', () => {
   })
