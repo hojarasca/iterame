@@ -14,7 +14,7 @@ import {
   DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive, FilterMap, Find, FindIndex, MapWhile
+  ZipInclusive, FilterMap, Find, FindIndex, MapWhile, MaxBy
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -218,6 +218,10 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   mapWhile <U>(mapping: OptionalMapping<T, U>): MapWhile<T, U> {
     return new MapWhile(this, mapping)
+  }
+
+  maxBy <U>(mapping: Mapping<T, U>): Option<T> {
+    return this.collect(new MaxBy(mapping))
   }
 }
 

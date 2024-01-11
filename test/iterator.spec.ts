@@ -1027,9 +1027,46 @@ describe('Iterator', () => {
     })
   })
 
-
   // describe.skip('#max', () => {})
-  describe.skip('#maxBy', () => {
+  describe('#maxBy', () => {
+    it('returns none for empty iter', () => {
+      const empty = iter<number>([]).maxBy(() => expect.fail('should not be called'))
+      expect(empty.isNone()).to.eql(true)
+    })
+
+    it('returns some with the element when only one element', () => {
+      const one = iter<number>([123]).maxBy((n) => n)
+      expect(one.unwrap()).to.eql(123)
+    })
+
+    it('returns some with the bigger when 2 elements and bigger is first', () => {
+      const max = iter<number>([100, 1]).maxBy((n) => n)
+      expect(max.unwrap()).to.eql(100)
+    })
+
+    it('returns some with the bigger when 2 elements and bigger is second', () => {
+      const max = iter<number>([1, 100]).maxBy((n) => n)
+      expect(max.unwrap()).to.eql(100)
+    })
+
+    it('returns some with the bigger in a collection', () => {
+      const max = iter<number>([1, 2, 3, 4, 100, 5, 6, 99]).maxBy((n) => n)
+      expect(max.unwrap()).to.eql(100)
+    })
+
+    it('returns the bigger according to the mapping', () => {
+      const max = iter<number>([1, 2, 3, 4, 100, 5, 6, 99]).maxBy(
+        (n) => 100 - n
+      )
+      expect(max.unwrap()).to.eql(1)
+    })
+
+    it('when more than one element have the same mapping returns the first', () => {
+      const max = iter<number>([1, 2, 99, 3, 199, 599, 6, 5]).maxBy(
+        (n) => n % 100
+      )
+      expect(max.unwrap()).to.eql(99)
+    })
   })
   describe.skip('#maxWith', () => {
   })
