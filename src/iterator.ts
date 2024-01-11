@@ -14,7 +14,7 @@ import {
   DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive, FilterMap, Find, FindIndex
+  ZipInclusive, FilterMap, Find, FindIndex, MapWhile
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -214,6 +214,10 @@ export abstract class Iterator<T> implements Iterable<T> {
 
   interspaceWith (genSeparator: GenValue<T>): Iterator<T> {
     return new Interspace(this, genSeparator)
+  }
+
+  mapWhile <U>(mapping: OptionalMapping<T, U>): MapWhile<T, U> {
+    return new MapWhile(this, mapping)
   }
 }
 

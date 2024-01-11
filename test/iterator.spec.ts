@@ -930,23 +930,23 @@ describe('Iterator', () => {
     })
 
     it('if an element matches the condition returns some with that element', () => {
-      const found = iter([1,2,3,4,5,6,7]).find((n) => n % 5 === 0)
+      const found = iter([1, 2, 3, 4, 5, 6, 7]).find((n) => n % 5 === 0)
       expect(found.unwrap()).to.eql(5)
     })
 
     it('from the iterator up to the element that matches the condition', () => {
-      const it = iter([1,2,3,4,5,6,7])
+      const it = iter([1, 2, 3, 4, 5, 6, 7])
       it.find((n) => n % 5 === 0)
       expect(it.count()).to.eql(2)
     })
 
     it('returns none when no element matches the condition', () => {
-      const found = iter([1,2,3,4,5,6,7]).find((n) => n % 10 === 0)
+      const found = iter([1, 2, 3, 4, 5, 6, 7]).find((n) => n % 10 === 0)
       expect(found.isNone()).to.eql(true)
     })
 
     it('from the iterator up to the element that matches the condition', () => {
-      const it = iter([1,2,3,4,5,6,7])
+      const it = iter([1, 2, 3, 4, 5, 6, 7])
       it.find((n) => n % 10 === 0)
       expect(it.next().isNone()).to.eql(true)
     })
@@ -995,8 +995,39 @@ describe('Iterator', () => {
       expect(it.toArray()).to.eql([1])
     })
   })
-  describe.skip('#mapWhile', () => {
+
+  describe('#mapWhile', () => {
+    it('returns empty iter for empty iter', () => {
+      const it = iter([]).mapWhile((_) => expect.fail('should not be called'))
+      expect(it.toArray()).to.eql([])
+    })
+
+    it('returns same values when fn returns always the value', () => {
+      const it = iter([1, 2, 3])
+        .mapWhile((n) => Option.Some(n))
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+
+    it('returns mapped values when fn returns some', () => {
+      const it = iter([1, 2, 3])
+        .mapWhile((n) => Option.Some(n.toString()))
+      expect(it.toArray()).to.eql(['1', '2', '3'])
+    })
+
+    it('stops iterating when function returns none', () => {
+      const it = iter([1, 2, 3, 4, 5])
+        .mapWhile((n) => Option.Some(n).filter(n => n <= 3))
+      expect(it.toArray()).to.eql([1, 2, 3])
+    })
+
+    it('stops consuming iterator when function returns none', () => {
+      const it = iter([1, 2, 3, 4, 5]);
+      it.mapWhile((n) => Option.Some(n).filter(n => n <= 3)).toArray()
+      expect(it.count()).to.eql(1)
+    })
   })
+
+
   // describe.skip('#max', () => {})
   describe.skip('#maxBy', () => {
   })
