@@ -2137,10 +2137,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-nochoices@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/nochoices/-/nochoices-1.1.3.tgz#3001d28eef27cd13d0ad3404058c0c7f00eee043"
-  integrity sha512-1X7PA/dOVCEHyH6aEYvAtGKzVVLSnGkaPFS29lq4hhMflaHGnbz0IO+M+kb04lInWXa/WuPiOHbdP+NxlkDu7w==
+nochoices@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/nochoices/-/nochoices-1.1.4.tgz#137cf2bfbb1547fd2c5d487a39812978a926134b"
+  integrity sha512-70iO7ftquStYdWECytpbnb0H+cdtLPvjBk0HEoHW3d1Bm8rqaeGiSK60hbPksqP+p0wLRktfJIve2kvfxttrAw==
 
 normalize-package-data@^2.5.0:
   version "2.5.0"

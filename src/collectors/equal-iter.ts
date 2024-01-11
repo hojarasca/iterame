@@ -13,13 +13,13 @@ export class EqualIter<T, U> implements Collector<T, boolean> {
   }
 
   collect (it: Iterator<T>): boolean {
-    const zip = it.zipInclusive(this.another)
-    const allEquals = zip.every(([first, second]) =>
-      (first.isNone() && second.isNone()) ||
-      first.zip(second)
-        .isSomeAnd(([a, b]) => this.equality(this.mapping(a), this.mapping(b)))
+    const zip = it
+      .map(this.mapping)
+      .zipInclusive(
+        this.another.map(this.mapping)
+      )
+    return zip.every(([first, second]) =>
+      first.equalsWith(second, this.equality)
     )
-    return allEquals
   }
-
 }

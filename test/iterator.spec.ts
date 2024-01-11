@@ -899,7 +899,11 @@ describe('Iterator', () => {
   })
 
   describe.skip('#filterMap', () => {
+    it('returns empty iter for empty iter', () => {
+
+    })
   })
+
   describe.skip('#find', () => {
   })
   describe.skip('#findIndex', () => {
