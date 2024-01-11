@@ -974,26 +974,26 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#intersperseWith', () => {
-    // it('returns empty for empty iterator', () => {
-    //   const it = iter<number>([]).interspaceWith(() => expect.fail('should not call this'))
-    //   expect(it.next().isNone()).to.eql(true)
-    // })
-    //
-    // it('in a 2 elem iterator puts 1 instance of the separator in the middle', () => {
-    //   const it = iter<number>([1, 2]).interspace(100)
-    //   expect(it.toArray()).to.eql([1, 100, 2])
-    // })
-    //
-    // it('in a 3 elem iterator puts separator in the middle after first and after second elem', () => {
-    //   const it = iter<number>([1, 2, 3]).interspace(100)
-    //   expect(it.toArray()).to.eql([1, 100, 2, 100, 3])
-    // })
-    //
-    // it('in a 1 elem iterator no separator', () => {
-    //   const it = iter<number>([1]).interspace(100)
-    //   expect(it.toArray()).to.eql([1])
-    // })
+  describe('#intersperseWith', () => {
+    it('returns empty for empty iterator', () => {
+      const it = iter<number>([]).interspaceWith(() => expect.fail('should not call this'))
+      expect(it.next().isNone()).to.eql(true)
+    })
+
+    it('in a 2 elem iterator puts 1 instance of the separator in the middle', () => {
+      const it = iter<number>([1, 2]).interspaceWith(() => 100)
+      expect(it.toArray()).to.eql([1, 100, 2])
+    })
+
+    it('in a 3 elem iterator puts separator in the middle after first and after second elem', () => {
+      const it = iter<number>([1, 2, 3]).interspaceWith(() => 100)
+      expect(it.toArray()).to.eql([1, 100, 2, 100, 3])
+    })
+
+    it('in a 1 elem iterator no separator', () => {
+      const it = iter<number>([1]).interspaceWith(() => expect.fail('should not be called'))
+      expect(it.toArray()).to.eql([1])
+    })
   })
   describe.skip('#mapWhile', () => {
   })

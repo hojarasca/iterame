@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-unsafe-declaration-merging: 0 */
 
 import {Option, Transformation} from "nochoices";
-import {AreEqual, Callback, Mapping, OptionalMapping, Predicate} from "./types.js";
+import {AreEqual, Callback, GenValue, Mapping, OptionalMapping, Predicate} from "./types.js";
 import {
   Filter,
   IterMap,
@@ -85,7 +85,7 @@ export abstract class Iterator<T> implements Iterable<T> {
   }
 
   interspace (separator: T): Interspace<T> {
-    return new Interspace(this, separator)
+    return new Interspace(this, () => separator)
   }
 
   flatMap<U> (fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
@@ -212,9 +212,9 @@ export abstract class Iterator<T> implements Iterable<T> {
     return this.collect(new FindIndex(condition))
   }
 
-  // interspaceWith (param: () => never) {
-  //
-  // }
+  interspaceWith (genSeparator: GenValue<T>): Iterator<T> {
+    return new Interspace(this, genSeparator)
+  }
 }
 
 export interface Iterator<T> {
