@@ -527,7 +527,7 @@ describe('Iterator', () => {
     })
 
     it('sends right args on each call', () => {
-      let calls: number[][] = []
+      const calls: number[][] = []
       iter<number>([1, 10, 100]).reduce((current, partial) => {
         calls.push([current, partial])
         return current + partial
@@ -540,18 +540,18 @@ describe('Iterator', () => {
 
   describe('#cycle', () => {
     it('returns empty for empty', () => {
-      let empty = iter<number>([]).cycle()
+      const empty = iter<number>([]).cycle()
       expect(empty.next().isNone()).to.eql(true)
     })
 
     it('the same element over and over for a 1 element iter', () => {
-      let empty = iter<number>([123]).cycle()
-      expect(empty.next().unwrap()).to.eql(123)
-      expect(empty.next().unwrap()).to.eql(123)
-      expect(empty.next().unwrap()).to.eql(123)
-      expect(empty.next().unwrap()).to.eql(123)
-      expect(empty.next().unwrap()).to.eql(123)
-      expect(empty.next().unwrap()).to.eql(123)
+      const oneElement = iter<number>([123]).cycle()
+      expect(oneElement.next().unwrap()).to.eql(123)
+      expect(oneElement.next().unwrap()).to.eql(123)
+      expect(oneElement.next().unwrap()).to.eql(123)
+      expect(oneElement.next().unwrap()).to.eql(123)
+      expect(oneElement.next().unwrap()).to.eql(123)
+      expect(oneElement.next().unwrap()).to.eql(123)
     })
 
     it('loops the same elements', () => {

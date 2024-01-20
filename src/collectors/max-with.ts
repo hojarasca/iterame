@@ -1,6 +1,6 @@
 import {Collector} from "./collector.js";
 import {Iterator} from "../iterator.js";
-import {CompareFn, Mapping} from "../types.js";
+import {CompareFn} from "../types.js";
 import {Option} from "nochoices";
 
 
