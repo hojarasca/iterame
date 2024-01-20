@@ -1068,9 +1068,44 @@ describe('Iterator', () => {
       expect(max.unwrap()).to.eql(99)
     })
   })
-  describe.skip('#maxWith', () => {
+
+  describe('#maxWith', () => {
+    it('returns none for empty iter', () => {
+      const empty = iter<number>([]).maxWith(() => expect.fail('should not be called'))
+      expect(empty.isNone()).to.eql(true)
+    })
+
+    it('returns only element when 1 sized iter', () => {
+      const elem = iter([123]).maxWith(() => expect.fail('should not be called'))
+      expect(elem.unwrap()).to.eql(123)
+    })
+
+    it('when the compare fn returns always 0 it returns first element', () => {
+      const elem = iter([123,2,3,4,5,6, 600, -100]).maxWith(() => 0)
+      expect(elem.unwrap()).to.eql(123)
+    })
+
+    it('when the compare fn returns always positive it returns first element', () => {
+      const elem = iter([123,2,3,4,5,6, 600, -100]).maxWith(() => 100)
+      expect(elem.unwrap()).to.eql(123)
+    })
+
+    it('when the compare fn returns always negative it returns last element', () => {
+      const elem = iter([123,2,3,4,5,6, 600, -1]).maxWith(() => -1)
+      expect(elem.unwrap()).to.eql(-1)
+    })
+
+    it('when multiple elems return the element that is bigger or equal in compare fn', () => {
+      const elem = iter([10, 1, -99, 100, 7, 44, 1.2])
+        .maxWith((a, b) =>  a.toString().length - b.toString().length)
+      expect(elem.unwrap()).to.eql(-99)
+    })
   })
+
   // describe.skip('#min', () => {})
+  describe.skip('#minBy', () => {
+
+  })
   describe.skip('#minWith', () => {
   })
   describe.skip('#partition', () => {
