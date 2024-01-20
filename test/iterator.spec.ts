@@ -1151,9 +1151,27 @@ describe('Iterator', () => {
       expect(withFalse).to.eql([1, 3, 5, 7])
     })
   })
-  describe.skip('#findIndex', () => {
-  })
-  describe.skip('#positionOf', () => {
+
+  describe('#positionOf', () => {
+    it('returns None for empty iter', () => {
+      const none = iter<number>([]).positionOf(123)
+      expect(none.isNone()).to.eql(true)
+    })
+
+    it('returns index of element matching', () => {
+      const none = iter<number>([11, -23, 50, 44, -10]).positionOf(50)
+      expect(none.unwrap()).to.eql(2)
+    })
+
+    it('returns none if element does not exists', () => {
+      const none = iter<number>([11, -23, 50, 44, -10]).positionOf(123)
+      expect(none.isNone()).to.eql(true)
+    })
+
+    it('when element is more than once returns first appearance', () => {
+      const none = iter<number>([11, -23, 50, 44, -23, -10]).positionOf(-23)
+      expect(none.unwrap()).to.eql(1)
+    })
   })
   describe.skip('#rev', () => {
   })

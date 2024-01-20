@@ -252,6 +252,10 @@ export abstract class Iterator<T> implements Iterable<T> {
   partition(criteria: Predicate<T>): [T[], T[]] {
     return this.collect(new Partition(criteria))
   }
+
+  positionOf(target: T): Option<number> {
+    return this.findIndex(t => t === target)
+  }
 }
 
 export interface Iterator<T> {
