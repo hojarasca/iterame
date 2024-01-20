@@ -1103,8 +1103,26 @@ describe('Iterator', () => {
   })
 
   // describe.skip('#min', () => {})
-  describe.skip('#minBy', () => {
+  describe('#minBy', () => {
+    it('returns none for empty iter', () => {
+      const none = iter<number>([]).minBy(() => expect.fail('should not be called'))
+      expect(none.isNone()).to.eql(true)
+    })
 
+    it('returns only element for 1 size iter', () => {
+      const none = iter([123]).minBy(() => expect.fail('should not be called'))
+      expect(none.unwrap()).to.eql(123)
+    })
+
+    it('returns element with lower mapping for a collection', () => {
+      const min = iter(['123', '245', '1', '356']).minBy(s => Number(s))
+      expect(min.unwrap()).to.eql('1')
+    })
+
+    it('returns element with lower mapping for a collection', () => {
+      const min = iter(['123', '245', '1', '356']).minBy(s => Number(s))
+      expect(min.unwrap()).to.eql('1')
+    })
   })
   describe.skip('#minWith', () => {
   })

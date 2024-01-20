@@ -235,6 +235,13 @@ export abstract class Iterator<T> implements Iterable<T> {
   maxWith(compare: CompareFn<T>): Option<T> {
     return this.collect(new MaxWith(compare))
   }
+
+  minBy<U>(mapping: Mapping<T, U>): Option<T> {
+    return this.collect(new MaxBy(
+      mapping,
+      (u1, u2) => u1 <= u2 ? 1 : -1 )
+    )
+  }
 }
 
 export interface Iterator<T> {
