@@ -5,7 +5,7 @@ import {ArrayIterator, Iterator} from "../src/index.js";
 import {Option} from "nochoices";
 
 describe('Iterator', () => {
-  const iter = <T> (arr: T[]): Iterator<T> => {
+  const iter = <T>(arr: T[]): Iterator<T> => {
     return new ArrayIterator(arr)
   }
 
@@ -1081,23 +1081,23 @@ describe('Iterator', () => {
     })
 
     it('when the compare fn returns always 0 it returns first element', () => {
-      const elem = iter([123,2,3,4,5,6, 600, -100]).maxWith(() => 0)
+      const elem = iter([123, 2, 3, 4, 5, 6, 600, -100]).maxWith(() => 0)
       expect(elem.unwrap()).to.eql(123)
     })
 
     it('when the compare fn returns always positive it returns first element', () => {
-      const elem = iter([123,2,3,4,5,6, 600, -100]).maxWith(() => 100)
+      const elem = iter([123, 2, 3, 4, 5, 6, 600, -100]).maxWith(() => 100)
       expect(elem.unwrap()).to.eql(123)
     })
 
     it('when the compare fn returns always negative it returns last element', () => {
-      const elem = iter([123,2,3,4,5,6, 600, -1]).maxWith(() => -1)
+      const elem = iter([123, 2, 3, 4, 5, 6, 600, -1]).maxWith(() => -1)
       expect(elem.unwrap()).to.eql(-1)
     })
 
     it('when multiple elems return the element that is bigger or equal in compare fn', () => {
       const elem = iter([10, 1, -99, 100, 7, 44, 1.2])
-        .maxWith((a, b) =>  a.toString().length - b.toString().length)
+        .maxWith((a, b) => a.toString().length - b.toString().length)
       expect(elem.unwrap()).to.eql(-99)
     })
   })
@@ -1124,9 +1124,32 @@ describe('Iterator', () => {
       expect(min.unwrap()).to.eql('1')
     })
   })
-  describe.skip('#minWith', () => {
+  describe('#minWith', () => {
+    it('returns none for empty iter', () => {
+      const none = iter<number>([]).minWith(() => expect.fail('should not be called'))
+      expect(none.isNone()).to.eql(true)
+    })
+
+    it('returns minimum for a collection', () => {
+      const none = iter([111, 123, 1, -1.123, 444])
+        .minWith((a, b) => a.toString().length - b.toString().length)
+      expect(none.unwrap()).to.eql(1)
+    })
   })
-  describe.skip('#partition', () => {
+
+  describe('#partition', () => {
+    it('returns empty lists for empty iter', () => {
+      const [withTrue, withFalse] = iter<number>([]).partition(() => false)
+      expect(withTrue).to.eql([])
+      expect(withFalse).to.eql([])
+    })
+
+    it('the list returned has all the values that returned true, and the seconds the ones that returned false', () => {
+      const [withTrue, withFalse] = iter<number>([1, 2, 3, 4, 5, 6, 7, 8])
+        .partition((n) => n % 2 === 0)
+      expect(withTrue).to.eql([2, 4, 6, 8])
+      expect(withFalse).to.eql([1, 3, 5, 7])
+    })
   })
   describe.skip('#findIndex', () => {
   })

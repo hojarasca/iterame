@@ -22,7 +22,7 @@ import {
   DedupBy,
   StepBy,
   Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive, FilterMap, Find, FindIndex, MapWhile, MaxBy, MaxWith
+  ZipInclusive, FilterMap, Find, FindIndex, MapWhile, MaxBy, MaxWith, Partition
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -241,6 +241,16 @@ export abstract class Iterator<T> implements Iterable<T> {
       mapping,
       (u1, u2) => u1 <= u2 ? 1 : -1 )
     )
+  }
+
+  minWith(compare: CompareFn<T>) {
+    return this.collect(new MaxWith((a, b) => {
+      return compare(a, b) * -1
+    }))
+  }
+
+  partition(criteria: Predicate<T>): [T[], T[]] {
+    return this.collect(new Partition(criteria))
   }
 }
 
