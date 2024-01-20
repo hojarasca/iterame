@@ -968,7 +968,7 @@ describe('Iterator', () => {
       expect(found.unwrap()).to.eql(1)
     })
 
-    it('returns Nopne when no item matches', () => {
+    it('returns None when no item matches', () => {
       const found = iter([1, 2, 3]).findIndex((n) => n === 5)
       expect(found.isNone()).to.eql(true)
     })
