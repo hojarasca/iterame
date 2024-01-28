@@ -1,9 +1,10 @@
 import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {Predicate} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class TakeWhile<T> extends Iterator<T> {
-  private base: Iterator<T>;
+export class TakeWhile<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private condition: Predicate<T>;
   private finished: boolean;
 

@@ -28,13 +28,7 @@ import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
 
 
-export interface Iterable<T> {
-  next(): Option<T>
-
-  // peek(): Option<T>
-}
-
-export abstract class Iterator<T> implements Iterable<T> {
+export abstract class Iterator<T> {
   abstract next(): Option<T>
 
   // abstract peek (): Option<T>
@@ -96,7 +90,7 @@ export abstract class Iterator<T> implements Iterable<T> {
     return new Interspace(this, () => separator)
   }
 
-  flatMap<U>(fn: Transformation<T, U[] | Iterable<U>>): FlatMap<T, U> {
+  flatMap<U>(fn: Transformation<T, U[] | Iterator<U>>): FlatMap<T, U> {
     return new FlatMap(this, fn)
   }
 
@@ -256,6 +250,8 @@ export abstract class Iterator<T> implements Iterable<T> {
   positionOf(target: T): Option<number> {
     return this.findIndex(t => t === target)
   }
+
+  abstract rev(): Iterator<T>
 }
 
 export interface Iterator<T> {

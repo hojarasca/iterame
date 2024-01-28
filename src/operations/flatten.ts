@@ -1,18 +1,17 @@
-import {Iterable, ArrayIterator, Iterator, IterMap} from "../index.js";
+import {Iterator, ArrayIterator, IterMap, OnePieceIterator} from "../index.js";
 import {Option} from "nochoices";
-import {OnePieceIterator} from "../iterators/one-piece-iterator.js";
 
 export class Flatten<A> extends Iterator<Flattened<A>> {
-  private base: Iterable<Iterable<Flattened<A>>>;
-  private head: Option<Iterable<Flattened<A>>>
+  private base: Iterator<Iterator<Flattened<A>>>;
+  private head: Option<Iterator<Flattened<A>>>
 
-  constructor (base: Iterable<A>) {
+  constructor (base: Iterator<A>) {
     super();
     this.base = this.prepareIter(base)
     this.head = Option.None()
   }
 
-  private prepareIter (base: Iterable<A>): Iterator<Iterator<Flattened<A>>> {
+  private prepareIter (base: Iterator<A>): Iterator<Iterator<Flattened<A>>> {
     return new IterMap(base, (a) => {
       if (a instanceof Array) {
         return new ArrayIterator(a) as Iterator<Flattened<A>>
@@ -34,9 +33,13 @@ export class Flatten<A> extends Iterator<Flattened<A>> {
         this.head.map(iter => iter.next()).flatten()
       )
   }
+
+  rev(): Iterator<Flattened<A>> {
+    return new Flatten(this.base.rev()) ;
+  }
 }
 
-type Flattened<T> = T extends Iterable<infer U>
+type Flattened<T> = T extends Iterator<infer U>
   ? U
   : (T extends Array<infer V>
     ? V

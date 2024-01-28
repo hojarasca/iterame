@@ -1,13 +1,14 @@
-import {Iterator, Iterable} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 import {Predicate} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class Filter<A> extends Iterator<A> {
-  private base: Iterable<A>;
+export class Filter<A> extends IterOperation<A, A> {
+  protected base: Iterator<A>;
   private predicate: Predicate<A>;
 
-  constructor (base: Iterable<A>, predicate: Predicate<A>) {
+  constructor (base: Iterator<A>, predicate: Predicate<A>) {
     super()
     this.base = base
     this.predicate = predicate

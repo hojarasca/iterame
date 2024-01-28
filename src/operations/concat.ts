@@ -1,8 +1,9 @@
 import {Iterator} from "../index.js";
 import {Option} from "nochoices";
+import {IterOperation} from "./iter-operation.js";
 
-export class Concat<T> extends Iterator<T> {
-  private base: Iterator<T>;
+export class Concat<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private extension: Iterator<T>;
   constructor (base: Iterator<T>, extension: Iterator<T>) {
     super();

@@ -1,12 +1,12 @@
-import {Iterable, Iterator} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class ZipInclusive<A, B> extends Iterator<[Option<A>, Option<B>]> {
-  private first: Iterable<A>;
-  private second: Iterable<B>;
+  private first: Iterator<A>;
+  private second: Iterator<B>;
   private finished: Option<void>;
 
-  constructor (first: Iterable<A>, second: Iterable<B>) {
+  constructor (first: Iterator<A>, second: Iterator<B>) {
     super();
     this.first = first
     this.second = second
@@ -20,5 +20,9 @@ export class ZipInclusive<A, B> extends Iterator<[Option<A>, Option<B>]> {
         this.second.next().ifNone(() => this.finished = Option.None())
       ]
     )
+  }
+
+  rev(): Iterator<[Option<A>, Option<B>]> {
+    return new ZipInclusive(this.first.rev(), this.second.rev());
   }
 }

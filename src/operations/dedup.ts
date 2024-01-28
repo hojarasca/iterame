@@ -1,11 +1,12 @@
-import {Iterator, Iterable} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
+import {IterOperation} from "./iter-operation.js";
 
-export class Dedup<T> extends Iterator<T>{
-  private base: Iterable<T>;
+export class Dedup<T> extends IterOperation<T, T>{
+  protected base: Iterator<T>;
   private alreadySeen: Set<T>;
 
-  constructor (base: Iterable<T>) {
+  constructor (base: Iterator<T>) {
     super();
     this.base = base
     this.alreadySeen = new Set();
@@ -18,5 +19,4 @@ export class Dedup<T> extends Iterator<T>{
     next.ifSome(t => this.alreadySeen.add(t))
     return next
   }
-
 }

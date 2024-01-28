@@ -1,12 +1,12 @@
-import {ArrayIterator, Iterable, Iterator} from "../index.js";
+import {ArrayIterator, Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class Cycle<T> extends Iterator<T> {
-  private base: Iterable<T>;
+  private base: Iterator<T>;
   private elems: T[]
   private elemsIter: ArrayIterator<T>
 
-  constructor (base: Iterable<T>) {
+  constructor (base: Iterator<T>) {
     super();
     this.base = base
     this.elems = []
@@ -22,4 +22,7 @@ export class Cycle<T> extends Iterator<T> {
       .orElse(() => this.elemsIter.next())
   }
 
+  rev(): Iterator<T> {
+    throw new Error('Cycles cannot be reverted');
+  }
 }

@@ -1,7 +1,7 @@
 import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
-import {ArrayIterator, Iterator} from "../src/index.js";
+import {ArrayIterator} from "../src/index.js";
 import {Option} from "nochoices";
 
 describe('Iterator', () => {
@@ -1173,13 +1173,39 @@ describe('Iterator', () => {
       expect(none.unwrap()).to.eql(1)
     })
   })
-  describe.skip('#rev', () => {
+
+  // Implementing rev is hard, because require making assumptions over the base iteratos
+  describe('#rev', () => {
+    it('returns empty iterator for empty iterator', () => {
+      const empty = iter<number>([]).rev()
+      expect(empty.next().isNone()).to.eql(true)
+    })
+
+    it('for a 3 elements iterator returns the same elements in oposite order', () => {
+      const reversed = iter<number>([1, 2, 3]).rev()
+      expect(reversed.toArray()).to.eql([3, 2, 1])
+    })
+
+    it('elements that were already traversed forward are not traversed again backwards', () => {
+      const it = iter<number>([1, 2, 3])
+      it.next()
+      it.rev()
+      expect(it.toArray()).to.eql([3, 2])
+    })
+
+    it('can be used after mapping', () => {
+      const it = iter<number>([1, 2, 3])
+        .map(n => n * 2)
+        .rev()
+      expect(it.toArray()).to.eql([6, 4, 2])
+    })
   })
+
+  // Implementing peek is hard, because require making assumptions over the base iteratos
   describe.skip('#peek', () => {
   })
+
   describe.skip('#rFindIndex', () => {
-  })
-  describe.skip('#rPositionOf', () => {
   })
   describe.skip('#rPositionOf', () => {
   })

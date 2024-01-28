@@ -1,11 +1,12 @@
-import {Iterable, Iterator} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
+import {IterOperation} from "./iter-operation.js";
 
-export class Take<T> extends Iterator<T> {
-  private base: Iterable<T>;
+export class Take<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private size: number;
   private current: number;
-  constructor (base: Iterable<T>, size: number) {
+  constructor (base: Iterator<T>, size: number) {
     super();
     this.base = base
     this.size = size

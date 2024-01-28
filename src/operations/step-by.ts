@@ -1,11 +1,12 @@
-import {Iterable, Iterator, Take} from "../index.js";
+import {Iterator, Take} from "../index.js";
 import {Option} from "nochoices";
 import {last} from "../helpers.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class StepBy<T> extends Iterator<T> {
-  private base: Iterable<T>;
+export class StepBy<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private step: number;
-  constructor(base: Iterable<T>, step: number) {
+  constructor(base: Iterator<T>, step: number) {
     super();
     this.base = base
     this.step = step

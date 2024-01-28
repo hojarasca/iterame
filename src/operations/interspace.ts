@@ -1,13 +1,14 @@
-import {Iterator, Iterable} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {GenValue} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class Interspace<T> extends Iterator<T> {
-  private base: Iterable<T>;
+export class Interspace<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private separator: GenValue<T>;
   private nextSepator: Option<GenValue<T>>;
   private nextValue: Option<T>;
-  constructor (base: Iterable<T>, separator: GenValue<T>) {
+  constructor (base: Iterator<T>, separator: GenValue<T>) {
     super();
     this.base = base
     this.separator = separator

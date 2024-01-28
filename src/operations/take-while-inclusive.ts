@@ -1,13 +1,14 @@
-import {Iterable, Iterator} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {Predicate} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class TakeWhileInclusive<T> extends Iterator<T> {
-  private base: Iterable<T>;
+export class TakeWhileInclusive<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private condition: Predicate<T>;
   private finished: boolean;
 
-  constructor (base: Iterable<T>, condition: Predicate<T>) {
+  constructor (base: Iterator<T>, condition: Predicate<T>) {
     super();
     this.base = base;
     this.condition = condition;

@@ -1,8 +1,9 @@
 import {Iterator} from "../index.js";
 import {Option} from "nochoices";
+import {IterOperation} from "./iter-operation.js";
 
-export class Enumerate<T> extends Iterator<[number, T]> {
-  private base: Iterator<T>;
+export class Enumerate<T> extends IterOperation<T, [number, T]> {
+  protected base: Iterator<T>;
   private index: number;
 
   constructor (base: Iterator<T>) {

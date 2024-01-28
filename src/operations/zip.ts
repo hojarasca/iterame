@@ -1,12 +1,12 @@
-import {Iterable, Iterator} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class Zip<A, B> extends Iterator<[A, B]> {
-  private first: Iterable<A>;
-  private second: Iterable<B>;
+  private first: Iterator<A>;
+  private second: Iterator<B>;
   private start: Option<void>;
 
-  constructor (first: Iterable<A>, second: Iterable<B>) {
+  constructor (first: Iterator<A>, second: Iterator<B>) {
     super();
     this.first = first
     this.second = second
@@ -18,5 +18,9 @@ export class Zip<A, B> extends Iterator<[A, B]> {
       .andThen(() => this.first.next())
       .zip(this.second.next())
       .ifNone(() => this.start = Option.None());
+  }
+
+  rev(): Iterator<[A, B]> {
+    return new Zip(this.first.rev(), this.second.rev());
   }
 }

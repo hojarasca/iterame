@@ -1,13 +1,14 @@
-import {Iterable, Iterator} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {OptionalMapping} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class FilterMap<A, B> extends Iterator<B> {
-  private base: Iterable<A>;
+export class FilterMap<A, B> extends IterOperation<A, B> {
+  protected base: Iterator<A>;
   private mapping: OptionalMapping<A, B>;
   private continue: Option<void>;
 
-  constructor (base: Iterable<A>, mapping: OptionalMapping<A, B>) {
+  constructor (base: Iterator<A>, mapping: OptionalMapping<A, B>) {
     super();
     this.base = base
     this.mapping = mapping

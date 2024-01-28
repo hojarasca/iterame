@@ -1,12 +1,13 @@
-import {Iterator, Iterable} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {Callback} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class Inspect<T> extends Iterator<T> {
-  private base: Iterable<T>;
+export class Inspect<T> extends IterOperation<T, T> {
+  protected base: Iterator<T>;
   private callback: Callback<T>;
 
-  constructor (base: Iterable<T>, cbk: Callback<T>) {
+  constructor (base: Iterator<T>, cbk: Callback<T>) {
     super();
     this.base = base
     this.callback = cbk
@@ -15,5 +16,4 @@ export class Inspect<T> extends Iterator<T> {
   next (): Option<T> {
     return this.base.next().ifSome(this.callback);
   }
-
 }

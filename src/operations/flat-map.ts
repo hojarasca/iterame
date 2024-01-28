@@ -1,17 +1,18 @@
-import {Iterable, ArrayIterator, Iterator} from "../index.js";
+import {Iterator, ArrayIterator} from "../index.js";
 import {Option} from "nochoices";
 import {Mapping} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class FlatMap<A, B> extends Iterator<B> {
-  private base: Iterable<A>;
-  private transformation: Mapping<A, Iterable<B> | B[]>;
-  private current: Iterable<B>
+export class FlatMap<A, B> extends IterOperation<A, B> {
+  protected base: Iterator<A>;
+  private transformation: Mapping<A, Iterator<B> | B[]>;
+  private current: Iterator<B>
 
-  constructor (base: Iterable<A>, transformation: Mapping<A, Iterable<B> | B[]>) {
+  constructor (base: Iterator<A>, transformation: Mapping<A, Iterator<B> | B[]>) {
     super();
     this.base = base
     this.transformation = transformation
-    this.current = new ArrayIterator([])
+    this.current = new ArrayIterator<B>([])
   }
 
   next (): Option<B> {
@@ -20,7 +21,7 @@ export class FlatMap<A, B> extends Iterator<B> {
 
   private findNext (): Option<B> {
     let next: Option<A>
-    let current: Iterable<B>
+    let current: Iterator<B>
     let maybeElem: Option<B>
 
     do {
@@ -28,7 +29,7 @@ export class FlatMap<A, B> extends Iterator<B> {
       current = next
         .map(this.transformation)
         .map((a) => this.arrayOrIterIntoIter(a))
-        .unwrapOr(new ArrayIterator([]))
+        .unwrapOr(new ArrayIterator<B>([]))
       maybeElem = current.next()
     } while (next.isSome() && maybeElem.isNone())
 
@@ -36,7 +37,7 @@ export class FlatMap<A, B> extends Iterator<B> {
     return maybeElem
   }
 
-  private arrayOrIterIntoIter (arrayOrIter: Iterable<B> | B[]): Iterable<B> {
+  private arrayOrIterIntoIter (arrayOrIter: Iterator<B> | B[]): Iterator<B> {
     if (Array.isArray(arrayOrIter)) {
       return new ArrayIterator(arrayOrIter)
     } else {

@@ -1,8 +1,9 @@
 import {Iterator} from "../iterator.js";
 import {Option} from "nochoices";
+import {IterOperation} from "./iter-operation.js";
 
-export class Chunks<T> extends Iterator<T[]> {
-  private base: Iterator<T>;
+export class Chunks<T> extends IterOperation<T, T[]> {
+  protected base: Iterator<T>;
   private chunkSize: number;
   constructor (base: Iterator<T>, chunkSize: number) {
     super();
@@ -17,5 +18,4 @@ export class Chunks<T> extends Iterator<T[]> {
     const nextChunk = this.base.take(this.chunkSize)
     return Option.Some(nextChunk.toArray()).filter(list => list.length > 0)
   }
-
 }

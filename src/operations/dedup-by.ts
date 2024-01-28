@@ -1,13 +1,14 @@
-import {Iterator, Iterable} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {Mapping} from "../types.js";
+import {IterOperation} from "./iter-operation.js";
 
-export class DedupBy<A, B> extends Iterator<A>{
-  private base: Iterable<A>;
+export class DedupBy<A, B> extends IterOperation<A, A>{
+  protected base: Iterator<A>;
   private alreadySeen: Set<B>;
   private transformation: Mapping<A, B>;
 
-  constructor (base: Iterable<A>, transformation: Mapping<A, B>) {
+  constructor (base: Iterator<A>, transformation: Mapping<A, B>) {
     super();
     this.base = base
     this.alreadySeen = new Set();
