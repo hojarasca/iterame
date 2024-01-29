@@ -21,8 +21,28 @@ import {
   Dedup,
   DedupBy,
   StepBy,
-  Interspace, FlatMap, Flatten, Collector, Reducer, Fold, Cycle, Inspect, Enumerate, EqualIter, Zip,
-  ZipInclusive, FilterMap, Find, FindIndex, MapWhile, MaxBy, MaxWith, Partition
+  Interspace,
+  FlatMap,
+  Flatten,
+  Collector,
+  Reducer,
+  Fold,
+  Cycle,
+  Inspect,
+  Enumerate,
+  EqualIter,
+  Zip,
+  ZipInclusive,
+  FilterMap,
+  Find,
+  FindIndex,
+  MapWhile,
+  MaxBy,
+  MaxWith,
+  Partition,
+  RFind,
+  SetCollector,
+  SortedArrayCollector
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -252,10 +272,29 @@ export abstract class Iterator<T> {
   }
 
   abstract rev(): Iterator<T>
+
+  rFindIndex(condition: Predicate<T>): Option<number> {
+    return this
+      .enumerate()
+      .collect(new RFind(([_index, elem]) => {
+        return condition(elem)
+      }))
+      .map(([index, _elem]) => index)
+  }
+
+  intoSet() {
+    return this.collect(new SetCollector())
+  }
+
+  intoSortedArray() {
+    return this.collect(new SortedArrayCollector())
+  }
 }
 
 export interface Iterator<T> {
   filter(predicate: Predicate<T>): Filter<T>
+  rPositionOf(predicate: Predicate<T>): Option<number>
 }
 
 Iterator.prototype.filter = Iterator.prototype.select
+Iterator.prototype.rPositionOf = Iterator.prototype.rFindIndex

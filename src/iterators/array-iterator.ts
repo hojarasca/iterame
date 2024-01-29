@@ -2,36 +2,36 @@ import {Option} from "nochoices";
 import {Iterator} from "../iterator.js";
 
 
-interface Advancer {
-  currentIndex(iter: ArrayIterator<any>): number
-  advance(iter: ArrayIterator<any>): void
-  revert(): Advancer
+interface Advancer<T> {
+  currentIndex(iter: ArrayIterator<T>): number
+  advance(iter: ArrayIterator<T>): void
+  revert(): Advancer<T>
 }
 
-class Forward implements Advancer {
-  advance(iter: ArrayIterator<any>): void {
+class Forward<T> implements Advancer<T> {
+  advance(iter: ArrayIterator<T>): void {
     iter.lowerBound += 1
   }
 
-  revert(): Advancer {
-    return new Backward()
+  revert(): Advancer<T> {
+    return new Backward<T>()
   }
 
-  currentIndex(iter: ArrayIterator<any>): number {
+  currentIndex(iter: ArrayIterator<T>): number {
     return iter.lowerBound;
   }
 }
 
-class Backward implements Advancer {
-  advance(iter: ArrayIterator<any>): void {
+class Backward<T> implements Advancer<T> {
+  advance(iter: ArrayIterator<T>): void {
     iter.upperBound -= 1
   }
 
-  revert(): Advancer {
+  revert(): Advancer<T> {
     return new Forward()
   }
 
-  currentIndex(iter: ArrayIterator<any>): number {
+  currentIndex(iter: ArrayIterator<T>): number {
     return iter.upperBound;
   }
 }
@@ -40,7 +40,7 @@ export class ArrayIterator<T> extends Iterator<T> {
   private iterable: T[]
   lowerBound: number
   upperBound: number
-  private advancer: Advancer
+  private advancer: Advancer<T>
   constructor (arr: T[]) {
     super()
     this.iterable = arr

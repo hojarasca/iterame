@@ -1,7 +1,7 @@
 import {describe, it} from "mocha";
 import {expect} from "chai";
 import '../src/index'
-import {ArrayIterator} from "../src/index.js";
+import {ArrayIterator, Iterator, MapCollector} from "../src/index.js";
 import {Option} from "nochoices";
 
 describe('Iterator', () => {
@@ -1199,23 +1199,89 @@ describe('Iterator', () => {
         .rev()
       expect(it.toArray()).to.eql([6, 4, 2])
     })
+
+    it('throws an error when iterator is not capable if revert', () => {
+      const cycle = iter<number>([1, 2, 3])
+        .cycle()
+
+      expect(() => cycle.rev()).to.throw(Error)
+      expect(cycle.next().unwrap()).to.eql(1)
+    })
   })
 
   // Implementing peek is hard, because require making assumptions over the base iteratos
+  // Note: I'm not going to implement peek at this time. I believe it adds confusion to when
+  // the iteration happens. If requestes I might add it. Adding it also involves changing
+  // several other implementations that should use it if exists
   describe.skip('#peek', () => {
   })
 
-  describe.skip('#rFindIndex', () => {
+  describe('#rFindIndex', () => {
+    it('finds the first occurrence from the right', () => {
+      const it = iter<number>([1, 2, 4, 1, 5, 6, 1, 7])
+      const res = it.rFindIndex(n => n == 1)
+      expect(res.unwrap()).to.eql(6)
+    })
+
+    it('returns none when no element matches the condition', () => {
+      const it = iter<number>([1, 2, 4, 1, 5, 6, 1, 7])
+      const res = it.rFindIndex(n => n == 11)
+      expect(res).to.eql(Option.None())
+    })
+
+    it('consumes the entire iterator', () => {
+      const it = iter<number>([1, 2, 3])
+      it.rFindIndex(n => n == 2)
+      expect(it.next()).to.eql(Option.None())
+    })
   })
+
   describe.skip('#rPositionOf', () => {
+    it('finds the first occurrence from the right', () => {
+      const it = iter<number>([1, 2, 4, 1, 5, 6, 1, 7])
+      const res = it.rPositionOf(n => n == 1)
+      expect(res.unwrap()).to.eql(6)
+    })
+
+    it('returns none when no element matches the condition', () => {
+      const it = iter<number>([1, 2, 4, 1, 5, 6, 1, 7])
+      const res = it.rPositionOf(n => n == 11)
+      expect(res).to.eql(Option.None())
+    })
+
+    it('consumes the entire iterator', () => {
+      const it = iter<number>([1, 2, 3])
+      it.rPositionOf(n => n == 2)
+      expect(it.next()).to.eql(Option.None())
+    })
   })
 
+  describe('collect into map', () => {
+    it('collects a map from a list of tuples', () => {
+      const it = iter<[string, number]>([["foo", 10], ["bar", 12]])
+      const map = it.collect(new MapCollector())
+      expect(map.size).to.eql(2)
+      expect(map.get('foo')).to.eql(10)
+      expect(map.get('bar')).to.eql(12)
+    })
+  })
+  describe('collect into set', () => {
+    it('collects into a set removing duplicated items', () => {
+      const it = iter([1, 2, 3, 1, 2])
+      const set = it.intoSet()
+      expect(set.size).to.eql(3)
+      expect(set.has(1)).to.eql(true)
+      expect(set.has(2)).to.eql(true)
+      expect(set.has(3)).to.eql(true)
+    })
+  })
 
-  describe.skip('collect into map', () => {
-  })
-  describe.skip('collect into set', () => {
-  })
-  describe.skip('collect into orderedList', () => {
+  describe('collect into orderedList', () => {
+    it('returns a list ordered by default js criteria', () => {
+      const it = iter([5, 1, 2, 4, 3])
+      const sorted = it.intoSortedArray()
+      expect(sorted).to.eql([1, 2, 3, 4, 5])
+    })
   })
   describe.skip('collect into orderedListBy', () => {
   })
