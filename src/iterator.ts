@@ -47,7 +47,6 @@ import {
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
 
-
 const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
   return a < b
     ? -1
@@ -149,6 +148,12 @@ export abstract class Iterator<T> {
   filterMap<U>(mapping: OptionalMapping<T, U>): Iterator<U> {
     return new FilterMap(this, mapping)
   }
+
+  //---------------------
+  // Double sided needed
+  // --------------------
+
+  abstract rev(): Iterator<T>
 
   //------------
   // Finalizers
@@ -278,8 +283,6 @@ export abstract class Iterator<T> {
   positionOf(target: T): Option<number> {
     return this.findIndex(t => t === target)
   }
-
-  abstract rev(): Iterator<T>
 
   rFindIndex(condition: Predicate<T>): Option<number> {
     return this
