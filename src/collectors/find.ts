@@ -10,7 +10,6 @@ export class Find<T> implements Collector<T, Option<T>> {
     this.predicate = predicate
   }
   collect (it: Iterator<T>): Option<T> {
-    const taken = it.takeWhileInclusive(this.predicate).toArray()
-    return last(taken)
+    return  it.filter(this.predicate).next()
   }
 }

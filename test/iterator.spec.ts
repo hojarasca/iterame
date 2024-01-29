@@ -898,7 +898,7 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#filterMap', () => {
+  describe('#filterMap', () => {
     it('returns empty iter for empty iter', () => {
       const empty = iter<number>([]).filterMap(() => Option.Some(10))
       expect(empty.next().isNone()).to.eql(true)
@@ -923,7 +923,7 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#find', () => {
+  describe('#find', () => {
     it('returns none for empty iter', () => {
       const found = iter([]).find((_) => true)
       expect(found.isNone()).to.eql(true)
@@ -1236,7 +1236,7 @@ describe('Iterator', () => {
     })
   })
 
-  describe.skip('#rPositionOf', () => {
+  describe('#rPositionOf', () => {
     it('finds the first occurrence from the right', () => {
       const it = iter<number>([1, 2, 4, 1, 5, 6, 1, 7])
       const res = it.rPositionOf(n => n == 1)
