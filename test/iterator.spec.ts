@@ -1283,11 +1283,25 @@ describe('Iterator', () => {
       expect(sorted).to.eql([1, 2, 3, 4, 5])
     })
   })
-  describe.skip('collect into orderedListBy', () => {
-  })
-  describe.skip('collect into orderedListWith', () => {
+
+  describe('collect into orderedListBy', () => {
+    it('returns a list ordered by default js criteria', () => {
+      const elem1 = { foo: 1 }
+      const elem2 = { foo: -1 }
+      const elem3 = { foo: 5 }
+      const it = iter([elem1, elem2, elem3])
+      const sorted = it.intoSortedByArray(elem => elem.foo)
+      expect(sorted).to.eql([elem2, elem1, elem3])
+    })
   })
 
+  describe('collect into orderedListWith', () => {
+    it('returns a list using custom criteria', () => {
+      const it = iter(['foo', 'f', 'fo', 'foob', 'foobar', 'fooba'])
+      const sorted = it.intoSortedWithArray((s1, s2) => s2.length - s1.length)
+      expect(sorted).to.eql(['f', 'fo', 'foo', 'foob', 'fooba', 'foobar'].reverse())
+    })
+  })
 
   it('can be mapped and then mapped again', () => {
     const res = []

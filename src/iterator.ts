@@ -48,6 +48,14 @@ import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
 
 
+const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
+  return a < b
+    ? -1
+    : a > b
+      ? 1
+      : 0
+};
+
 export abstract class Iterator<T> {
   abstract next(): Option<T>
 
@@ -286,8 +294,18 @@ export abstract class Iterator<T> {
     return this.collect(new SetCollector())
   }
 
-  intoSortedArray() {
-    return this.collect(new SortedArrayCollector())
+  intoSortedArray(): T[] {
+    return this.collect(new SortedArrayCollector(DEFAULT_SORT_CRITERIA))
+  }
+
+  intoSortedWithArray(order: CompareFn<T>): T[] {
+    return this.collect(new SortedArrayCollector(order))
+  }
+
+  intoSortedByArray<U>(transformation: Mapping<T, U>) {
+    return this.collect(new SortedArrayCollector((t1, t2) => {
+      return DEFAULT_SORT_CRITERIA(transformation(t1), transformation(t2))
+    }))
   }
 }
 
