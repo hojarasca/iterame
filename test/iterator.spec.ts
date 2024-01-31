@@ -1303,6 +1303,22 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#rFind', () => {
+    it('returns none when element is not present', () => {
+      const found = iter([1,2,3]).rFind(n => n === 10)
+      expect(found.isNone()).to.eql(true)
+    })
+
+    it('returns some with the element when the element is present', () => {
+      const obj1 = {foo: 1}
+      const obj2 = {foo: 2}
+      const obj3 = {foo: 3}
+      const found = iter([obj1, obj2, obj3]).rFind(o => o.foo === 2)
+      expect(found.unwrap()).to.equal(obj2)
+    })
+  })
+
+
   it('can be mapped and then mapped again', () => {
     const res = []
     for (const a of iter([1, 2, 3]).map(n => n * 2).map(n => n + 1)) {

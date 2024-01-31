@@ -1,7 +1,8 @@
 import {ArrayIterator, Iterator} from "../index.js";
 import {Option} from "nochoices";
+import {InfiniteStream} from "../iterators/index.js";
 
-export class Cycle<T> extends Iterator<T> {
+export class Cycle<T> extends InfiniteStream<T> {
   private base: Iterator<T>;
   private elems: T[]
   private elemsIter: ArrayIterator<T>
@@ -20,9 +21,5 @@ export class Cycle<T> extends Iterator<T> {
       })
       .orElse(() => this.elemsIter.next().ifNone(() => this.elemsIter.reset()))
       .orElse(() => this.elemsIter.next())
-  }
-
-  rev(): Iterator<T> {
-    throw new Error('Cycles cannot be reverted');
   }
 }

@@ -284,6 +284,10 @@ export abstract class Iterator<T> {
     return this.findIndex(t => t === target)
   }
 
+  rFind(condition: Predicate<T>): Option<T> {
+    return this.collect(new RFind(condition))
+  }
+
   rFindIndex(condition: Predicate<T>): Option<number> {
     return this
       .enumerate()
