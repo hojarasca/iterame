@@ -1,2 +1,5 @@
 import './monkeypatch-array.js'
 import './monkeypatch-map.js'
+import './monkeypatch-set.js'
+import './monkeypatch-typed-arrays.js'
+import './monkeypatch-array-buffer.js'
