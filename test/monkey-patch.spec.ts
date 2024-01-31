@@ -21,4 +21,23 @@ describe('Map monkey patch', () => {
     const iter = map.iterValues()
     expect(iter.intoArray()).to.have.members([1, 2])
   })
+
+  it('adds iterEntries method', () => {
+    const map = new Map([['foo', 1], ['bar', 2]])
+    const iter = map.iterEntries()
+
+    let count = 0
+    for (const [key, value] of iter) {
+      count += 1
+      if (key === 'foo') {
+        expect(value).to.eql(1)
+      } else if (key === 'bar') {
+        expect(value).to.eql(2)
+      } else {
+        expect.fail('unknown key')
+      }
+    }
+
+    expect(count).to.eql(2)
+  })
 });
