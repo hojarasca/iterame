@@ -10,7 +10,7 @@ export class FindIndex<T> implements Collector<T, Option<number>> {
     this.predicate = predicate
   }
   collect (it: Iterator<T>): Option<number> {
-    const taken = it.map(this.predicate).takeWhileInclusive(a => !a).toArray()
+    const taken = it.map(this.predicate).takeWhileInclusive(a => !a).intoArray()
     return last(taken).filter(elem => elem).map(_ => taken.length - 1)
   }
 }

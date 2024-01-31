@@ -16,6 +16,6 @@ export class Chunks<T> extends IterOperation<T, T[]> {
 
   next (): Option<T[]> {
     const nextChunk = this.base.take(this.chunkSize)
-    return Option.Some(nextChunk.toArray()).filter(list => list.length > 0)
+    return Option.Some(nextChunk.intoArray()).filter(list => list.length > 0)
   }
 }

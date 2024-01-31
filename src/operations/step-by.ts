@@ -13,7 +13,7 @@ export class StepBy<T> extends IterOperation<T, T> {
   }
 
   next(): Option<T> {
-    const taken = new Take(this.base, this.step).toArray();
+    const taken = new Take(this.base, this.step).intoArray();
     return last(taken).filter(_ => taken.length === this.step)
   }
 

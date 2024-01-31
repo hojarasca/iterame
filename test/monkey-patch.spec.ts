@@ -8,3 +8,17 @@ describe('Array monkey patch', () => {
     expect([...iter]).to.eql([2, 6])
   })
 })
+
+describe('Map monkey patch', () => {
+  it('adds iterKeys method', () => {
+    const map = new Map([['foo', 1], ['bar', 2]])
+    const iter = map.iterKeys()
+    expect(iter.intoArray()).to.have.members(['foo', 'bar'])
+  })
+
+  it('adds iterValues method', () => {
+    const map = new Map([['foo', 1], ['bar', 2]])
+    const iter = map.iterValues()
+    expect(iter.intoArray()).to.have.members([1, 2])
+  })
+});

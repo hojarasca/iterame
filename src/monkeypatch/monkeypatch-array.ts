@@ -1,5 +1,4 @@
-import {ArrayIterator} from "./index.js";
-
+import {ArrayIterator} from "../iterators/index.js";
 
 declare global {
   interface Array<T> {

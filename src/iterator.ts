@@ -163,7 +163,7 @@ export abstract class Iterator<T> {
     return collector.collect(this)
   }
 
-  toArray(): T[] {
+  intoArray(): T[] {
     return this.collect(new ToArray())
   }
 

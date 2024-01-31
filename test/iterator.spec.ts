@@ -52,7 +52,7 @@ describe('Iterator', () => {
 
   describe('toArray', () => {
     it('returns the original array', () => {
-      const target = iter([1, 2, 3]).toArray()
+      const target = iter([1, 2, 3]).intoArray()
       expect(target).to.eql([1, 2, 3])
     })
   })
@@ -109,17 +109,17 @@ describe('Iterator', () => {
   describe('#skip', () => {
     it('skip 0 does nothing', () => {
       const target = iter([1, 2, 3]).drop(0)
-      expect(target.toArray()).to.eql([1, 2, 3])
+      expect(target.intoArray()).to.eql([1, 2, 3])
     })
 
     it('skip 1 ignores first element', () => {
       const target = iter([1, 2, 3]).drop(1)
-      expect(target.toArray()).to.eql([2, 3])
+      expect(target.intoArray()).to.eql([2, 3])
     })
 
     it('skip 1 ignores for empty iterator returns empty iterator', () => {
       const target = iter([]).drop(1)
-      expect(target.toArray()).to.eql([])
+      expect(target.intoArray()).to.eql([])
     })
 
     it('skip more times than iterator length returns empty iterator', () => {
@@ -147,7 +147,7 @@ describe('Iterator', () => {
     it('with a negative number throws an error', () => {
       const iterator = iter([1, 2, 3])
       expect(() => iterator.nth(-1)).to.throw(Error, 'position should be positive')
-      expect(iterator.toArray()).to.eql([1, 2, 3])
+      expect(iterator.intoArray()).to.eql([1, 2, 3])
     })
 
     it('with a value bigger than the size of the iterator returns none', () => {
@@ -159,89 +159,89 @@ describe('Iterator', () => {
   describe('#take', () => {
     it('for an empty list returns empty list', () => {
       const taken = iter([]).take(10)
-      expect(taken.toArray()).to.eql([])
+      expect(taken.intoArray()).to.eql([])
     })
 
     it('when size is lower than the iterator length returns the first elements of the iterator', () => {
       const taken = iter([1, 2, 3]).take(2)
-      expect(taken.toArray()).to.eql([1, 2])
+      expect(taken.intoArray()).to.eql([1, 2])
     })
 
     it('when the size is bigger than the list returns the entire list', () => {
       const taken = iter([1, 2, 3]).take(10)
-      expect(taken.toArray()).to.eql([1, 2, 3])
+      expect(taken.intoArray()).to.eql([1, 2, 3])
     })
   })
 
   describe('#takeWhile', () => {
     it('returns empty for empty iterator', () => {
       const it = iter<number>([]).takeWhile(() => true)
-      expect(it.toArray()).to.eql([])
+      expect(it.intoArray()).to.eql([])
     })
 
     it('returns first chunk of elements that match the condition', () => {
       const it = iter<number>([-3, -1, 0, -1, 1, 2])
         .takeWhile((elem) => elem < 0)
-      expect(it.toArray()).to.eql([-3, -1])
+      expect(it.intoArray()).to.eql([-3, -1])
     })
 
     it('when condition always fulfills take all the iterator', () => {
       const it = iter<number>([1, 2, 3])
         .takeWhile((_) => true)
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
   })
 
   describe('#takeWhileInclusive', () => {
     it('returns empty for empty iterator', () => {
       const it = iter<number>([]).takeWhileInclusive(() => true)
-      expect(it.toArray()).to.eql([])
+      expect(it.intoArray()).to.eql([])
     })
 
     it('returns first chunk of elements that match the condition, including the element that made the condition fail', () => {
       const it = iter<number>([-3, -1, 0, -1, 1, 2])
         .takeWhileInclusive((elem) => elem < 0)
-      expect(it.toArray()).to.eql([-3, -1, 0])
+      expect(it.intoArray()).to.eql([-3, -1, 0])
     })
 
     it('when condition always fulfills take all the iterator', () => {
       const it = iter<number>([1, 2, 3])
         .takeWhileInclusive((_) => true)
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
   })
 
   describe('#chunks', () => {
     it('using 2, an iterator with 4 elements gets into an iterator with 2 lists of 2', () => {
       const chunks = iter([1, 2, 3, 4]).chunks(2)
-      expect(chunks.toArray()).to.eql([[1, 2], [3, 4]])
+      expect(chunks.intoArray()).to.eql([[1, 2], [3, 4]])
     })
 
     it('using 3, an iterator with 5 elements gets into an iterator with only 2 elems with 3 and 2 elems inside', () => {
       const chunks = iter([1, 2, 3, 4, 5]).chunks(3)
-      expect(chunks.toArray()).to.eql([[1, 2, 3], [4, 5]])
+      expect(chunks.intoArray()).to.eql([[1, 2, 3], [4, 5]])
     })
 
     it('using the size of the iterator returns only 1 element with the list inside', () => {
       const chunks = iter([1, 2, 3, 4, 5]).chunks(5)
-      expect(chunks.toArray()).to.eql([[1, 2, 3, 4, 5]])
+      expect(chunks.intoArray()).to.eql([[1, 2, 3, 4, 5]])
     })
 
     it('using a number bigger than the list returns 1 element with the list inside', () => {
       const chunks = iter([1, 2, 3, 4, 5]).chunks(10)
-      expect(chunks.toArray()).to.eql([[1, 2, 3, 4, 5]])
+      expect(chunks.intoArray()).to.eql([[1, 2, 3, 4, 5]])
     })
 
     it('used with 0 throws an error', () => {
       const iterator = iter([1, 2, 3]);
       expect(() => iterator.chunks(0)).to.throw(Error, 'size should be a positive non zero integer')
-      expect(iterator.toArray()).to.eql([1, 2, 3])
+      expect(iterator.intoArray()).to.eql([1, 2, 3])
     })
 
     it('used with negative numbers throws an error', () => {
       const iterator = iter([1, 2, 3]);
       expect(() => iterator.chunks(-5)).to.throw(Error, 'size should be a positive non zero integer')
-      expect(iterator.toArray()).to.eql([1, 2, 3])
+      expect(iterator.intoArray()).to.eql([1, 2, 3])
     })
   })
 
@@ -250,21 +250,21 @@ describe('Iterator', () => {
       const it1 = iter<number>([])
       const it2 = iter([1, 2, 3])
       const target = it1.concat(it2)
-      expect(target.toArray()).to.eql([1, 2, 3])
+      expect(target.intoArray()).to.eql([1, 2, 3])
     })
 
     it('concat 2 iterators with data returns 1 iterator with all the data', () => {
       const it1 = iter([1, 2, 3])
       const it2 = iter([10, 11, 12])
       const target = it1.concat(it2)
-      expect(target.toArray()).to.eql([1, 2, 3, 10, 11, 12])
+      expect(target.intoArray()).to.eql([1, 2, 3, 10, 11, 12])
     })
 
     it('concat with empty returns iterator with the original data', () => {
       const it1 = iter<number>([1, 2, 3])
       const it2 = iter<number>([])
       const target = it1.concat(it2)
-      expect(target.toArray()).to.eql([1, 2, 3])
+      expect(target.intoArray()).to.eql([1, 2, 3])
     })
   })
 
@@ -289,46 +289,46 @@ describe('Iterator', () => {
   describe('#dedup', () => {
     it('returns none for empty iterator', () => {
       const it = iter<number>([]).dedup()
-      expect(it.toArray()).to.eql([])
+      expect(it.intoArray()).to.eql([])
     })
 
     it('returns same list when all elements are different', () => {
       const it = iter<number>([1, 2, 3]).dedup()
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('groups of 2 are reduced to only one', () => {
       const it = iter<number>([1, 1, 2, 2, 3, 3]).dedup()
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('when elements appear in different moments only the first instance is shown', () => {
       const it = iter<number>([1, 2, 3, 1, 4, 1, 2, 5]).dedup()
-      expect(it.toArray()).to.eql([1, 2, 3, 4, 5])
+      expect(it.intoArray()).to.eql([1, 2, 3, 4, 5])
     })
 
     it('it compares elements using js ===', () => {
       const obj1 = {}
       const obj2 = {}
       const it = iter([obj1, obj2, obj1]).dedup()
-      expect(it.toArray()).to.eql([obj1, obj2])
+      expect(it.intoArray()).to.eql([obj1, obj2])
     })
   })
 
   describe('#dedupBy', () => {
     it('returns none for empty iterator', () => {
       const it = iter<number>([]).dedupBy(() => 10)
-      expect(it.toArray()).to.eql([])
+      expect(it.intoArray()).to.eql([])
     })
 
     it('groups of 2 that ar mapped to the same value are reduced the first one', () => {
       const it = iter([1, '1', 2, '2', 3, '3']).dedupBy(t => t.toString())
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('when elements that map to the same value are dispersed the first occurrence survives', () => {
       const it = iter([1, '2', 3, 1, '1', 2, '2', 1]).dedupBy(t => t.toString())
-      expect(it.toArray()).to.eql([1, '2', 3])
+      expect(it.intoArray()).to.eql([1, '2', 3])
     })
 
     it('compares transformed values using js equality', () => {
@@ -345,29 +345,29 @@ describe('Iterator', () => {
           return obj1
         }
       })
-      expect(it.toArray()).to.eql([1, 2])
+      expect(it.intoArray()).to.eql([1, 2])
     })
   })
 
   describe('#stepBy', () => {
     it('returns odd position when size is 2', () => {
       const it = iter([0, 1, 2, 3, 4, 5]).stepBy(2)
-      expect(it.toArray()).to.eql([1, 3, 5])
+      expect(it.intoArray()).to.eql([1, 3, 5])
     })
 
     it('returns empty iter when step is bigger than iterator size', () => {
       const it = iter([0, 1, 2]).stepBy(4)
-      expect(it.toArray()).to.eql([])
+      expect(it.intoArray()).to.eql([])
     })
 
     it('returns equivalent iterator when size is 1', () => {
       const it = iter([0, 1, 2]).stepBy(1)
-      expect(it.toArray()).to.eql([0, 1, 2])
+      expect(it.intoArray()).to.eql([0, 1, 2])
     })
 
     it('when there is a rest the rest is ignored', () => {
       const it = iter([0, 1, 2, 3, 4, 5, 6, 7]).stepBy(3)
-      expect(it.toArray()).to.eql([2, 5])
+      expect(it.intoArray()).to.eql([2, 5])
     })
   })
 
@@ -379,17 +379,17 @@ describe('Iterator', () => {
 
     it('in a 2 elem iterator puts 1 instance of the separator in the middle', () => {
       const it = iter<number>([1, 2]).interspace(100)
-      expect(it.toArray()).to.eql([1, 100, 2])
+      expect(it.intoArray()).to.eql([1, 100, 2])
     })
 
     it('in a 3 elem iterator puts separator in the middle after first and after second elem', () => {
       const it = iter<number>([1, 2, 3]).interspace(100)
-      expect(it.toArray()).to.eql([1, 100, 2, 100, 3])
+      expect(it.intoArray()).to.eql([1, 100, 2, 100, 3])
     })
 
     it('in a 1 elem iterator no separator', () => {
       const it = iter<number>([1]).interspace(100)
-      expect(it.toArray()).to.eql([1])
+      expect(it.intoArray()).to.eql([1])
     })
   })
 
@@ -406,24 +406,24 @@ describe('Iterator', () => {
 
     it('when the function returns a list it returns those elements in order', () => {
       const it = iter<number>([1]).flatMap((_) => [2, 3, 4])
-      expect(it.toArray()).to.eql([2, 3, 4])
+      expect(it.intoArray()).to.eql([2, 3, 4])
     })
 
     it('when the function returns an iter it returns those elements in order', () => {
       const it = iter<number>([1]).flatMap((_) => iter([2, 3, 4]))
-      expect(it.toArray()).to.eql([2, 3, 4])
+      expect(it.intoArray()).to.eql([2, 3, 4])
     })
 
     it('when the function returns empty array for some elements they get ignored', () => {
       const it = iter<number>([0, 1, 2, 3, 4, 5, 6])
         .flatMap((n) => n % 3 === 0 ? [n] : [])
-      expect(it.toArray()).to.eql([0, 3, 6])
+      expect(it.intoArray()).to.eql([0, 3, 6])
     })
 
     it('when the function returns list of lists it flattens only once', () => {
       const it = iter<number>([0, 1, 2])
         .flatMap((n) => [[n]])
-      expect(it.toArray()).to.eql([[0], [1], [2]])
+      expect(it.intoArray()).to.eql([[0], [1], [2]])
     })
   })
 
@@ -435,31 +435,31 @@ describe('Iterator', () => {
 
     it('flattens a list of size 1', () => {
       const it = iter([[1]]).flatten()
-      expect(it.toArray()).to.eql([1])
+      expect(it.intoArray()).to.eql([1])
     })
 
     it('flattens a list of one iterator', () => {
       const it = iter([iter([1])]).flatten()
-      expect(it.toArray()).to.eql([1])
+      expect(it.intoArray()).to.eql([1])
     })
 
     it('does nothing with a list of plain objects', () => {
       const it = iter([1, 2, 3]).flatten()
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
   })
 
   describe('#select', () => {
     it('works as filter', () => {
       const it = iter([0, 1, 2, 3]).select(n => n % 2 === 0)
-      expect(it.toArray()).to.eql([0, 2])
+      expect(it.intoArray()).to.eql([0, 2])
     })
   })
 
   describe('#reject', () => {
     it('returns elements that make the predicate false', () => {
       const it = iter([0, 1, 2, 3]).reject(n => n % 2 === 0)
-      expect(it.toArray()).to.eql([1, 3])
+      expect(it.intoArray()).to.eql([1, 3])
     })
   })
 
@@ -579,7 +579,7 @@ describe('Iterator', () => {
     it('calls the callback for each element when the iterator was not consumed', () => {
       const elems: number[] = []
       const fn = (n: number) => elems.push(n)
-      iter([1, 2, 3]).inspect(fn).toArray()
+      iter([1, 2, 3]).inspect(fn).intoArray()
       expect(elems).to.eql([1, 2, 3])
     })
 
@@ -587,7 +587,7 @@ describe('Iterator', () => {
       const fn = (_n: number) => {
       }
       const it = iter([1, 2, 3]).inspect(fn)
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
   })
 
@@ -625,7 +625,7 @@ describe('Iterator', () => {
 
     it('enumerates a list', () => {
       const it = iter(['first', 'second', 'third']).enumerate()
-      expect(it.toArray()).to.eql([
+      expect(it.intoArray()).to.eql([
         [0, 'first'],
         [1, 'second'],
         [2, 'third'],
@@ -637,7 +637,7 @@ describe('Iterator', () => {
         .enumerate()
         .filter(([_, s]) => s !== 'second')
 
-      expect(it.toArray()).to.eql([
+      expect(it.intoArray()).to.eql([
         [0, 'first'],
         [2, 'third'],
       ])
@@ -648,7 +648,7 @@ describe('Iterator', () => {
         .filter(s => s !== 'second') // first remove some elems
         .enumerate()
 
-      expect(it.toArray()).to.eql([
+      expect(it.intoArray()).to.eql([
         [0, 'first'],
         [1, 'third'],
       ])
@@ -683,7 +683,7 @@ describe('Iterator', () => {
       const it1 = iter<number>([1, 2, 3])
       const it2 = iter<string>(['one', 'two', 'three'])
       const zip = it1.zip(it2)
-      expect(zip.toArray()).to.eql([
+      expect(zip.intoArray()).to.eql([
         [1, 'one'],
         [2, 'two'],
         [3, 'three'],
@@ -694,7 +694,7 @@ describe('Iterator', () => {
       const it1 = iter<number>([1, 2])
       const it2 = iter<string>(['one', 'two', 'three'])
       const zip = it1.zip(it2)
-      expect(zip.toArray()).to.eql([
+      expect(zip.intoArray()).to.eql([
         [1, 'one'],
         [2, 'two']
       ])
@@ -703,7 +703,7 @@ describe('Iterator', () => {
     it('when first finishes the second gets consumed 1 extra time', () => {
       const it1 = iter<number>([1, 2])
       const it2 = iter<string>(['one', 'two', 'three', 'four'])
-      it1.zip(it2).toArray()
+      it1.zip(it2).intoArray()
       expect(it2.next().unwrap()).to.eql('four')
       expect(it2.next().isNone()).to.eql(true)
     })
@@ -711,7 +711,7 @@ describe('Iterator', () => {
     it('when second finishes the first does gets consumed one extra time', () => {
       const it1 = iter<number>([1, 2, 3, 4])
       const it2 = iter<string>(['one', 'two'])
-      it1.zip(it2).toArray()
+      it1.zip(it2).intoArray()
       expect(it1.next().isSome()).to.eql(true)
     })
 
@@ -719,7 +719,7 @@ describe('Iterator', () => {
       const it1 = iter<number>([1, 2, 3])
       const it2 = iter<string>(['one', 'two'])
       const zip = it1.zip(it2)
-      expect(zip.toArray()).to.eql([
+      expect(zip.intoArray()).to.eql([
         [1, 'one'],
         [2, 'two']
       ])
@@ -739,7 +739,7 @@ describe('Iterator', () => {
       const it1 = iter<number>([1, 2, 3])
       const it2 = iter<string>(['one', 'two', 'tree'])
       const zip = it1.zipInclusive(it2)
-      expect(zip.toArray()).to.eql([
+      expect(zip.intoArray()).to.eql([
         [Option.Some(1), Option.Some('one')],
         [Option.Some(2), Option.Some('two')],
         [Option.Some(3), Option.Some('tree')],
@@ -751,7 +751,7 @@ describe('Iterator', () => {
       const it1 = iter<number>([1, 2])
       const it2 = iter<string>(['one', 'two', 'tree', 'four'])
       const zip = it1.zipInclusive(it2)
-      expect(zip.toArray()).to.eql([
+      expect(zip.intoArray()).to.eql([
         [Option.Some(1), Option.Some('one')],
         [Option.Some(2), Option.Some('two')],
         [Option.None(), Option.Some('tree')],
@@ -762,7 +762,7 @@ describe('Iterator', () => {
       const it1 = iter<number>([1, 2, 3, 4])
       const it2 = iter<string>(['one', 'two'])
       const zip = it1.zipInclusive(it2)
-      expect(zip.toArray()).to.eql([
+      expect(zip.intoArray()).to.eql([
         [Option.Some(1), Option.Some('one')],
         [Option.Some(2), Option.Some('two')],
         [Option.Some(3), Option.None()],
@@ -907,19 +907,19 @@ describe('Iterator', () => {
     it('returns same list when transformation returns some of the value', () => {
       const it = iter([1, 2, 3])
         .filterMap((v) => Option.Some(v))
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('stops when function returns None', () => {
       const it = iter([1, 2, 3, 4, 5])
         .filterMap(v => Option.Some(v).filter(v => v < 4))
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('iterates over transformed values', () => {
       const it = iter([1, 2, 3, 4, 5])
         .filterMap(v => Option.Some(v).filter(v => v < 4).map(n => n.toString()))
-      expect(it.toArray()).to.eql(['1', '2', '3'])
+      expect(it.intoArray()).to.eql(['1', '2', '3'])
     })
   })
 
@@ -982,47 +982,47 @@ describe('Iterator', () => {
 
     it('in a 2 elem iterator puts 1 instance of the separator in the middle', () => {
       const it = iter<number>([1, 2]).interspaceWith(() => 100)
-      expect(it.toArray()).to.eql([1, 100, 2])
+      expect(it.intoArray()).to.eql([1, 100, 2])
     })
 
     it('in a 3 elem iterator puts separator in the middle after first and after second elem', () => {
       const it = iter<number>([1, 2, 3]).interspaceWith(() => 100)
-      expect(it.toArray()).to.eql([1, 100, 2, 100, 3])
+      expect(it.intoArray()).to.eql([1, 100, 2, 100, 3])
     })
 
     it('in a 1 elem iterator no separator', () => {
       const it = iter<number>([1]).interspaceWith(() => expect.fail('should not be called'))
-      expect(it.toArray()).to.eql([1])
+      expect(it.intoArray()).to.eql([1])
     })
   })
 
   describe('#mapWhile', () => {
     it('returns empty iter for empty iter', () => {
       const it = iter([]).mapWhile((_) => expect.fail('should not be called'))
-      expect(it.toArray()).to.eql([])
+      expect(it.intoArray()).to.eql([])
     })
 
     it('returns same values when fn returns always the value', () => {
       const it = iter([1, 2, 3])
         .mapWhile((n) => Option.Some(n))
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('returns mapped values when fn returns some', () => {
       const it = iter([1, 2, 3])
         .mapWhile((n) => Option.Some(n.toString()))
-      expect(it.toArray()).to.eql(['1', '2', '3'])
+      expect(it.intoArray()).to.eql(['1', '2', '3'])
     })
 
     it('stops iterating when function returns none', () => {
       const it = iter([1, 2, 3, 4, 5])
         .mapWhile((n) => Option.Some(n).filter(n => n <= 3))
-      expect(it.toArray()).to.eql([1, 2, 3])
+      expect(it.intoArray()).to.eql([1, 2, 3])
     })
 
     it('stops consuming iterator when function returns none', () => {
       const it = iter([1, 2, 3, 4, 5]);
-      it.mapWhile((n) => Option.Some(n).filter(n => n <= 3)).toArray()
+      it.mapWhile((n) => Option.Some(n).filter(n => n <= 3)).intoArray()
       expect(it.count()).to.eql(1)
     })
   })
@@ -1183,21 +1183,21 @@ describe('Iterator', () => {
 
     it('for a 3 elements iterator returns the same elements in oposite order', () => {
       const reversed = iter<number>([1, 2, 3]).rev()
-      expect(reversed.toArray()).to.eql([3, 2, 1])
+      expect(reversed.intoArray()).to.eql([3, 2, 1])
     })
 
     it('elements that were already traversed forward are not traversed again backwards', () => {
       const it = iter<number>([1, 2, 3])
       it.next()
       it.rev()
-      expect(it.toArray()).to.eql([3, 2])
+      expect(it.intoArray()).to.eql([3, 2])
     })
 
     it('can be used after mapping', () => {
       const it = iter<number>([1, 2, 3])
         .map(n => n * 2)
         .rev()
-      expect(it.toArray()).to.eql([6, 4, 2])
+      expect(it.intoArray()).to.eql([6, 4, 2])
     })
 
     it('throws an error when iterator is not capable if revert', () => {

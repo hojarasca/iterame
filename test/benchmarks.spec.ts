@@ -11,7 +11,7 @@ describe('simple benchmarks', () => {
     console.timeEnd('eager')
 
     console.time('lazy')
-    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).toArray()
+    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).intoArray()
     expect(res2.length).to.eql(50)
     console.timeEnd('lazy')
   })
@@ -24,7 +24,7 @@ describe('simple benchmarks', () => {
     console.timeEnd('eager')
 
     console.time('lazy')
-    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).toArray()
+    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).intoArray()
     expect(res2.length).to.eql(500)
     console.timeEnd('lazy')
   })
@@ -37,7 +37,7 @@ describe('simple benchmarks', () => {
     console.timeEnd('eager')
 
     console.time('lazy')
-    const res2 = numbers.iter().filter(n => n % 2 === 0).map(n => n * 3).toArray()
+    const res2 = numbers.iter().filter(n => n % 2 === 0).map(n => n * 3).intoArray()
     expect(res2.length).to.eql(500)
     console.timeEnd('lazy')
   })
@@ -50,7 +50,7 @@ describe('simple benchmarks', () => {
     console.timeEnd('eager')
 
     console.time('lazy')
-    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).toArray()
+    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).intoArray()
     expect(res2.length).to.eql(10000000 / 2)
     console.timeEnd('lazy')
   })
@@ -63,7 +63,7 @@ describe('simple benchmarks', () => {
     console.timeEnd('eager')
 
     console.time('lazy')
-    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).take(10).toArray()
+    const res2 = numbers.iter().map(n => n * 3).filter(n => n % 2 === 0).take(10).intoArray()
     expect(res2.length).to.eql(10)
     console.timeEnd('lazy')
   })
