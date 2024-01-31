@@ -1,5 +1,6 @@
 {
   "name": "iterame",
+  "description": "Advance iterator funcionality in js and ts.",
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
