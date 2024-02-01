@@ -1,8 +1,20 @@
 {
   "name": "iterame",
   "description": "Advance iterator funcionality in js and ts.",
+  "keywords": [
+    "iterators",
+    "collections"
+  ],
+  "author": "Miguel Duarte",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "./dist/mod/index.js",
+  "repository": "https://github.com/hojarasca/iterame.git",
+  "types": "./dist/mod/index.d.ts",
+  "exports": {
+    ".": "./dist/mod/index.js",
+    "./pure": "./dist/mod/pure.js",
+    "./*": "./dist/mod/*"
+  },
   "license": "MIT",
   "type": "module",
   "scripts": {
