@@ -15,7 +15,7 @@ declare global {
   }
 
   interface BigUint64Array {
-    iter(): Iterator<BigInt>
+    iter(): Iterator<bigint>
   }
 
   interface Int8Array {
@@ -31,7 +31,7 @@ declare global {
   }
 
   interface BigInt64Array {
-    iter(): Iterator<BigInt>
+    iter(): Iterator<bigint>
   }
 
   interface Float32Array {
@@ -66,7 +66,7 @@ declare global {
   BigInt64Array
 ].forEach(klass => {
   Object.defineProperty(klass.prototype, 'iter', {
-    value: function(): Iterator<BigInt> {
+    value: function(): Iterator<bigint> {
       return new IteratorIterator(this[Symbol.iterator]())
     },
     writable: false

@@ -3,7 +3,6 @@ import {Option} from "nochoices";
 
 export class OnePieceIterator<T> extends Iterator<T>{
   private piece: Option<T>
-
   constructor (piece: Option<T>) {
     super();
     this.piece = piece
@@ -11,6 +10,10 @@ export class OnePieceIterator<T> extends Iterator<T>{
 
   next (): Option<T> {
     return this.piece.take();
+  }
+
+  rev(): Iterator<T> {
+    return this;
   }
 
   static from<T>(t: T) {
