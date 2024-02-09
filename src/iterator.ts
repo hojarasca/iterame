@@ -42,7 +42,7 @@ import {
   Partition,
   RFind,
   SetCollector,
-  SortedArrayCollector
+  SortedArrayCollector, Last
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
 import {ToArray} from "./collectors/to-array.js";
@@ -313,6 +313,10 @@ export abstract class Iterator<T> {
     return this.collect(new SortedArrayCollector((t1, t2) => {
       return DEFAULT_SORT_CRITERIA(transformation(t1), transformation(t2))
     }))
+  }
+
+  last () {
+    return this.collect(new Last())
   }
 }
 

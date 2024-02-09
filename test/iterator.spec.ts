@@ -5,7 +5,7 @@ import {ArrayIterator, Iterator, MapCollector} from "../src/index.js";
 import {Option} from "nochoices";
 
 describe('Iterator', () => {
-  const iter = <T>(arr: T[]): Iterator<T> => {
+  const iter = <T> (arr: T[]): Iterator<T> => {
     return new ArrayIterator(arr)
   }
 
@@ -1256,6 +1256,39 @@ describe('Iterator', () => {
     })
   })
 
+  describe('#rFind', () => {
+    it('returns none when element is not present', () => {
+      const found = iter([1, 2, 3]).rFind(n => n === 10)
+      expect(found.isNone()).to.eql(true)
+    })
+
+    it('returns some with the element when the element is present', () => {
+      const obj1 = {foo: 1}
+      const obj2 = {foo: 2}
+      const obj3 = {foo: 3}
+      const found = iter([obj1, obj2, obj3]).rFind(o => o.foo === 2)
+      expect(found.unwrap()).to.equal(obj2)
+    })
+  })
+
+  describe('#last', () => {
+    it('returns none for empty', () => {
+      const last = iter([]).last()
+      expect(last.isNone()).to.eql(true)
+    })
+
+    it('returns last element for iterator with elements', () => {
+      const last = iter([1, 2, 3]).last()
+      expect(last.unwrap()).to.eql(3)
+    })
+
+    it('consumes the iterator', () => {
+      const it = iter([1,2,3])
+      it.last()
+      expect(it.next().isNone()).to.eql(true)
+    })
+  })
+
   describe('collect into map', () => {
     it('collects a map from a list of tuples', () => {
       const it = iter<[string, number]>([["foo", 10], ["bar", 12]])
@@ -1286,9 +1319,9 @@ describe('Iterator', () => {
 
   describe('collect into orderedListBy', () => {
     it('returns a list ordered by default js criteria', () => {
-      const elem1 = { foo: 1 }
-      const elem2 = { foo: -1 }
-      const elem3 = { foo: 5 }
+      const elem1 = {foo: 1}
+      const elem2 = {foo: -1}
+      const elem3 = {foo: 5}
       const it = iter([elem1, elem2, elem3])
       const sorted = it.intoSortedByArray(elem => elem.foo)
       expect(sorted).to.eql([elem2, elem1, elem3])
@@ -1300,21 +1333,6 @@ describe('Iterator', () => {
       const it = iter(['foo', 'f', 'fo', 'foob', 'foobar', 'fooba'])
       const sorted = it.intoSortedWithArray((s1, s2) => s2.length - s1.length)
       expect(sorted).to.eql(['f', 'fo', 'foo', 'foob', 'fooba', 'foobar'].reverse())
-    })
-  })
-
-  describe('#rFind', () => {
-    it('returns none when element is not present', () => {
-      const found = iter([1,2,3]).rFind(n => n === 10)
-      expect(found.isNone()).to.eql(true)
-    })
-
-    it('returns some with the element when the element is present', () => {
-      const obj1 = {foo: 1}
-      const obj2 = {foo: 2}
-      const obj3 = {foo: 3}
-      const found = iter([obj1, obj2, obj3]).rFind(o => o.foo === 2)
-      expect(found.unwrap()).to.equal(obj2)
     })
   })
 
