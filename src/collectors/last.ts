@@ -1,5 +1,4 @@
 import {Collector} from "./collector.js";
-import {Predicate} from "../types.js";
 import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
