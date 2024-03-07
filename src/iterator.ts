@@ -47,7 +47,7 @@ import {
 import {identity, simpleEquality, times} from "./helpers.js";
 import {IntoArray} from "./collectors/index.js";
 
-const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
+const DEFAULT_SORT_CRITERIA = function <T> (a: T, b: T): number {
   return a < b
     ? -1
     : a > b
@@ -279,7 +279,7 @@ export abstract class Iterator<T> {
   minBy<U> (mapping: Mapping<T, U>): Option<T> {
     return this.collect(new MaxBy(
       mapping,
-      (u1, u2) => u1 <= u2 ? 1 : -1 )
+      (u1, u2) => u1 <= u2 ? 1 : -1)
     )
   }
 
@@ -334,8 +334,9 @@ export abstract class Iterator<T> {
 }
 
 export interface Iterator<T> {
-  filter(predicate: Predicate<T>): Filter<T>
-  rPositionOf(predicate: Predicate<T>): Option<number>
+  filter (predicate: Predicate<T>): Filter<T>
+
+  rPositionOf (predicate: Predicate<T>): Option<number>
 }
 
 Iterator.prototype.filter = Iterator.prototype.select
