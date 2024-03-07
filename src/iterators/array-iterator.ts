@@ -28,12 +28,6 @@ export class ArrayIterator<T> extends Iterator<T> implements Sized{
     }
   }
 
-  rev(): Iterator<T> {
-    throw new Error('not implemented')
-    // this.advancer = this.advancer.revert()
-    // return this
-  }
-
   reset () {
     this.lowerBound = 0
     this.upperBound = this.iterable.length - 1

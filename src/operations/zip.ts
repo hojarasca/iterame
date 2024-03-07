@@ -24,8 +24,4 @@ export class Zip<A, B> extends Iterator<[A, B]> {
     const next = this.next() as Option<OrEnd<[A, B]>>
     return next.unwrapOr(END);
   }
-
-  rev(): Iterator<[A, B]> {
-    return new Zip(this.first.rev(), this.second.rev());
-  }
 }

@@ -59,7 +59,10 @@ export const END = Symbol('iterame::END')
 export type OrEnd<T> = T | typeof END
 
 export abstract class Iterator<T> {
-  abstract internalNext(): OrEnd<T>;
+  internalNext(): OrEnd<T> {
+    const next = this.next() as Option<OrEnd<T>>
+    return next.unwrapOr(END);
+  }
 
   next(): Option<T> {
     const next = this.internalNext()
@@ -164,8 +167,6 @@ export abstract class Iterator<T> {
   //---------------------
   // Double sided needed
   // --------------------
-
-  abstract rev(): Iterator<T>
 
   //------------
   // Finalizers

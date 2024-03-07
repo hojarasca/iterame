@@ -6,9 +6,4 @@ export abstract class IterOperation<A, B> extends Iterator<B> {
   protected changeBase(newBase: Iterator<A>): void {
     this.base = newBase
   }
-
-  rev(): Iterator<B> {
-    this.changeBase(this.base.rev())
-    return this;
-  }
 }
