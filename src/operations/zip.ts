@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class Zip<A, B> extends Iterator<[A, B]> {
@@ -18,10 +18,5 @@ export class Zip<A, B> extends Iterator<[A, B]> {
       .andThen(() => this.first.next())
       .zip(this.second.next())
       .ifNone(() => this.start = Option.None());
-  }
-
-  internalNext (): OrEnd<[A, B]> {
-    const next = this.next() as Option<OrEnd<[A, B]>>
-    return next.unwrapOr(END);
   }
 }

@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {GenValue} from "../types.js";
 import {IterOperation} from "./iter-operation.js";
@@ -32,10 +32,5 @@ export class Interspace<T> extends IterOperation<T, T> {
     this.nextValue = this.base.next()
     this.nextSepator.replace(this.separator)
     return res
-  }
-
-  internalNext (): OrEnd<T> {
-    const next = this.next() as Option<OrEnd<T>>
-    return next.unwrapOr(END);
   }
 }

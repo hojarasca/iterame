@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 export class ZipInclusive<A, B> extends Iterator<[Option<A>, Option<B>]> {
@@ -20,10 +20,5 @@ export class ZipInclusive<A, B> extends Iterator<[Option<A>, Option<B>]> {
         this.second.next().ifNone(() => this.finished = Option.None())
       ]
     )
-  }
-
-  internalNext (): OrEnd<[Option<A>, Option<B>]> {
-    const next = this.next() as Option<OrEnd<[Option<A>, Option<B>]>>
-    return next.unwrapOr(END);
   }
 }

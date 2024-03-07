@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {OptionalMapping} from "../types.js";
 import {IterOperation} from "./iter-operation.js";
@@ -21,10 +21,5 @@ export class FilterMap<A, B> extends IterOperation<A, B> {
       .map(this.mapping)
       .flatten()
       .ifNone(() => this.continue = Option.None());
-  }
-
-  internalNext (): OrEnd<B> {
-    const next = this.next() as Option<OrEnd<B>>
-    return next.unwrapOr(END);
   }
 }

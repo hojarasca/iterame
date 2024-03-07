@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {IterOperation} from "./iter-operation.js";
 
@@ -16,11 +16,5 @@ export class Enumerate<T> extends IterOperation<T, [number, T]> {
     return this.base.next()
       .map<[number, T]>(t => [this.index, t])
       .ifSome((_) => this.index += 1);
-  }
-
-
-  internalNext (): OrEnd<[number, T]> {
-    const next = this.next() as Option<OrEnd<[number, T]>>
-    return next.unwrapOr(END);
   }
 }

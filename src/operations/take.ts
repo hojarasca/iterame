@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {IterOperation} from "./iter-operation.js";
 
@@ -18,10 +18,5 @@ export class Take<T> extends IterOperation<T, T> {
         .filter(() => this.size > this.current)
         .andThen(() => this.base.next())
         .ifSome(() => this.current += 1)
-  }
-
-  internalNext (): OrEnd<T> {
-    const next = this.next() as Option<OrEnd<T>>
-    return next.unwrapOr(END);
   }
 }

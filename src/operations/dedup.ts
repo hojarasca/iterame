@@ -1,4 +1,4 @@
-import {END, Iterator, OrEnd} from "../index.js";
+import {Iterator} from "../index.js";
 import {Option} from "nochoices";
 import {IterOperation} from "./iter-operation.js";
 
@@ -18,10 +18,5 @@ export class Dedup<T> extends IterOperation<T, T>{
     }
     next.ifSome(t => this.alreadySeen.add(t))
     return next
-  }
-
-  internalNext (): OrEnd<T> {
-    const next = this.next() as Option<OrEnd<T>>
-    return next.unwrapOr(END);
   }
 }
