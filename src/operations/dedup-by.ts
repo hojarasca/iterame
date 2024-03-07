@@ -23,12 +23,12 @@ export class DedupBy<A, B> extends IterOperation<A, A>{
     return next.map(([value, _]) => value)
   }
 
-  private nextWithTransformation(): Option<[A, B]> {
+  private nextWithTransformation (): Option<[A, B]> {
     return this.base.next()
         .map<[A, B]>(value => [value, this.transformation(value)])
   }
 
-  internalNext(): OrEnd<A> {
+  internalNext (): OrEnd<A> {
     const next = this.next() as Option<OrEnd<A>>
     return next.unwrapOr(END);
   }

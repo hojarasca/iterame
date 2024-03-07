@@ -19,7 +19,7 @@ export class Enumerate<T> extends IterOperation<T, [number, T]> {
   }
 
 
-  internalNext(): OrEnd<[number, T]> {
+  internalNext (): OrEnd<[number, T]> {
     const next = this.next() as Option<OrEnd<[number, T]>>
     return next.unwrapOr(END);
   }

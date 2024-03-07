@@ -20,7 +20,7 @@ export class Zip<A, B> extends Iterator<[A, B]> {
       .ifNone(() => this.start = Option.None());
   }
 
-  internalNext(): OrEnd<[A, B]> {
+  internalNext (): OrEnd<[A, B]> {
     const next = this.next() as Option<OrEnd<[A, B]>>
     return next.unwrapOr(END);
   }

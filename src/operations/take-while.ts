@@ -22,12 +22,12 @@ export class TakeWhile<T> extends IterOperation<T, T> {
         .ifNone(() => this.finished = true)
   }
 
-  internalNext(): OrEnd<T> {
+  internalNext (): OrEnd<T> {
     const next = this.next() as Option<OrEnd<T>>
     return next.unwrapOr(END);
   }
 
-  private start(): Option<void> {
+  private start (): Option<void> {
     return this.finished
       ? Option.None()
       : Option.Some(undefined)

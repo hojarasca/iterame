@@ -7,7 +7,7 @@ declare global {
 }
 
 Object.defineProperty(Array.prototype, 'iter', {
-  value: function<T>(): ArrayIterator<T> {
+  value: function<T> (): ArrayIterator<T> {
     return new ArrayIterator(this)
   },
   writable: false

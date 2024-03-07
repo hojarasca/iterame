@@ -15,7 +15,7 @@ export class Concat<T> extends IterOperation<T, T> {
     return this.base.next().orElse(() => this.extension.next());
   }
 
-  internalNext(): OrEnd<T> {
+  internalNext (): OrEnd<T> {
     const next = this.next() as Option<OrEnd<T>>
     return next.unwrapOr(END);
   }

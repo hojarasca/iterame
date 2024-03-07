@@ -18,7 +18,7 @@ await b.suite(
 
   b.add('lodash', () => {
     const mapped = _.map(numbers, n => n * 3)
-    const filtered = _.filter(mapped, n => n % 2 === 0)
+    _.filter(mapped, n => n % 2 === 0)
   }),
 
   b.add('fp-ts', () => {

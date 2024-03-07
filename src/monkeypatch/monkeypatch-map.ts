@@ -12,21 +12,21 @@ declare global {
 }
 
 Object.defineProperty(Map.prototype, 'iterKeys', {
-  value: function <T>(): Iterator<T> {
+  value: function <T> (): Iterator<T> {
     return new IteratorIterator(this.keys())
   },
   writable: false
 })
 
 Object.defineProperty(Map.prototype, 'iterValues', {
-  value: function <T>(): Iterator<T> {
+  value: function <T> (): Iterator<T> {
     return new IteratorIterator(this.values())
   },
   writable: false
 })
 
 Object.defineProperty(Map.prototype, 'iterEntries', {
-  value: function <T>(): Iterator<T> {
+  value: function <T> (): Iterator<T> {
     return new IteratorIterator(this.entries())
   },
   writable: false

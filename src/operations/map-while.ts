@@ -22,7 +22,7 @@ export class MapWhile<A, B> extends IterOperation<A, B> {
       .ifNone(() => this.continue.take())
   }
 
-  internalNext(): OrEnd<B> {
+  internalNext (): OrEnd<B> {
     const next = this.next() as Option<OrEnd<B>>
     return next.unwrapOr(END);
   }

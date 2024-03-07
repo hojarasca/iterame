@@ -34,7 +34,7 @@ export class Interspace<T> extends IterOperation<T, T> {
     return res
   }
 
-  internalNext(): OrEnd<T> {
+  internalNext (): OrEnd<T> {
     const next = this.next() as Option<OrEnd<T>>
     return next.unwrapOr(END);
   }

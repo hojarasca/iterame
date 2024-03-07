@@ -54,7 +54,7 @@ declare global {
   Float64Array
 ].forEach(klass => {
   Object.defineProperty(klass.prototype, 'iter', {
-    value: function(): Iterator<number> {
+    value: function (): Iterator<number> {
       return new IteratorIterator(this[Symbol.iterator]())
     },
     writable: false
@@ -66,7 +66,7 @@ declare global {
   BigInt64Array
 ].forEach(klass => {
   Object.defineProperty(klass.prototype, 'iter', {
-    value: function(): Iterator<bigint> {
+    value: function (): Iterator<bigint> {
       return new IteratorIterator(this[Symbol.iterator]())
     },
     writable: false

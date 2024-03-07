@@ -17,7 +17,7 @@ export class Inspect<T> extends IterOperation<T, T> {
     return this.base.next().ifSome(this.callback);
   }
 
-  internalNext(): OrEnd<T> {
+  internalNext (): OrEnd<T> {
     const next = this.next() as Option<OrEnd<T>>
     return next.unwrapOr(END);
   }

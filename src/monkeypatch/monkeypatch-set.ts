@@ -8,7 +8,7 @@ declare global {
 }
 
 Object.defineProperty(Set.prototype, 'iter', {
-  value: function<T>(): Iterator<T> {
+  value: function<T> (): Iterator<T> {
     return new IteratorIterator(this.keys())
   },
   writable: false

@@ -23,7 +23,7 @@ export class Cycle<T> extends InfiniteStream<T> {
       .orElse(() => this.elemsIter.next())
   }
 
-  internalNext(): OrEnd<T> {
+  internalNext (): OrEnd<T> {
     const next = this.next() as Option<OrEnd<T>>
     return next.unwrapOr(END);
   }

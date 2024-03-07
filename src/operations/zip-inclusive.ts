@@ -22,7 +22,7 @@ export class ZipInclusive<A, B> extends Iterator<[Option<A>, Option<B>]> {
     )
   }
 
-  internalNext(): OrEnd<[Option<A>, Option<B>]> {
+  internalNext (): OrEnd<[Option<A>, Option<B>]> {
     const next = this.next() as Option<OrEnd<[Option<A>, Option<B>]>>
     return next.unwrapOr(END);
   }

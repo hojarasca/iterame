@@ -14,11 +14,11 @@ export class ArrayIterator<T> extends Iterator<T> implements Sized{
     this.upperBound = this.iterable.length - 1
   }
 
-  size(): number {
+  size (): number {
     return this.upperBound - this.lowerBound
   }
 
-  internalNext(): typeof END | T {
+  internalNext (): typeof END | T {
     if (this.lowerBound > this.upperBound) {
       return END
     } else {

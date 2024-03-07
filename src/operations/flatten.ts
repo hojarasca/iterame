@@ -34,7 +34,7 @@ export class Flatten<A> extends Iterator<Flattened<A>> {
       )
   }
 
-  internalNext(): OrEnd<Flattened<A>> {
+  internalNext (): OrEnd<Flattened<A>> {
     const next = this.next() as Option<OrEnd<Flattened<A>>>
     return next.unwrapOr(END);
   }

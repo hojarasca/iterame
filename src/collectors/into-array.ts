@@ -1,7 +1,7 @@
 import {END, Iterator} from "../iterator.js";
 
 export class IntoArray<T> {
-  collect(iter: Iterator<T>): Array<T> {
+  collect (iter: Iterator<T>): Array<T> {
     const array = new Array(100)
     let i = 0
     while (true) {

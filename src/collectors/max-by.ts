@@ -27,7 +27,7 @@ export class MaxBy<A, B> implements Collector<A, Option<A>> {
     });
   }
 
-  private take(a1: A, a2: A): A {
+  private take (a1: A, a2: A): A {
     if (this.compare(this.mapping(a1), this.mapping(a2)) >= 0) {
       return a1
     } else {

@@ -22,7 +22,7 @@ export class Filter<A> extends IterOperation<A, A> {
     return next
   }
 
-  internalNext(): typeof END | A {
+  internalNext (): typeof END | A {
     while (true) {
       const next = this.base.internalNext()
       if (next === END) {

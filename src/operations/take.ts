@@ -1,7 +1,6 @@
 import {END, Iterator, OrEnd} from "../index.js";
 import {Option} from "nochoices";
 import {IterOperation} from "./iter-operation.js";
-import {number} from "fp-ts";
 
 export class Take<T> extends IterOperation<T, T> {
   protected base: Iterator<T>;
@@ -21,7 +20,7 @@ export class Take<T> extends IterOperation<T, T> {
         .ifSome(() => this.current += 1)
   }
 
-  internalNext(): OrEnd<T> {
+  internalNext (): OrEnd<T> {
     const next = this.next() as Option<OrEnd<T>>
     return next.unwrapOr(END);
   }

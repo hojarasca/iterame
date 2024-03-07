@@ -19,7 +19,7 @@ export class Chunks<T> extends IterOperation<T, T[]> {
     return Option.Some(nextChunk.intoArray()).filter(list => list.length > 0)
   }
 
-  internalNext(): typeof END | T[] {
+  internalNext (): typeof END | T[] {
     return (this.next() as Option<typeof END | T[]>).unwrapOr(END);
   }
 }

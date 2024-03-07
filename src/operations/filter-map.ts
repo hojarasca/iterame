@@ -23,7 +23,7 @@ export class FilterMap<A, B> extends IterOperation<A, B> {
       .ifNone(() => this.continue = Option.None());
   }
 
-  internalNext(): OrEnd<B> {
+  internalNext (): OrEnd<B> {
     const next = this.next() as Option<OrEnd<B>>
     return next.unwrapOr(END);
   }
