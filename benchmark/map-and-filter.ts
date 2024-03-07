@@ -9,9 +9,6 @@ const numbers = _.range(100)
 
 await b.suite(
   'Map and filter 100 numbers',
-
-
-
   b.add('Native', () => {
     numbers.map(n => n * 3).filter(n => n % 2 === 0)
   }),
