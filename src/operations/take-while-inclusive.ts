@@ -1,4 +1,4 @@
-import {Iterator} from "../index.js";
+import {END, Iterator, OrEnd} from "../index.js";
 import {Option} from "nochoices";
 import {Predicate} from "../types.js";
 import {IterOperation} from "./iter-operation.js";
@@ -21,6 +21,11 @@ export class TakeWhileInclusive<T> extends IterOperation<T, T> {
       this.finished = true
     }
     return next
+  }
+
+  internalNext(): OrEnd<T> {
+    const next = this.next() as Option<OrEnd<T>>
+    return next.unwrapOr(END);
   }
 
   private start(): Option<void> {

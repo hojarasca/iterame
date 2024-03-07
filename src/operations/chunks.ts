@@ -1,4 +1,4 @@
-import {Iterator} from "../iterator.js";
+import {END, Iterator} from "../iterator.js";
 import {Option} from "nochoices";
 import {IterOperation} from "./iter-operation.js";
 
@@ -17,5 +17,9 @@ export class Chunks<T> extends IterOperation<T, T[]> {
   next (): Option<T[]> {
     const nextChunk = this.base.take(this.chunkSize)
     return Option.Some(nextChunk.intoArray()).filter(list => list.length > 0)
+  }
+
+  internalNext(): typeof END | T[] {
+    return (this.next() as Option<typeof END | T[]>).unwrapOr(END);
   }
 }

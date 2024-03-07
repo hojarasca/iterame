@@ -1,4 +1,4 @@
-import {Iterator} from "../index.js";
+import {END, Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 import {Predicate} from "../types.js";
@@ -20,5 +20,17 @@ export class Filter<A> extends IterOperation<A, A> {
       next = this.base.next()
     }
     return next
+  }
+
+  internalNext(): typeof END | A {
+    while (true) {
+      const next = this.base.internalNext()
+      if (next === END) {
+        return END
+      }
+      if (this.predicate(next)) {
+        return next
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import {Iterator} from "../index.js";
+import {END, Iterator, OrEnd} from "../index.js";
 import {Option} from "nochoices";
 import {Mapping} from "../types.js";
 import {IterOperation} from "./iter-operation.js";
@@ -26,5 +26,10 @@ export class DedupBy<A, B> extends IterOperation<A, A>{
   private nextWithTransformation(): Option<[A, B]> {
     return this.base.next()
         .map<[A, B]>(value => [value, this.transformation(value)])
+  }
+
+  internalNext(): OrEnd<A> {
+    const next = this.next() as Option<OrEnd<A>>
+    return next.unwrapOr(END);
   }
 }

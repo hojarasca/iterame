@@ -45,7 +45,7 @@ import {
   SortedArrayCollector, Last
 } from "./index.js";
 import {identity, simpleEquality, times} from "./helpers.js";
-import {ToArray} from "./collectors/to-array.js";
+import {IntoArray} from "./collectors/index.js";
 
 const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
   return a < b
@@ -55,8 +55,20 @@ const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
       : 0
 };
 
+export const END = Symbol('iterame::END')
+export type OrEnd<T> = T | typeof END
+
 export abstract class Iterator<T> {
-  abstract next(): Option<T>
+  abstract internalNext(): OrEnd<T>;
+
+  next(): Option<T> {
+    const next = this.internalNext()
+    if (next === END) {
+      return Option.None()
+    } else {
+      return Option.Some(next as T)
+    }
+  }
 
   // abstract peek (): Option<T>
 
@@ -164,7 +176,7 @@ export abstract class Iterator<T> {
   }
 
   intoArray(): T[] {
-    return this.collect(new ToArray())
+    return this.collect(new IntoArray())
   }
 
   every(param: Predicate<T>): boolean {
@@ -211,10 +223,10 @@ export abstract class Iterator<T> {
   }
 
   * [Symbol.iterator](): Generator<T> {
-    let next = this.next()
-    while (next.isSome()) {
-      yield next.unwrap()
-      next = this.next()
+    let next = this.internalNext()
+    while (next !== END) {
+      yield next
+      next = this.internalNext()
     }
   }
 

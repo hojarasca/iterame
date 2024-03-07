@@ -1,4 +1,4 @@
-import {Iterator} from "../index.js";
+import {END, Iterator} from "../index.js";
 import {Option} from "nochoices";
 
 import {Mapping} from "../types.js";
@@ -14,7 +14,12 @@ export class IterMap<A, B> extends IterOperation<A, B> {
     this.mapping = mapping
   }
 
-  next (): Option<B> {
-    return this.base.next().map(this.mapping);
+  internalNext(): typeof END | B {
+    const next = this.base.internalNext()
+    if (next === END) {
+      return END
+    }
+
+    return this.mapping(next);
   }
 }

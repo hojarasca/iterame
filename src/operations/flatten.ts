@@ -1,4 +1,4 @@
-import {Iterator, ArrayIterator, IterMap, OnePieceIterator} from "../index.js";
+import {Iterator, ArrayIterator, IterMap, OnePieceIterator, OrEnd, END} from "../index.js";
 import {Option} from "nochoices";
 
 export class Flatten<A> extends Iterator<Flattened<A>> {
@@ -34,6 +34,10 @@ export class Flatten<A> extends Iterator<Flattened<A>> {
       )
   }
 
+  internalNext(): OrEnd<Flattened<A>> {
+    const next = this.next() as Option<OrEnd<Flattened<A>>>
+    return next.unwrapOr(END);
+  }
   rev(): Iterator<Flattened<A>> {
     return new Flatten(this.base.rev()) ;
   }

@@ -1,4 +1,4 @@
-import {Iterator, ArrayIterator} from "../index.js";
+import {Iterator, ArrayIterator, OrEnd, END} from "../index.js";
 import {Option} from "nochoices";
 import {Mapping} from "../types.js";
 import {IterOperation} from "./iter-operation.js";
@@ -17,6 +17,11 @@ export class FlatMap<A, B> extends IterOperation<A, B> {
 
   next (): Option<B> {
     return this.current.next().orElse(() => this.findNext())
+  }
+
+  internalNext(): OrEnd<B> {
+    const next = this.next() as Option<OrEnd<B>>
+    return next.unwrapOr(END);
   }
 
   private findNext (): Option<B> {

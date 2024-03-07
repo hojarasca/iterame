@@ -1,4 +1,4 @@
-import {ArrayIterator, Iterator} from "../index.js";
+import {ArrayIterator, END, Iterator, OrEnd} from "../index.js";
 import {Option} from "nochoices";
 import {InfiniteStream} from "../iterators/index.js";
 
@@ -21,5 +21,10 @@ export class Cycle<T> extends InfiniteStream<T> {
       })
       .orElse(() => this.elemsIter.next().ifNone(() => this.elemsIter.reset()))
       .orElse(() => this.elemsIter.next())
+  }
+
+  internalNext(): OrEnd<T> {
+    const next = this.next() as Option<OrEnd<T>>
+    return next.unwrapOr(END);
   }
 }

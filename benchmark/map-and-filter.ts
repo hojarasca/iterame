@@ -1,11 +1,11 @@
 /* benchmark.js */
 import * as b from 'benny'
 import _ from 'lodash'
-import { pipe } from 'fp-ts/lib/function'
+import {pipe} from 'fp-ts/lib/function'
 import * as A from 'fp-ts/lib/Array'
 import '../src/index.js'
 
-const numbers = _.range(0, 100)
+const numbers = _.range(100)
 
 await b.suite(
   'Map and filter 100 numbers',
@@ -13,13 +13,12 @@ await b.suite(
 
 
   b.add('Native', () => {
-    numbers.map(n => n * 3).filter(n => n % 2 === 0).reduce((a, b) => a + b)
+    numbers.map(n => n * 3).filter(n => n % 2 === 0)
   }),
 
   b.add('lodash', () => {
     const mapped = _.map(numbers, n => n * 3)
     const filtered = _.filter(mapped, n => n % 2 === 0)
-    _.reduce(filtered, (a, b) => a + b)
   }),
 
   b.add('fp-ts', () => {
@@ -27,16 +26,14 @@ await b.suite(
       numbers,
       A.map(n => n * 3),
       A.filter(n => n % 2 === 0),
-      A.reduce(0,(a, b) => a + b)
     )
   }),
 
   b.add('iterame', () => {
-    numbers.iter()
+    const iter = numbers.iter()
       .map(n => n * 3)
       .filter(n => n % 2 === 0)
-      .reduce((a, b) => a + b)
-      .toArray()
+    iter.intoArray()
   }),
 
   b.cycle(),
