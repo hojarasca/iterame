@@ -236,8 +236,13 @@ export abstract class Iterator<T> {
   }
 
   reduce (param: Reducer<T, T>): Option<T> {
-    return this.next()
-      .map(t => new Fold(t, param).collect(this))
+    const next = this.internalNext()
+
+    if (next === END) {
+      return Option.None()
+    } else {
+      return Option.Some(new Fold(next, param).collect(this))
+    }
   }
 
   equals (it2: Iterator<T>): boolean {
