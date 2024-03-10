@@ -1,4 +1,4 @@
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
 
 export abstract class IterOperation<A, B> extends Iterator<B> {
   protected abstract base: Iterator<A>

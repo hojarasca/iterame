@@ -1,4 +1,4 @@
-import {END, Iterator} from "../iterator.js";
+import {END, Iterator} from "../iterators/iterator.js";
 import {Sized} from "../sized.js";
 
 export class IntoSizedArray<T> {

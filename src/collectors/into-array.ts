@@ -1,4 +1,4 @@
-import {END, Iterator} from "../iterator.js";
+import {END, Iterator} from "../iterators/iterator.js";
 
 export class IntoArray<T> {
   collect (iter: Iterator<T>): Array<T> {

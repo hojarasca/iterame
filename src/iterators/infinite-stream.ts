@@ -1,5 +1,5 @@
 import {Option} from "nochoices";
-import {Iterator} from "../iterator.js";
+import {Iterator} from "./iterator.js";
 import {Collector} from "../collectors/index.js";
 
 export abstract class InfiniteStream<T> extends Iterator<T> {

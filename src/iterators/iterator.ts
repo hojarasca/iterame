@@ -9,7 +9,7 @@ import {
   Mapping,
   OptionalMapping,
   Predicate
-} from "./types.js";
+} from "../types.js";
 import {
   Filter,
   IterMap,
@@ -43,9 +43,9 @@ import {
   RFind,
   SetCollector,
   SortedArrayCollector, Last
-} from "./index.js";
-import {identity, simpleEquality, times} from "./helpers.js";
-import {IntoArray} from "./collectors/index.js";
+} from "../index.js";
+import {identity, simpleEquality, times} from "../helpers.js";
+import {IntoArray} from "../collectors/index.js";
 
 const DEFAULT_SORT_CRITERIA = function <T> (a: T, b: T): number {
   return a < b

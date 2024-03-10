@@ -12,48 +12,29 @@ await b.suite(
     b.add('Native', () => {
         const mapped = numbers
             .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
-        const filtered = mapped.filter(n => n % 2 === 0)
-        filtered.reduce((a, b) => a + b)
+            .filter(n => n % 2 === 0)
     }),
 
     b.add('lodash', () => {
-        const list = _.chain(numbers)
-            .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
+        _.chain(numbers)
             .map(n => n * 3)
             .filter(n => n % 2 === 0)
-        list.reduce((a, b) => a + b).value()
+            .value()
     }),
 
     b.add('fp-ts', () => {
         pipe(
             numbers,
             A.map(n => n * 3),
-            A.map(n => n * 3),
-            A.map(n => n * 3),
-            A.map(n => n * 3),
-            A.map(n => n * 3),
             A.filter(n => n % 2 === 0),
-            A.reduce(0, (a, b) => a + b)
         )
     }),
 
     b.add('iterame', () => {
         const iter = numbers.iter()
             .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
-            .map(n => n * 3)
             .filter(n => n % 2 === 0)
-            .reduce((a, b) => a + b)
-        iter.unwrap()
+            .intoArray()
     }),
 
     b.cycle(),

@@ -1,5 +1,5 @@
 import {Collector} from "./collector.js";
-import {END, Iterator} from "../iterator.js";
+import {END, Iterator} from "../iterators/iterator.js";
 
 export type Reducer<Curr, Res> = (partial: Res, current: Curr) => Res
 export class Fold<A, B> implements Collector<A, B> {

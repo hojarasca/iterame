@@ -1,4 +1,4 @@
-import {END, Iterator} from "../iterator.js";
+import {END, Iterator} from "./iterator.js";
 import {Sized} from "../sized.js";
 
 

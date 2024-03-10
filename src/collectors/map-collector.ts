@@ -1,5 +1,5 @@
 import {Collector} from "./collector.js";
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
 
 
 type Pair<A, B> = [A, B];

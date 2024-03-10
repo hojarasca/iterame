@@ -1,5 +1,5 @@
 import {Collector} from "./collector.js";
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
 import {AreEqual, Mapping} from "../types.js";
 
 export class EqualIter<T, U> implements Collector<T, boolean> {

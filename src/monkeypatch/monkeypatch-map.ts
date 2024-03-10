@@ -1,5 +1,5 @@
 import {IteratorIterator} from "../iterators/index.js";
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
 
 declare global {
   interface Map<K, V> {

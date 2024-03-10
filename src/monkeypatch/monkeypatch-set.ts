@@ -1,4 +1,4 @@
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
 import {IteratorIterator} from "../iterators/index.js";
 
 declare global {
