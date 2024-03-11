@@ -12,6 +12,8 @@ module.exports = {
     root: true,
     rules: {
         "tsdoc/syntax": "warn",
-        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "space-before-function-paren": ["error", "always"],
+        "no-constant-condition": ["error", { "checkLoops": false }]
     }
 }

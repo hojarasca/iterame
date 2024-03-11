@@ -1175,39 +1175,7 @@ describe('Iterator', () => {
   })
 
   // Implementing rev is hard, because require making assumptions over the base iteratos
-  describe('#rev', () => {
-    it('returns empty iterator for empty iterator', () => {
-      const empty = iter<number>([]).rev()
-      expect(empty.next().isNone()).to.eql(true)
-    })
-
-    it('for a 3 elements iterator returns the same elements in oposite order', () => {
-      const reversed = iter<number>([1, 2, 3]).rev()
-      expect(reversed.intoArray()).to.eql([3, 2, 1])
-    })
-
-    it('elements that were already traversed forward are not traversed again backwards', () => {
-      const it = iter<number>([1, 2, 3])
-      it.next()
-      it.rev()
-      expect(it.intoArray()).to.eql([3, 2])
-    })
-
-    it('can be used after mapping', () => {
-      const it = iter<number>([1, 2, 3])
-        .map(n => n * 2)
-        .rev()
-      expect(it.intoArray()).to.eql([6, 4, 2])
-    })
-
-    it('throws an error when iterator is not capable if revert', () => {
-      const cycle = iter<number>([1, 2, 3])
-        .cycle()
-
-      expect(() => cycle.rev()).to.throw(Error)
-      expect(cycle.next().unwrap()).to.eql(1)
-    })
-  })
+  describe.skip('#rev', () => {})
 
   // Implementing peek is hard, because require making assumptions over the base iteratos
   // Note: I'm not going to implement peek at this time. I believe it adds confusion to when
@@ -1363,4 +1331,32 @@ describe('Iterator', () => {
     }
     expect(res).to.eql([2, 6])
   })
+
+  describe('#estimateLength', () => {
+    it('returns 0 for empty array', () => {
+      const it = iter([])
+      expect(it.estimateLength().unwrap()).to.eql(0)
+    })
+
+    it('returns 1 for array with 1 element', () => {
+      const it = iter([132])
+      expect(it.estimateLength().unwrap()).to.eql(1)
+    })
+
+    it('returns 0 for consumed iterator', () => {
+      const it = iter([132])
+      it.next()
+      expect(it.estimateLength().unwrap()).to.eql(0)
+    })
+
+    it('returns array length for mapped iterator', () => {
+      const it = iter([1,2,3]).map(n => n * 2)
+      expect(it.estimateLength().unwrap()).to.eql(3)
+    })
+
+    it('returns array length for filtered iterator', () => {
+      const it = iter([1,2,3]).filter(n => n % 2 === 0)
+      expect(it.estimateLength().unwrap()).to.eql(3)
+    })
+  });
 })

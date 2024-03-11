@@ -12,11 +12,7 @@ export class OnePieceIterator<T> extends Iterator<T>{
     return this.piece.take();
   }
 
-  rev(): Iterator<T> {
-    return this;
-  }
-
-  static from<T>(t: T) {
+  static from<T> (t: T) {
     return new this(Option.Some(t))
   }
 }

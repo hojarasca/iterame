@@ -17,5 +17,4 @@ export class Enumerate<T> extends IterOperation<T, [number, T]> {
       .map<[number, T]>(t => [this.index, t])
       .ifSome((_) => this.index += 1);
   }
-
 }

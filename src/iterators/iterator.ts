@@ -9,7 +9,7 @@ import {
   Mapping,
   OptionalMapping,
   Predicate
-} from "./types.js";
+} from "../types.js";
 import {
   Filter,
   IterMap,
@@ -43,11 +43,11 @@ import {
   RFind,
   SetCollector,
   SortedArrayCollector, Last
-} from "./index.js";
-import {identity, simpleEquality, times} from "./helpers.js";
-import {ToArray} from "./collectors/to-array.js";
+} from "../index.js";
+import {identity, simpleEquality, times} from "../helpers.js";
+import {IntoArray} from "../collectors/index.js";
 
-const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
+const DEFAULT_SORT_CRITERIA = function <T> (a: T, b: T): number {
   return a < b
     ? -1
     : a > b
@@ -55,97 +55,114 @@ const DEFAULT_SORT_CRITERIA = function<T> (a: T, b: T): number {
       : 0
 };
 
-export abstract class Iterator<T> {
-  abstract next(): Option<T>
+export const END = Symbol('iterame::END')
+export type OrEnd<T> = T | typeof END
 
-  // abstract peek (): Option<T>
+export abstract class Iterator<T> {
+  internalNext (): OrEnd<T> {
+    const next = this.next() as Option<OrEnd<T>>
+    return next.unwrapOr(END);
+  }
+
+  next (): Option<T> {
+    const next = this.internalNext()
+    if (next === END) {
+      return Option.None()
+    } else {
+      return Option.Some(next as T)
+    }
+  }
+
+  estimateLength(): Option<number> {
+    return Option.None()
+  }
 
   //---------
   // Filters
   //---------
 
-  map<U>(mapping: Mapping<T, U>): IterMap<T, U> {
+  map<U> (mapping: Mapping<T, U>): IterMap<T, U> {
     return new IterMap(this, mapping)
   }
 
-  select(predicate: Predicate<T>): Filter<T> {
+  select (predicate: Predicate<T>): Filter<T> {
     return new Filter(this, predicate)
   }
 
-  reject(condition: Predicate<T>): Filter<T> {
+  reject (condition: Predicate<T>): Filter<T> {
     return new Filter(this, (t) => !condition(t))
   }
 
-  drop(n: number): Iterator<T> {
+  drop (n: number): Iterator<T> {
     times(n, () => this.next())
     return this
   }
 
-  take(size: number): Take<T> {
+  take (size: number): Take<T> {
     return new Take(this, size)
   }
 
-  chunks(eachSize: number): Chunks<T> {
+  chunks (eachSize: number): Chunks<T> {
     return new Chunks<T>(this, eachSize)
   }
 
-  concat(it2: Iterator<T>): Concat<T> {
+  concat (it2: Iterator<T>): Concat<T> {
     return new Concat(this, it2)
   }
 
-  takeWhile(condition: Predicate<T>): TakeWhile<T> {
+  takeWhile (condition: Predicate<T>): TakeWhile<T> {
     return new TakeWhile(this, condition)
   }
 
-  takeWhileInclusive(condition: Predicate<T>): TakeWhileInclusive<T> {
+  takeWhileInclusive (condition: Predicate<T>): TakeWhileInclusive<T> {
     return new TakeWhileInclusive(this, condition)
   }
 
-  dedup(): Dedup<T> {
+  dedup (): Dedup<T> {
     return new Dedup<T>(this)
   }
 
-  dedupBy<U>(transformation: Mapping<T, U>): DedupBy<T, U> {
+  dedupBy<U> (transformation: Mapping<T, U>): DedupBy<T, U> {
     return new DedupBy(this, transformation)
   }
 
-  stepBy(stepSize: number): StepBy<T> {
+  stepBy (stepSize: number): StepBy<T> {
     return new StepBy(this, stepSize)
   }
 
-  interspace(separator: T): Interspace<T> {
+  interspace (separator: T): Interspace<T> {
     return new Interspace(this, () => separator)
   }
 
-  flatMap<U>(fn: Transformation<T, U[] | Iterator<U>>): FlatMap<T, U> {
+  flatMap<U> (fn: Transformation<T, U[] | Iterator<U>>): FlatMap<T, U> {
     return new FlatMap(this, fn)
   }
 
-  flatten(): Flatten<T> {
+  flatten (): Flatten<T> {
     return new Flatten(this)
   }
 
-  inspect(callback: Callback<T>): Inspect<T> {
+  inspect (callback: Callback<T>): Inspect<T> {
     return new Inspect(this, callback)
   }
 
-  enumerate(): Enumerate<T> {
+  enumerate (): Enumerate<T> {
     return new Enumerate(this)
   }
 
-  cycle(): Cycle<T> {
+  cycle (): Cycle<T> {
     return new Cycle(this)
   }
 
-  zip<U>(another: Iterator<U>): Zip<T, U> {
+  zip<U> (another: Iterator<U>): Zip<T, U> {
     return new Zip<T, U>(this, another)
   }
 
-  zipInclusive<U>(another: Iterator<U>): ZipInclusive<T, U> {
+  zipInclusive<U> (another: Iterator<U>): ZipInclusive<T, U> {
     return new ZipInclusive(this, another)
   }
 
-  filterMap<U>(mapping: OptionalMapping<T, U>): Iterator<U> {
+  filterMap<U> (mapping: OptionalMapping<T, U>): Iterator<U> {
     return new FilterMap(this, mapping)
   }
 
@@ -153,21 +170,19 @@ export abstract class Iterator<T> {
   // Double sided needed
   // --------------------
 
-  abstract rev(): Iterator<T>
-
   //------------
   // Finalizers
   //------------
 
-  collect<U>(collector: Collector<T, U>): U {
+  collect<U> (collector: Collector<T, U>): U {
     return collector.collect(this)
   }
 
-  intoArray(): T[] {
-    return this.collect(new ToArray())
+  intoArray (): T[] {
+    return this.collect(new IntoArray())
   }
 
-  every(param: Predicate<T>): boolean {
+  every (param: Predicate<T>): boolean {
     let next = this.next()
     // Advance until there is next and the condition is meet.
     while (next.isSomeAnd(param)) {
@@ -177,7 +192,7 @@ export abstract class Iterator<T> {
     return next.isNone()
   }
 
-  some(predicate: Predicate<T>) {
+  some (predicate: Predicate<T>) {
     const map = this.map(predicate);
     let next = map.next()
 
@@ -188,7 +203,7 @@ export abstract class Iterator<T> {
     return next.isSome()
   }
 
-  nth(position: number): Option<T> {
+  nth (position: number): Option<T> {
     if (position < 0) {
       throw new Error('position should be positive')
     }
@@ -196,7 +211,7 @@ export abstract class Iterator<T> {
     return this.next()
   }
 
-  forEach(fn: (t: T) => void): void {
+  forEach (fn: (t: T) => void): void {
     let next = this.next()
     while (next.isSome()) {
       fn(next.unwrap())
@@ -204,91 +219,96 @@ export abstract class Iterator<T> {
     }
   }
 
-  count(): number {
+  count (): number {
     let count = 0
     this.forEach(() => count += 1)
     return count
   }
 
-  * [Symbol.iterator](): Generator<T> {
-    let next = this.next()
-    while (next.isSome()) {
-      yield next.unwrap()
-      next = this.next()
+  * [Symbol.iterator] (): Generator<T> {
+    let next = this.internalNext()
+    while (next !== END) {
+      yield next
+      next = this.internalNext()
     }
   }
 
-  fold<U>(start: U, reducer: Reducer<T, U>): U {
+  fold<U> (start: U, reducer: Reducer<T, U>): U {
     return this.collect(new Fold(start, reducer))
   }
 
-  reduce(param: Reducer<T, T>): Option<T> {
-    return this.next()
-      .map(t => new Fold(t, param).collect(this))
+  reduce (param: Reducer<T, T>): Option<T> {
+    const next = this.internalNext()
+
+    if (next === END) {
+      return Option.None()
+    } else {
+      return Option.Some(new Fold(next, param).collect(this))
+    }
   }
 
-  equals(it2: Iterator<T>): boolean {
+  equals (it2: Iterator<T>): boolean {
     return this.collect(new EqualIter(it2, identity, simpleEquality))
   }
 
-  equalsBy<U>(iter2: Iterator<T>, fn: Mapping<T, U>): boolean {
+  equalsBy<U> (iter2: Iterator<T>, fn: Mapping<T, U>): boolean {
     return this.collect(new EqualIter(iter2, fn, simpleEquality))
   }
 
-  equalsWith(iter2: Iterator<T>, equality: AreEqual<T>): boolean {
+  equalsWith (iter2: Iterator<T>, equality: AreEqual<T>): boolean {
     return this.collect(new EqualIter(iter2, identity, equality))
   }
 
-  find(condition: Predicate<T>): Option<T> {
+  find (condition: Predicate<T>): Option<T> {
     return this.collect(new Find(condition))
   }
 
-  findIndex(condition: Predicate<T>): Option<number> {
+  findIndex (condition: Predicate<T>): Option<number> {
     return this.collect(new FindIndex(condition))
   }
 
-  interspaceWith(genSeparator: GenValue<T>): Iterator<T> {
+  interspaceWith (genSeparator: GenValue<T>): Iterator<T> {
     return new Interspace(this, genSeparator)
   }
 
-  mapWhile<U>(mapping: OptionalMapping<T, U>): MapWhile<T, U> {
+  mapWhile<U> (mapping: OptionalMapping<T, U>): MapWhile<T, U> {
     return new MapWhile(this, mapping)
   }
 
-  maxBy<U>(mapping: Mapping<T, U>): Option<T> {
+  maxBy<U> (mapping: Mapping<T, U>): Option<T> {
     return this.collect(new MaxBy(mapping))
   }
 
-  maxWith(compare: CompareFn<T>): Option<T> {
+  maxWith (compare: CompareFn<T>): Option<T> {
     return this.collect(new MaxWith(compare))
   }
 
-  minBy<U>(mapping: Mapping<T, U>): Option<T> {
+  minBy<U> (mapping: Mapping<T, U>): Option<T> {
     return this.collect(new MaxBy(
       mapping,
-      (u1, u2) => u1 <= u2 ? 1 : -1 )
+      (u1, u2) => u1 <= u2 ? 1 : -1)
     )
   }
 
-  minWith(compare: CompareFn<T>) {
+  minWith (compare: CompareFn<T>) {
     return this.collect(new MaxWith((a, b) => {
       return compare(a, b) * -1
     }))
   }
 
-  partition(criteria: Predicate<T>): [T[], T[]] {
+  partition (criteria: Predicate<T>): [T[], T[]] {
     return this.collect(new Partition(criteria))
   }
 
-  positionOf(target: T): Option<number> {
+  positionOf (target: T): Option<number> {
     return this.findIndex(t => t === target)
   }
 
-  rFind(condition: Predicate<T>): Option<T> {
+  rFind (condition: Predicate<T>): Option<T> {
     return this.collect(new RFind(condition))
   }
 
-  rFindIndex(condition: Predicate<T>): Option<number> {
+  rFindIndex (condition: Predicate<T>): Option<number> {
     return this
       .enumerate()
       .collect(new RFind(([_index, elem]) => {
@@ -297,19 +317,19 @@ export abstract class Iterator<T> {
       .map(([index, _elem]) => index)
   }
 
-  intoSet() {
+  intoSet () {
     return this.collect(new SetCollector())
   }
 
-  intoSortedArray(): T[] {
+  intoSortedArray (): T[] {
     return this.collect(new SortedArrayCollector(DEFAULT_SORT_CRITERIA))
   }
 
-  intoSortedWithArray(order: CompareFn<T>): T[] {
+  intoSortedWithArray (order: CompareFn<T>): T[] {
     return this.collect(new SortedArrayCollector(order))
   }
 
-  intoSortedByArray<U>(transformation: Mapping<T, U>) {
+  intoSortedByArray<U> (transformation: Mapping<T, U>) {
     return this.collect(new SortedArrayCollector((t1, t2) => {
       return DEFAULT_SORT_CRITERIA(transformation(t1), transformation(t2))
     }))
@@ -321,8 +341,9 @@ export abstract class Iterator<T> {
 }
 
 export interface Iterator<T> {
-  filter(predicate: Predicate<T>): Filter<T>
-  rPositionOf(predicate: Predicate<T>): Option<number>
+  filter (predicate: Predicate<T>): Filter<T>
+
+  rPositionOf (predicate: Predicate<T>): Option<number>
 }
 
 Iterator.prototype.filter = Iterator.prototype.select

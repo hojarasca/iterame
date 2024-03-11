@@ -1,14 +1,10 @@
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
+import {Option} from "nochoices";
 
 export abstract class IterOperation<A, B> extends Iterator<B> {
   protected abstract base: Iterator<A>
 
-  protected changeBase(newBase: Iterator<A>): void {
-    this.base = newBase
-  }
-
-  rev(): Iterator<B> {
-    this.changeBase(this.base.rev())
-    return this;
+  estimateLength (): Option<number> {
+    return this.base.estimateLength();
   }
 }

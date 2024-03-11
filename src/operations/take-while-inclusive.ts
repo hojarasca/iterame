@@ -23,7 +23,7 @@ export class TakeWhileInclusive<T> extends IterOperation<T, T> {
     return next
   }
 
-  private start(): Option<void> {
+  private start (): Option<void> {
     return this.finished
       ? Option.None<void>()
       : Option.Some(undefined)

@@ -33,10 +33,6 @@ export class Flatten<A> extends Iterator<Flattened<A>> {
         this.head.map(iter => iter.next()).flatten()
       )
   }
-
-  rev(): Iterator<Flattened<A>> {
-    return new Flatten(this.base.rev()) ;
-  }
 }
 
 type Flattened<T> = T extends Iterator<infer U>

@@ -21,8 +21,4 @@ export class ZipInclusive<A, B> extends Iterator<[Option<A>, Option<B>]> {
       ]
     )
   }
-
-  rev(): Iterator<[Option<A>, Option<B>]> {
-    return new ZipInclusive(this.first.rev(), this.second.rev());
-  }
 }

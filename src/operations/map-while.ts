@@ -21,5 +21,4 @@ export class MapWhile<A, B> extends IterOperation<A, B> {
       .flatten()
       .ifNone(() => this.continue.take())
   }
-
 }

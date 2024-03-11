@@ -1,8 +1,20 @@
 {
   "name": "iterame",
-  "description": "Advance iterator funcionality in js and ts.",
+  "description": "Advance iterator functionality in js and ts.",
+  "keywords": [
+    "iterators",
+    "collections"
+  ],
+  "author": "Miguel Duarte",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "./dist/mod/index.js",
+  "repository": "https://github.com/hojarasca/iterame.git",
+  "types": "./dist/mod/index.d.ts",
+  "exports": {
+    ".": "./dist/mod/index.js",
+    "./pure": "./dist/mod/pure.js",
+    "./*": "./dist/mod/*"
+  },
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -13,12 +25,16 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@types/chai": "^4.3.11",
+    "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.6",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
+    "benny": "^3.7.1",
     "chai": "^5.0.0",
     "eslint": "^8.56.0",
     "eslint-plugin-tsdoc": "^0.2.17",
+    "fp-ts": "2.16.2",
+    "lodash": "^4.17.21",
     "mocha": "^10.2.0",
     "tsx": "^4.7.0",
     "typedoc": "^0.25.6",

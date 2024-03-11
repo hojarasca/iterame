@@ -1,5 +1,5 @@
 import {Collector} from "./collector.js";
-import {Iterator} from "../iterator.js";
+import {END, Iterator} from "../iterators/iterator.js";
 
 export type Reducer<Curr, Res> = (partial: Res, current: Curr) => Res
 export class Fold<A, B> implements Collector<A, B> {
@@ -11,11 +11,11 @@ export class Fold<A, B> implements Collector<A, B> {
     this.fn = fn
   }
   collect (it: Iterator<A>): B {
-    let next = it.next()
+    let next = it.internalNext()
     let partial = this.start
-    while (next.isSome()) {
-      partial = this.fn(partial, next.unwrap())
-      next = it.next()
+    while (next !== END) {
+      partial = this.fn(partial, next)
+      next = it.internalNext()
     }
     return partial
   }

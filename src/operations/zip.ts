@@ -19,8 +19,4 @@ export class Zip<A, B> extends Iterator<[A, B]> {
       .zip(this.second.next())
       .ifNone(() => this.start = Option.None());
   }
-
-  rev(): Iterator<[A, B]> {
-    return new Zip(this.first.rev(), this.second.rev());
-  }
 }

@@ -4,11 +4,11 @@ import {Iterator} from "../index.js";
 
 export class Partition<T> implements Collector<T, [T[], T[]]> {
   private criteria: Predicate<T>;
-  constructor(criteria: Predicate<T>) {
+  constructor (criteria: Predicate<T>) {
     this.criteria = criteria
   }
 
-  collect(it: Iterator<T>): [T[], T[]] {
+  collect (it: Iterator<T>): [T[], T[]] {
     const trues = []
     const falses = []
     for (const val of it) {

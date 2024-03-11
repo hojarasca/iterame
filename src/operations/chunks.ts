@@ -1,4 +1,4 @@
-import {Iterator} from "../iterator.js";
+import {Iterator} from "../iterators/iterator.js";
 import {Option} from "nochoices";
 import {IterOperation} from "./iter-operation.js";
 

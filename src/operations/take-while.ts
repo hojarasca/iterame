@@ -22,7 +22,7 @@ export class TakeWhile<T> extends IterOperation<T, T> {
         .ifNone(() => this.finished = true)
   }
 
-  private start(): Option<void> {
+  private start (): Option<void> {
     return this.finished
       ? Option.None()
       : Option.Some(undefined)
