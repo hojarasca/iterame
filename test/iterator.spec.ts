@@ -1350,10 +1350,13 @@ describe('Iterator', () => {
     })
 
     it('returns array length for mapped iterator', () => {
-      const it = iter([1,2,3])
-      it.next()
-      expect(it.estimateLength().unwrap()).to.eql(0)
+      const it = iter([1,2,3]).map(n => n * 2)
+      expect(it.estimateLength().unwrap()).to.eql(3)
     })
 
+    it('returns array length for filtered iterator', () => {
+      const it = iter([1,2,3]).filter(n => n % 2 === 0)
+      expect(it.estimateLength().unwrap()).to.eql(3)
+    })
   });
 })
