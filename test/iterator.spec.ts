@@ -1331,4 +1331,29 @@ describe('Iterator', () => {
     }
     expect(res).to.eql([2, 6])
   })
+
+  describe('#estimateLength', () => {
+    it('returns 0 for empty array', () => {
+      const it = iter([])
+      expect(it.estimateLength().unwrap()).to.eql(0)
+    })
+
+    it('returns 1 for array with 1 element', () => {
+      const it = iter([132])
+      expect(it.estimateLength().unwrap()).to.eql(1)
+    })
+
+    it('returns 0 for consumed iterator', () => {
+      const it = iter([132])
+      it.next()
+      expect(it.estimateLength().unwrap()).to.eql(0)
+    })
+
+    it('returns array length for mapped iterator', () => {
+      const it = iter([1,2,3])
+      it.next()
+      expect(it.estimateLength().unwrap()).to.eql(0)
+    })
+
+  });
 })

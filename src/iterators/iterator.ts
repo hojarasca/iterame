@@ -73,7 +73,9 @@ export abstract class Iterator<T> {
     }
   }
 
-  // abstract peek (): Option<T>
+  estimateLength(): Option<number> {
+    return Option.None()
+  }
 
   //---------
   // Filters

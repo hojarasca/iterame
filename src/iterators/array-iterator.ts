@@ -1,8 +1,8 @@
 import {END, Iterator} from "./iterator.js";
-import {Sized} from "../sized.js";
+import {Option} from "nochoices";
 
 
-export class ArrayIterator<T> extends Iterator<T> implements Sized{
+export class ArrayIterator<T> extends Iterator<T> {
   private iterable: T[]
   lowerBound: number
   upperBound: number
@@ -11,15 +11,16 @@ export class ArrayIterator<T> extends Iterator<T> implements Sized{
     super()
     this.iterable = arr
     this.lowerBound = 0
-    this.upperBound = this.iterable.length - 1
+    this.upperBound = this.iterable.length
   }
 
-  size (): number {
-    return this.upperBound - this.lowerBound
+  estimateLength (): Option<number> {
+    return Option.Some(this.upperBound - this.lowerBound)
+        .filter(l => l >= 0)
   }
 
   internalNext (): typeof END | T {
-    if (this.lowerBound > this.upperBound) {
+    if (this.lowerBound >= this.upperBound) {
       return END
     } else {
       const next = this.iterable[this.lowerBound]
@@ -30,6 +31,6 @@ export class ArrayIterator<T> extends Iterator<T> implements Sized{
 
   reset () {
     this.lowerBound = 0
-    this.upperBound = this.iterable.length - 1
+    this.upperBound = this.iterable.length
   }
 }
