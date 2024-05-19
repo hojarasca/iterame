@@ -1,11 +1,11 @@
-import {describe, it} from "mocha";
-import {expect} from "chai";
+import { describe, it } from "mocha";
+import { expect } from "chai";
 import '../src/index'
-import {ArrayIterator, Iterator, MapCollector} from "../src/index.js";
-import {Option} from "nochoices";
+import { ArrayIterator, END, Iterator, MapCollector } from "../src/index.js";
+import { Option } from "nochoices";
 
 describe('Iterator', () => {
-  const iter = <T> (arr: T[]): Iterator<T> => {
+  const iter = <T>(arr: T[]): Iterator<T> => {
     return new ArrayIterator(arr)
   }
 
@@ -1175,7 +1175,8 @@ describe('Iterator', () => {
   })
 
   // Implementing rev is hard, because require making assumptions over the base iteratos
-  describe.skip('#rev', () => {})
+  describe.skip('#rev', () => {
+  })
 
   // Implementing peek is hard, because require making assumptions over the base iteratos
   // Note: I'm not going to implement peek at this time. I believe it adds confusion to when
@@ -1231,9 +1232,9 @@ describe('Iterator', () => {
     })
 
     it('returns some with the element when the element is present', () => {
-      const obj1 = {foo: 1}
-      const obj2 = {foo: 2}
-      const obj3 = {foo: 3}
+      const obj1 = { foo: 1 }
+      const obj2 = { foo: 2 }
+      const obj3 = { foo: 3 }
       const found = iter([obj1, obj2, obj3]).rFind(o => o.foo === 2)
       expect(found.unwrap()).to.equal(obj2)
     })
@@ -1251,7 +1252,7 @@ describe('Iterator', () => {
     })
 
     it('consumes the iterator', () => {
-      const it = iter([1,2,3])
+      const it = iter([1, 2, 3])
       it.last()
       expect(it.next().isNone()).to.eql(true)
     })
@@ -1287,9 +1288,9 @@ describe('Iterator', () => {
 
   describe('collect into orderedListBy', () => {
     it('returns a list ordered by default js criteria', () => {
-      const elem1 = {foo: 1}
-      const elem2 = {foo: -1}
-      const elem3 = {foo: 5}
+      const elem1 = { foo: 1 }
+      const elem2 = { foo: -1 }
+      const elem3 = { foo: 5 }
       const it = iter([elem1, elem2, elem3])
       const sorted = it.intoSortedByArray(elem => elem.foo)
       expect(sorted).to.eql([elem2, elem1, elem3])
@@ -1350,13 +1351,67 @@ describe('Iterator', () => {
     })
 
     it('returns array length for mapped iterator', () => {
-      const it = iter([1,2,3]).map(n => n * 2)
+      const it = iter([1, 2, 3]).map(n => n * 2)
       expect(it.estimateLength().unwrap()).to.eql(3)
     })
 
     it('returns array length for filtered iterator', () => {
-      const it = iter([1,2,3]).filter(n => n % 2 === 0)
+      const it = iter([1, 2, 3]).filter(n => n % 2 === 0)
       expect(it.estimateLength().unwrap()).to.eql(3)
     })
-  });
+  })
+
+  describe('#nextBack', () => {
+    it('returns last element', () => {
+      const it = iter([1, 2, 3])
+      expect(it.nextBack().unwrap()).to.eql(3)
+    })
+
+    it('returns all elements from last to first', () => {
+      const it = iter([1, 2, 3])
+      expect(it.nextBack().unwrap()).to.eql(3)
+      expect(it.nextBack().unwrap()).to.eql(2)
+      expect(it.nextBack().unwrap()).to.eql(1)
+    })
+
+    it('returns None for empty iterator', () => {
+      const it = iter([])
+      expect(it.nextBack().isNone()).to.eql(true)
+    })
+
+    it('does not overlap with items that were already consumed by next', () => {
+      const it = iter([1, 2, 3])
+      it.next()
+      expect(it.nextBack().unwrap()).to.eql(3)
+      expect(it.nextBack().unwrap()).to.eql(2)
+      expect(it.nextBack().isNone()).to.eql(true)
+    })
+  })
+
+  describe('#netBackInternal', () => {
+    it('returns last element', () => {
+      const it = iter([1, 2, 3])
+      expect(it.internalNextBack()).to.eql(3)
+    })
+
+    it('returns all elements from last to first', () => {
+      const it = iter([1, 2, 3])
+      expect(it.internalNextBack()).to.eql(3)
+      expect(it.internalNextBack()).to.eql(2)
+      expect(it.internalNextBack()).to.eql(1)
+    })
+
+    it('returns None for empty iterator', () => {
+      const it = iter([])
+      expect(it.internalNextBack()).to.eql(END)
+    })
+
+    it('does not overlap with items that were already consumed by next', () => {
+      const it = iter([1, 2, 3])
+      it.next()
+      expect(it.internalNextBack()).to.eql(3)
+      expect(it.internalNextBack()).to.eql(2)
+      expect(it.internalNextBack()).to.eql(END)
+    })
+  })
 })

@@ -1,4 +1,4 @@
-import {END, Iterator} from "./iterator.js";
+import { END, Iterator, OrEnd } from "./iterator.js";
 import {Option} from "nochoices";
 
 
@@ -25,6 +25,16 @@ export class ArrayIterator<T> extends Iterator<T> {
     } else {
       const next = this.iterable[this.lowerBound]
       this.lowerBound += 1
+      return next
+    }
+  }
+
+  internalNextBack(): OrEnd<T> {
+    if (this.lowerBound >= this.upperBound) {
+      return END
+    } else {
+      const next = this.iterable[this.upperBound - 1]
+      this.upperBound -= 1
       return next
     }
   }

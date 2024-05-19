@@ -77,6 +77,20 @@ export abstract class Iterator<T> {
     return Option.None()
   }
 
+  nextBack (): Option<T> {
+    const next = this.internalNextBack()
+    if (next === END) {
+      return Option.None()
+    } else {
+      return Option.Some(next as T)
+    }
+  }
+
+  internalNextBack(): OrEnd<T> {
+    const next: Option<OrEnd<T>> = this.nextBack()
+    return next.unwrapOr(END);
+  }
+
   //---------
   // Filters
   //---------
