@@ -1,8 +1,8 @@
 import {Option} from "nochoices";
-import {Iterator} from "./iterator.js";
 import {Collector} from "../collectors/index.js";
+import { Stream } from "./stream.js";
 
-export abstract class InfiniteStream<T> extends Iterator<T> {
+export abstract class InfiniteStream<T> extends Stream<T> {
   abstract next(): Option<T>
 
   collect<U> (_collector: Collector<T, U>): U {
