@@ -42,7 +42,7 @@ import {
   Partition,
   RFind,
   SetCollector,
-  SortedArrayCollector, Last
+  SortedArrayCollector, Last, Reverse
 } from "../index.js";
 import {identity, simpleEquality, times} from "../helpers.js";
 import {IntoArray} from "../collectors/index.js";
@@ -183,6 +183,10 @@ export abstract class Iterator<T> {
   //---------------------
   // Double sided needed
   // --------------------
+
+  rev (): Reverse<T> {
+    return new Reverse(this)
+  }
 
   //------------
   // Finalizers

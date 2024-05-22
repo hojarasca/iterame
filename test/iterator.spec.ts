@@ -1414,4 +1414,18 @@ describe('Iterator', () => {
       expect(it.internalNextBack()).to.eql(END)
     })
   })
+
+  describe('#rev', () => {
+    it('rev of empty returns empty', () => {
+      const it = iter([])
+      const rev = it.rev()
+      expect(rev.next().isNone()).to.eql(true)
+    })
+
+    it('rev of list iters list backwards', () => {
+      const it = iter([1, 2, 3])
+      const rev = it.rev()
+      expect(rev.intoArray()).to.eql([3, 2, 1])
+    })
+  })
 })
